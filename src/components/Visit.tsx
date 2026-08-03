@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { AtSign, MapPin, MessageCircle } from 'lucide-react'
 import { brand } from '../data/site'
 import { isSupabaseConfigured, supabase } from '../lib/supabase'
@@ -166,7 +167,9 @@ function ReservationForm() {
   if (!isSupabaseConfigured) {
     return (
       <div className="flex flex-col justify-center border border-char p-8 sm:p-10">
-        <p className="eyebrow">Reservar mesa</p>
+        <Link to="/reservas" className="eyebrow transition-colors hover:text-coral">
+          Reserve sua Mesa
+        </Link>
         <p className="mt-4 text-lg leading-snug text-cream">
           A reserva online entra no ar assim que o Supabase for configurado.
         </p>
@@ -190,7 +193,11 @@ function ReservationForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="border border-char p-8 sm:p-10">
-      <p className="eyebrow">Reservar mesa</p>
+      {/* O mesmo rótulo leva a equipe ao painel — discreto para o visitante,
+          e protegido por login de qualquer forma. */}
+      <Link to="/reservas" className="eyebrow transition-colors hover:text-coral">
+        Reserve sua Mesa
+      </Link>
       <h3 className="display mt-4 text-3xl text-cream">Guarde seu lugar</h3>
 
       <div className="mt-8 space-y-5">
