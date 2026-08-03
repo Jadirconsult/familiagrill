@@ -158,9 +158,12 @@ export const menu: { kitchen: string; items: { name: string; note: string }[] }[
 ]
 
 /**
- * Segunda = 1 … Domingo = 0. Terça fechada.
+ * Segunda = 1 … Domingo = 0. `open: null` marca dia fechado — hoje nenhum.
  * Minutos desde 00:00 do dia de abertura — fechamentos após a meia-noite
  * passam de 1440 (ex.: 5h da manhã = 29 * 60).
+ *
+ * Mudou aqui? O SQL em supabase/migrations/20260803_000003 repete estes turnos
+ * para barrar reserva fora do expediente vinda de fora do site. Atualize os dois.
  */
 export type DayHours = {
   day: number

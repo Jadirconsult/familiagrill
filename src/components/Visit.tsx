@@ -195,7 +195,12 @@ function ReservationForm() {
     <form onSubmit={handleSubmit} noValidate className="border border-char p-8 sm:p-10">
       {/* O mesmo rótulo leva a equipe ao painel — discreto para o visitante,
           e protegido por login de qualquer forma. */}
-      <Link to="/reservas" className="eyebrow transition-colors hover:text-gold">
+      <Link
+        to="/reservas"
+        title="Painel da equipe — consultar reservas"
+        aria-label="Painel da equipe: consultar reservas (acesso restrito)"
+        className="eyebrow transition-colors hover:text-gold"
+      >
         Reserve sua Mesa
       </Link>
       <h3 className="display mt-4 text-3xl text-cream">Guarde seu lugar</h3>

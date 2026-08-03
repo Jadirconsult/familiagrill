@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 
+const TZ = 'America/Sao_Paulo'
+
 export type Reserva = {
   id: string
   nome: string
@@ -11,18 +13,36 @@ export type Reserva = {
   criado_em: string
 }
 
+/** Data-calendário do restaurante, independente do fuso do aparelho da equipe. */
+function restaurantDateParts(day: Date) {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: TZ,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(day)
+  const get = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((p) => p.type === type)?.value ?? '01'
+  return `${get('year')}-${get('month')}-${get('day')}`
+}
+
 /**
  * A "noite" da casa não coincide com o dia do calendário: o serviço começa às
  * 18h e termina de madrugada. Uma mesa de 1h da manhã de sábado pertence à
  * noite de sexta, então a janela vai do início do dia até as 6h do dia seguinte.
+ *
+ * Os limites são fixados no horário de Niterói, não no do navegador — a equipe
+ * viajando ou um celular com fuso errado veriam o dia trocado.
  */
 export function nightWindow(day: Date) {
-  const start = new Date(day)
-  start.setHours(0, 0, 0, 0)
-  const end = new Date(start)
-  end.setDate(end.getDate() + 1)
-  end.setHours(6, 0, 0, 0)
+  const start = new Date(`${restaurantDateParts(day)}T00:00:00-03:00`)
+  const end = new Date(start.getTime() + 30 * 60 * 60 * 1000) // 6h do dia seguinte
   return { start, end }
+}
+
+/** Avança ou volta um dia sem depender do fuso local. */
+export function addDays(day: Date, offset: number): Date {
+  return new Date(day.getTime() + offset * 24 * 60 * 60 * 1000)
 }
 
 export async function fetchReservas(day: Date): Promise<Reserva[]> {
@@ -50,7 +70,7 @@ export function formatTime(iso: string): string {
   return new Intl.DateTimeFormat('pt-BR', {
     hour: '2-digit',
     minute: '2-digit',
-    timeZone: 'America/Sao_Paulo',
+    timeZone: TZ,
   }).format(new Date(iso))
 }
 
@@ -59,6 +79,7 @@ export function formatDay(day: Date): string {
     weekday: 'long',
     day: '2-digit',
     month: '2-digit',
+    timeZone: TZ,
   }).format(day)
 }
 

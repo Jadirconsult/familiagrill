@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, LogOut, MessageCircle, RefreshCw } from 'luc
 import { brand } from '../data/site'
 import { isSupabaseConfigured, supabase } from '../lib/supabase'
 import {
+  addDays,
   fetchReservas,
   formatDay,
   formatPhone,
@@ -179,11 +180,7 @@ function Board({ email }: { email: string }) {
     navigate('/')
   }
 
-  const shiftDay = (offset: number) => {
-    const next = new Date(day)
-    next.setDate(next.getDate() + offset)
-    setDay(next)
-  }
+  const shiftDay = (offset: number) => setDay(addDays(day, offset))
 
   const ativas = reservas.filter((r) => r.status !== 'cancelada')
   const lugares = ativas.reduce((total, r) => total + r.pessoas, 0)
