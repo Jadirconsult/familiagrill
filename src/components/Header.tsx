@@ -34,7 +34,7 @@ export function Header() {
             alt=""
             width={48}
             height={48}
-            className="size-12 rounded-full"
+            className="size-12 rounded-full bg-white"
           />
           <span className="display hidden text-lg leading-tight text-cream sm:block">
             {brand.name}

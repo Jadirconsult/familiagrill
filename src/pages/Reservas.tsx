@@ -60,7 +60,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           alt=""
           width={72}
           height={72}
-          className="size-18 rounded-full"
+          className="size-18 rounded-full bg-white"
         />
         <p className="eyebrow mt-6">Painel da equipe</p>
         <div className="mt-4">{children}</div>
@@ -190,7 +190,7 @@ function Board({ email }: { email: string }) {
               alt=""
               width={36}
               height={36}
-              className="size-9 rounded-full"
+              className="size-9 rounded-full bg-white"
             />
             <span className="display text-sm text-cream">Reservas</span>
           </div>

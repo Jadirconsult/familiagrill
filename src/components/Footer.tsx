@@ -10,7 +10,7 @@ export function Footer() {
             alt={brand.fullName}
             width={112}
             height={112}
-            className="size-28 rounded-full"
+            className="size-28 rounded-full bg-white"
           />
           <p className="mt-4 font-mono text-xs tracking-widest text-smoke uppercase">
             {brand.tagline}
