@@ -5,7 +5,7 @@ import { useReveal } from '../hooks/useReveal'
 
 const accent = {
   ember: 'text-ember',
-  flare: 'text-coral',
+  flare: 'text-gold',
   cold: 'text-sage',
 } as const
 
@@ -58,7 +58,7 @@ export function Menu() {
             href={brand.menuUrl}
             target="_blank"
             rel="noreferrer"
-            className="group inline-flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-coral uppercase"
+            className="group inline-flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-gold uppercase"
           >
             Cardápio completo e preços
             <ArrowUpRight

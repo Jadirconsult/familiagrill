@@ -28,14 +28,14 @@ export function Order() {
               href={channel.url}
               target="_blank"
               rel="noreferrer"
-              className="group flex items-center justify-between gap-6 border border-char px-6 py-5 transition-colors hover:border-coral sm:px-8"
+              className="group flex items-center justify-between gap-6 border border-char px-6 py-5 transition-colors hover:border-gold sm:px-8"
             >
               <span>
                 <span className="display block text-xl text-cream">{channel.name}</span>
                 <span className="mt-1 block text-sm text-smoke">{channel.note}</span>
               </span>
               <ArrowUpRight
-                className="size-5 shrink-0 text-smoke transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-coral"
+                className="size-5 shrink-0 text-smoke transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gold"
                 aria-hidden
               />
             </a>
@@ -54,14 +54,14 @@ function AppCard({ channel, featured }: { channel: OrderChannel; featured: boole
       rel="noreferrer"
       className={`group flex min-h-64 flex-col justify-between gap-10 p-8 transition-colors sm:p-10 ${
         featured
-          ? 'bg-coral text-coal hover:bg-cream'
-          : 'border border-coral/40 text-cream hover:border-coral hover:bg-soot'
+          ? 'bg-gold text-coal hover:bg-cream'
+          : 'border border-gold/40 text-cream hover:border-gold hover:bg-soot'
       }`}
     >
       <div>
         <span
           className={`font-mono text-[11px] font-bold tracking-[0.3em] uppercase ${
-            featured ? 'opacity-70' : 'text-coral'
+            featured ? 'opacity-70' : 'text-gold'
           }`}
         >
           {featured ? 'Nosso app preferido' : 'Também entregamos por aqui'}

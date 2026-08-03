@@ -31,7 +31,7 @@ export function NightMeter() {
         <span className="eyebrow">A noite de hoje</span>
         <span
           className={`font-mono text-xs font-bold tracking-widest uppercase ${
-            status.open ? 'text-coral' : 'text-smoke'
+            status.open ? 'text-gold' : 'text-smoke'
           }`}
         >
           {status.open ? '● Aberto agora' : '○ Fechado'}
@@ -43,7 +43,7 @@ export function NightMeter() {
         <div
           className={`absolute inset-x-0 top-3 h-2 rounded-full ${
             status.open
-              ? 'bg-gradient-to-r from-char via-ember to-coral'
+              ? 'bg-gradient-to-r from-char via-ember to-gold'
               : 'bg-char'
           }`}
         />

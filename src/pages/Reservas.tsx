@@ -101,7 +101,7 @@ function Login() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors focus:border-coral"
+            className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors focus:border-gold"
           />
         </label>
         <label className="block">
@@ -112,14 +112,14 @@ function Login() {
             required
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
-            className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors focus:border-coral"
+            className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors focus:border-gold"
           />
         </label>
 
         <button
           type="submit"
           disabled={busy}
-          className="w-full bg-coral px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:opacity-60"
+          className="w-full bg-gold px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:opacity-60"
         >
           {busy ? 'Entrando…' : 'Entrar'}
         </button>
@@ -200,14 +200,14 @@ function Board({ email }: { email: string }) {
               type="button"
               onClick={() => void load()}
               aria-label="Atualizar lista"
-              className="grid size-9 place-items-center border border-char text-smoke transition-colors hover:border-coral hover:text-coral"
+              className="grid size-9 place-items-center border border-char text-smoke transition-colors hover:border-gold hover:text-gold"
             >
               <RefreshCw className={`size-4 ${loading ? 'animate-spin' : ''}`} aria-hidden />
             </button>
             <button
               type="button"
               onClick={() => supabase?.auth.signOut()}
-              className="inline-flex items-center gap-2 border border-char px-3 py-2 font-mono text-[11px] tracking-widest text-smoke uppercase transition-colors hover:border-coral hover:text-coral"
+              className="inline-flex items-center gap-2 border border-char px-3 py-2 font-mono text-[11px] tracking-widest text-smoke uppercase transition-colors hover:border-gold hover:text-gold"
             >
               <LogOut className="size-3.5" aria-hidden />
               Sair
@@ -222,7 +222,7 @@ function Board({ email }: { email: string }) {
             type="button"
             onClick={() => shiftDay(-1)}
             aria-label="Dia anterior"
-            className="grid size-10 place-items-center border border-char text-cream transition-colors hover:border-coral hover:text-coral"
+            className="grid size-10 place-items-center border border-char text-cream transition-colors hover:border-gold hover:text-gold"
           >
             <ChevronLeft className="size-5" aria-hidden />
           </button>
@@ -239,7 +239,7 @@ function Board({ email }: { email: string }) {
             type="button"
             onClick={() => shiftDay(1)}
             aria-label="Próximo dia"
-            className="grid size-10 place-items-center border border-char text-cream transition-colors hover:border-coral hover:text-coral"
+            className="grid size-10 place-items-center border border-char text-cream transition-colors hover:border-gold hover:text-gold"
           >
             <ChevronRight className="size-5" aria-hidden />
           </button>
@@ -281,7 +281,7 @@ function Board({ email }: { email: string }) {
                       href={phoneHref(reserva.telefone)}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1 text-coral hover:underline"
+                      className="inline-flex items-center gap-1 text-gold hover:underline"
                     >
                       <MessageCircle className="size-3" aria-hidden />
                       {formatPhone(reserva.telefone)}

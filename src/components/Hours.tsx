@@ -44,7 +44,7 @@ export function Hours() {
                   {shift && (
                     <div
                       className={`absolute inset-y-0 rounded-full ${
-                        isToday ? 'bg-gradient-to-r from-ember to-coral' : 'bg-char'
+                        isToday ? 'bg-gradient-to-r from-ember to-gold' : 'bg-char'
                       }`}
                       style={{
                         left: `${((shift.open - SPAN_START) / (SPAN_END - SPAN_START)) * 100}%`,

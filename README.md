@@ -69,13 +69,13 @@ A paleta sai da própria logo da casa, guardada em
 | Token | Hex | De onde veio |
 | --- | --- | --- |
 | `cream` | `#f5f5eb` | fundo da logo |
-| `coral` | `#f2635f` | hambúrguer da logo — cor de ação da marca |
+| `gold` | `#cb8b26` | cor de ação — escolha de tela, lê como brasa sobre o carvão |
 | `coal` | `#121110` | fundo da página |
 | `soot` | `#1c1a18` | seções alternadas |
 | `ember` | `#d4551d` | brasa do churrasco |
 | `sage` | `#8fae9b` | o único tom frio, reservado ao sushi |
 
-As três cozinhas seguem uma escala de temperatura: `ember` no churras, `coral`
+As três cozinhas seguem uma escala de temperatura: `ember` no churras, `gold`
 no burger, `sage` no sushi. O tom frio nunca aparece nas seções de fogo.
 
 O display é Cinzel — romana em caixa alta com serifas em cunha.

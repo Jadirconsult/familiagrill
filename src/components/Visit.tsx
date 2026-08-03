@@ -50,7 +50,7 @@ export function Visit() {
                 href={mapsLink}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-coral hover:text-coral"
+                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <MapPin className="size-3.5" aria-hidden />
                 Abrir no mapa
@@ -59,7 +59,7 @@ export function Visit() {
                 href={`https://wa.me/${brand.whatsapp}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-coral hover:text-coral"
+                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <MessageCircle className="size-3.5" aria-hidden />
                 WhatsApp
@@ -68,7 +68,7 @@ export function Visit() {
                 href={brand.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-coral hover:text-coral"
+                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <AtSign className="size-3.5" aria-hidden />
                 Instagram
@@ -167,22 +167,22 @@ function ReservationForm() {
   if (!isSupabaseConfigured) {
     return (
       <div className="flex flex-col justify-center border border-char p-8 sm:p-10">
-        <Link to="/reservas" className="eyebrow transition-colors hover:text-coral">
+        <Link to="/reservas" className="eyebrow transition-colors hover:text-gold">
           Reserve sua Mesa
         </Link>
         <p className="mt-4 text-lg leading-snug text-cream">
           A reserva online entra no ar assim que o Supabase for configurado.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-smoke">
-          Preencha <code className="font-mono text-coral">VITE_SUPABASE_URL</code> e{' '}
-          <code className="font-mono text-coral">VITE_SUPABASE_PUBLISHABLE_KEY</code> no
-          arquivo <code className="font-mono text-coral">.env.local</code>.
+          Preencha <code className="font-mono text-gold">VITE_SUPABASE_URL</code> e{' '}
+          <code className="font-mono text-gold">VITE_SUPABASE_PUBLISHABLE_KEY</code> no
+          arquivo <code className="font-mono text-gold">.env.local</code>.
         </p>
         <a
           href={`https://wa.me/${brand.whatsapp}`}
           target="_blank"
           rel="noreferrer"
-          className="mt-8 inline-flex items-center justify-center gap-2 bg-coral px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
+          className="mt-8 inline-flex items-center justify-center gap-2 bg-gold px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
         >
           <MessageCircle className="size-3.5" aria-hidden />
           Reservar pelo WhatsApp
@@ -195,7 +195,7 @@ function ReservationForm() {
     <form onSubmit={handleSubmit} noValidate className="border border-char p-8 sm:p-10">
       {/* O mesmo rótulo leva a equipe ao painel — discreto para o visitante,
           e protegido por login de qualquer forma. */}
-      <Link to="/reservas" className="eyebrow transition-colors hover:text-coral">
+      <Link to="/reservas" className="eyebrow transition-colors hover:text-gold">
         Reserve sua Mesa
       </Link>
       <h3 className="display mt-4 text-3xl text-cream">Guarde seu lugar</h3>
@@ -267,7 +267,7 @@ function ReservationForm() {
         <button
           type="submit"
           disabled={sending}
-          className="mt-8 w-full bg-coral px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-8 w-full bg-gold px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
         >
           {sending ? 'Enviando…' : 'Reservar mesa'}
         </button>
@@ -312,7 +312,7 @@ function Field({
         ref={ref}
         name={name}
         onChange={(event) => onValue(event.target.value)}
-        className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors placeholder:text-smoke/50 focus:border-coral"
+        className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors placeholder:text-smoke/50 focus:border-gold"
       />
     </label>
   )

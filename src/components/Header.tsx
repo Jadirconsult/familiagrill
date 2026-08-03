@@ -59,7 +59,7 @@ export function Header() {
           aria-controls="menu-mobile"
           aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
           onClick={() => setMenuOpen((open) => !open)}
-          className="grid size-11 place-items-center border border-char text-cream transition-colors hover:border-coral hover:text-coral lg:hidden"
+          className="grid size-11 place-items-center border border-char text-cream transition-colors hover:border-gold hover:text-gold lg:hidden"
         >
           {menuOpen ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
         </button>
@@ -68,7 +68,7 @@ export function Header() {
           href={primaryChannel.url}
           target="_blank"
           rel="noreferrer"
-          className="shrink-0 bg-coral px-4 py-2.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
+          className="shrink-0 bg-gold px-4 py-2.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
         >
           Pedir no {primaryChannel.name}
         </a>

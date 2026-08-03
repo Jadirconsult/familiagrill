@@ -1,16 +1,16 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Paleta amostrada da própria logo da casa: creme #f5f5eb do fundo e o
-     coral #f2635f do hambúrguer. O coral é a cor de ação da marca.
-     A escala de temperatura das cozinhas segue viva: brasa de carvão no churras,
-     o coral da marca no burger, e uma sálvia dessaturada no balcão de sushi —
-     o único tom frio da página. */
+  /* O creme vem do fundo da logo. O ouro é escolha de tela, não de marca:
+     sobre o carvão ele lê como brasa quente, enquanto o coral da logo puxava
+     para o vermelho de alerta.
+     A escala de temperatura das cozinhas: brasa de carvão no churras, ouro no
+     burger, e uma sálvia dessaturada no balcão de sushi — o único tom frio. */
   --color-coal: #121110;
   --color-soot: #1c1a18;
   --color-char: #35312e;
   --color-ember: #d4551d;
-  --color-coral: #f2635f;
+  --color-gold: #cb8b26;
   --color-cream: #f5f5eb;
   --color-smoke: #9a938a;
   --color-sage: #8fae9b;
@@ -34,12 +34,12 @@
   }
 
   ::selection {
-    background-color: var(--color-coral);
+    background-color: var(--color-gold);
     color: var(--color-coal);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-coral);
+    outline: 2px solid var(--color-gold);
     outline-offset: 3px;
   }
 }
@@ -69,7 +69,7 @@
   font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--color-coral);
+  color: var(--color-gold);
 }
 
 /* O calor do carvão sob o hero: respira devagar, como brasa de verdade. */
