@@ -1,91 +1,95 @@
--- A página pública só pode criar reservas por esta função. Ela controla os
--- campos gravados, converte o horário do restaurante e reduz abuso repetido.
+-- Acesso à tabela de reservas.
+--
+-- O site público grava direto na tabela (insert), e a RLS é quem define o que
+-- pode entrar. A leitura é da equipe: quem estiver na tabela `staff`.
+--
+-- Uma versão anterior deste arquivo criava a função `criar_reserva` e revogava
+-- os privilégios de anon/authenticated. Essa combinação derrubava o formulário
+-- do site, que faz insert direto — os comandos abaixo desfazem aquele estado
+-- caso ele tenha chegado a ser aplicado.
+
+-- 1. Desfaz a tentativa anterior ------------------------------------------------
+
+drop function if exists public.criar_reserva(
+  text, text, timestamp without time zone, smallint, text
+);
+
+grant usage on schema public to anon, authenticated;
+grant insert on public.reservas to anon, authenticated;
+grant select, update, delete on public.reservas to authenticated;
+
+-- 2. Quem é a equipe ------------------------------------------------------------
+
+create table if not exists public.staff (
+  user_id uuid primary key references auth.users (id) on delete cascade,
+  nome text,
+  criado_em timestamptz not null default now()
+);
+
+alter table public.staff enable row level security;
+grant select on public.staff to authenticated;
+
+drop policy if exists "staff le o proprio registro" on public.staff;
+create policy "staff le o proprio registro"
+  on public.staff for select
+  to authenticated
+  using (user_id = (select auth.uid()));
+
+-- search_path vazio e nomes qualificados: a função não pode ser desviada por
+-- um schema plantado no caminho de busca de quem a chama.
+create or replace function public.is_staff()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1 from public.staff s where s.user_id = (select auth.uid())
+  );
+$$;
+
+revoke all on function public.is_staff() from public;
+grant execute on function public.is_staff() to authenticated;
+
+-- 3. Políticas da tabela de reservas --------------------------------------------
+
+alter table public.reservas enable row level security;
 
 drop policy if exists "visitante cria reserva" on public.reservas;
+create policy "visitante cria reserva"
+  on public.reservas for insert
+  to anon, authenticated
+  with check (
+    data_hora > now()
+    and data_hora < now() + interval '90 days'
+    and status = 'pendente'
+  );
 
 drop policy if exists "equipe le reservas" on public.reservas;
 create policy "equipe le reservas"
   on public.reservas for select
   to authenticated
-  using (coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') = 'staff');
+  using (public.is_staff());
 
 drop policy if exists "equipe atualiza reservas" on public.reservas;
 create policy "equipe atualiza reservas"
   on public.reservas for update
   to authenticated
-  using (coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') = 'staff')
-  with check (coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') = 'staff');
+  using (public.is_staff())
+  with check (public.is_staff());
 
-revoke all on public.reservas from anon, authenticated;
+drop policy if exists "equipe apaga reservas" on public.reservas;
+create policy "equipe apaga reservas"
+  on public.reservas for delete
+  to authenticated
+  using (public.is_staff());
 
-create or replace function public.criar_reserva(
-  p_nome text,
-  p_telefone text,
-  p_data_hora timestamp without time zone,
-  p_pessoas smallint,
-  p_observacao text default null
-)
-returns uuid
-language plpgsql
-security definer
-set search_path = public, pg_temp
-as $$
-declare
-  v_id uuid;
-  v_now_local timestamp without time zone := now() at time zone 'America/Sao_Paulo';
-  v_weekday integer;
-  v_minutes integer;
-begin
-  if char_length(trim(p_nome)) not between 2 and 120
-    or char_length(trim(p_telefone)) not between 8 and 20
-    or p_pessoas not between 1 and 20
-    or char_length(coalesce(trim(p_observacao), '')) > 500 then
-    raise exception 'Dados da reserva inválidos';
-  end if;
+-- 4. Freio contra reenvio ---------------------------------------------------------
+-- Barra a duplicata exata (mesmo telefone, mesmo horário), que é o caso real:
+-- duplo clique e reenvio de formulário. Não substitui um rate limit de verdade
+-- contra abuso deliberado — para isso é preciso CAPTCHA ou Edge Function, já que
+-- o Postgres não enxerga o IP de quem chamou.
 
-  if p_data_hora <= v_now_local or p_data_hora >= v_now_local + interval '90 days' then
-    raise exception 'A reserva deve estar entre agora e os próximos 90 dias';
-  end if;
-
-  v_weekday := extract(dow from p_data_hora);
-  v_minutes := extract(hour from p_data_hora) * 60 + extract(minute from p_data_hora);
-
-  if not (
-    (v_weekday = 0 and (v_minutes < 300 or v_minutes >= 1080)) or
-    (v_weekday = 1 and (v_minutes < 240 or v_minutes >= 1080)) or
-    (v_weekday = 2 and v_minutes < 60) or
-    (v_weekday = 3 and v_minutes >= 1080) or
-    (v_weekday in (4, 5) and (v_minutes < 60 or v_minutes >= 1080)) or
-    (v_weekday = 6 and (v_minutes < 300 or v_minutes >= 1080))
-  ) then
-    raise exception 'A casa não funciona nesse horário';
-  end if;
-
-  if (
-    select count(*)
-    from public.reservas
-    where telefone = trim(p_telefone)
-      and criado_em > now() - interval '10 minutes'
-  ) >= 2 then
-    raise exception 'Aguarde alguns minutos antes de enviar outra reserva';
-  end if;
-
-  insert into public.reservas (nome, telefone, data_hora, pessoas, observacao, status)
-  values (
-    trim(p_nome),
-    trim(p_telefone),
-    p_data_hora at time zone 'America/Sao_Paulo',
-    p_pessoas,
-    nullif(trim(p_observacao), ''),
-    'pendente'
-  )
-  returning id into v_id;
-
-  return v_id;
-end;
-$$;
-
-revoke all on function public.criar_reserva(text, text, timestamp without time zone, smallint, text)
-  from public;
-grant execute on function public.criar_reserva(text, text, timestamp without time zone, smallint, text)
-  to anon, authenticated;
+create unique index if not exists reservas_sem_duplicata
+  on public.reservas (telefone, data_hora);

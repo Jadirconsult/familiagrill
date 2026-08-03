@@ -1,25 +1,16 @@
-import { Header } from './components/Header'
-import { Hero } from './components/Hero'
-import { Kitchens } from './components/Kitchens'
-import { Menu } from './components/Menu'
-import { Order } from './components/Order'
-import { Hours } from './components/Hours'
-import { Visit } from './components/Visit'
-import { Footer } from './components/Footer'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Landing } from './pages/Landing'
+import { Reservas } from './pages/Reservas'
 
 export default function App() {
   return (
-    <>
-      <Header />
-      <main>
-        <Hero />
-        <Kitchens />
-        <Menu />
-        <Order />
-        <Hours />
-        <Visit />
-      </main>
-      <Footer />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        {/* Fora do menu do site: quem trabalha no salão acessa pelo endereço. */}
+        <Route path="/reservas" element={<Reservas />} />
+        <Route path="*" element={<Landing />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
