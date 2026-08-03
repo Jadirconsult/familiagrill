@@ -99,7 +99,7 @@ export const kitchens: {
     temperature: 'Carvão · brasa viva',
     lede: 'A carne encosta na grelha e ninguém tem pressa.',
     detail:
-      'Cortes na brasa de carvão, no ponto que você pedir. Espeto, na travessa ou no prato — é o mesmo fogo.',
+      'Travessa para dividir de quatro a seis, ou a jantinha no prato. Carne, linguiça, frango, suíno e coração — com arroz, feijão tropeiro, farofa e banana frita.',
   },
   {
     id: 'burger',
@@ -129,12 +129,28 @@ export const kitchens: {
 export const menu: { kitchen: string; items: { name: string; note: string }[] }[] = [
   {
     kitchen: 'churras',
+    // Itens conferidos no cardápio digital da casa, do maior para o individual.
     items: [
-      { name: 'Picanha na brasa', note: 'Fatiada na hora, sal grosso, ponto a pedido' },
-      { name: 'Costela de chão', note: 'Horas de carvão até desfiar no garfo' },
-      { name: 'Fraldinha', note: 'Corte largo, gordura selada, pra dividir' },
-      { name: 'Linguiça artesanal', note: 'Grelhada com cebola e pão na tábua' },
-      { name: 'Coração de frango', note: 'No espeto, o clássico da madrugada' },
+      {
+        name: 'Churrascão família',
+        note: 'Carne, linguiça, frango, salsichão, suíno e coração, com molho, farofa e batata frita — serve de 4 a 6',
+      },
+      {
+        name: 'Churrascão',
+        note: 'Carne, linguiça, frango, suíno, salsichão e coração, com molho, farofa e batata frita — serve de 2 a 4',
+      },
+      {
+        name: 'Individual',
+        note: 'Carne, linguiça e frango, com molho e farofa',
+      },
+      {
+        name: 'Jantinha',
+        note: 'Arroz, feijão tropeiro, batata, banana frita, molho, farofa e a proteína que você escolher',
+      },
+      {
+        name: 'Jantinha de espetinho de picanha',
+        note: 'A mesma travessa, com picanha na brasa',
+      },
     ],
   },
   {
