@@ -1,18 +1,20 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Paleta derivada da casa: carvão, brasa, chama — e um único tom frio,
-     reservado ao balcão de sushi. O frio nunca aparece nas seções de fogo. */
-  --color-coal: #0b0906;
-  --color-soot: #14100b;
-  --color-char: #221b13;
-  --color-ember: #ff4d17;
-  --color-flare: #ffab1f;
-  --color-ash: #f4ece0;
-  --color-smoke: #a2968a;
-  --color-jade: #6fd3b4;
+  /* Paleta amostrada da própria logo da casa:
+     fundo #272322, lettering creme #e5dbb7, arco "NA BRASA" em ouro #cb8b26.
+     A brasa é um tijolo queimado, não um laranja de neon — a marca é terrosa.
+     O sushi ganha o único tom frio, uma sálvia dessaturada que convive com o ouro. */
+  --color-coal: #191514;
+  --color-soot: #272322;
+  --color-char: #3a332f;
+  --color-ember: #c9481a;
+  --color-gold: #cb8b26;
+  --color-cream: #e5dbb7;
+  --color-smoke: #9c9082;
+  --color-sage: #8fae9b;
 
-  --font-display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  --font-display: 'Cinzel', 'Times New Roman', serif;
   --font-body: 'Archivo', system-ui, sans-serif;
   --font-mono: 'Space Mono', ui-monospace, monospace;
 }
@@ -24,28 +26,30 @@
 
   body {
     background-color: var(--color-coal);
-    color: var(--color-ash);
+    color: var(--color-cream);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 
   ::selection {
-    background-color: var(--color-ember);
+    background-color: var(--color-gold);
     color: var(--color-coal);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-flare);
+    outline: 2px solid var(--color-gold);
     outline-offset: 3px;
   }
 }
 
+/* A logo é toda em caixa alta com serifas em cunha; o display da página
+   segue o mesmo registro, sem tentar imitar o lettering desenhado à mão. */
 @utility display {
   font-family: var(--font-display);
-  font-weight: 800;
-  line-height: 0.85;
-  letter-spacing: -0.01em;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.005em;
   text-transform: uppercase;
 }
 
@@ -57,15 +61,25 @@
   color: var(--color-smoke);
 }
 
+/* O arco "✳ NA BRASA ✳" da logo, reaproveitado como marcador de seção. */
+@utility brand-mark {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
 /* O calor do carvão sob o hero: respira devagar, como brasa de verdade. */
 @keyframes breathe {
   0%,
   100% {
-    opacity: 0.5;
+    opacity: 0.45;
     transform: scale(1);
   }
   50% {
-    opacity: 0.85;
+    opacity: 0.75;
     transform: scale(1.06);
   }
 }

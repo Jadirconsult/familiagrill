@@ -16,8 +16,8 @@ export function Visit() {
     <section id="visita" className="border-t border-char bg-soot py-20 sm:py-28">
       <div ref={ref} className="reveal mx-auto max-w-6xl px-5 sm:px-8">
         <p className="eyebrow">Onde estamos</p>
-        <h2 className="display mt-4 max-w-2xl text-[clamp(2.25rem,6vw,4.5rem)] text-ash">
-          Av. Tamandaré, 389
+        <h2 className="display mt-4 max-w-3xl text-[clamp(1.75rem,4.5vw,3.25rem)] text-cream">
+          {brand.address.street}
         </h2>
         <p className="mt-4 text-lg text-smoke">
           {brand.address.city}/{brand.address.state} — mesa para dividir, balcão
@@ -41,31 +41,29 @@ export function Visit() {
                 href={mapsLink}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-ash uppercase transition-colors hover:border-ember hover:text-ember"
+                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <MapPin className="size-3.5" aria-hidden />
                 Abrir no mapa
               </a>
               <a
+                href={`https://wa.me/${brand.whatsapp}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+              >
+                <MessageCircle className="size-3.5" aria-hidden />
+                WhatsApp
+              </a>
+              <a
                 href={brand.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-ash uppercase transition-colors hover:border-ember hover:text-ember"
+                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <AtSign className="size-3.5" aria-hidden />
-                {brand.instagramHandle}
+                Instagram
               </a>
-              {brand.whatsapp && (
-                <a
-                  href={`https://wa.me/${brand.whatsapp.replace(/\D/g, '')}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-ash uppercase transition-colors hover:border-ember hover:text-ember"
-                >
-                  <MessageCircle className="size-3.5" aria-hidden />
-                  WhatsApp
-                </a>
-              )}
             </div>
           </div>
 
@@ -98,7 +96,7 @@ function ReservationForm() {
 
     if (error) {
       setState('error')
-      setMessage('A mesa não foi registrada. Tente de novo ou fale com a gente pelo Instagram.')
+      setMessage('A mesa não foi registrada. Tente de novo ou chame a gente no WhatsApp.')
       return
     }
 
@@ -111,15 +109,24 @@ function ReservationForm() {
     return (
       <div className="flex flex-col justify-center border border-char p-8 sm:p-10">
         <p className="eyebrow">Reservar mesa</p>
-        <p className="mt-4 text-lg leading-snug text-ash">
+        <p className="mt-4 text-lg leading-snug text-cream">
           A reserva online entra no ar assim que o Supabase for configurado.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-smoke">
-          Preencha <code className="font-mono text-flare">VITE_SUPABASE_URL</code> e{' '}
-          <code className="font-mono text-flare">VITE_SUPABASE_PUBLISHABLE_KEY</code> no
-          arquivo <code className="font-mono text-flare">.env.local</code> e rode a migration
-          em <code className="font-mono text-flare">supabase/migrations</code>.
+          Preencha <code className="font-mono text-gold">VITE_SUPABASE_URL</code> e{' '}
+          <code className="font-mono text-gold">VITE_SUPABASE_PUBLISHABLE_KEY</code> no
+          arquivo <code className="font-mono text-gold">.env.local</code> e rode a migration
+          em <code className="font-mono text-gold">supabase/migrations</code>.
         </p>
+        <a
+          href={`https://wa.me/${brand.whatsapp}`}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-8 inline-flex items-center justify-center gap-2 bg-gold px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
+        >
+          <MessageCircle className="size-3.5" aria-hidden />
+          Reservar pelo WhatsApp
+        </a>
       </div>
     )
   }
@@ -127,7 +134,7 @@ function ReservationForm() {
   return (
     <form onSubmit={handleSubmit} className="border border-char p-8 sm:p-10">
       <p className="eyebrow">Reservar mesa</p>
-      <h3 className="display mt-4 text-4xl text-ash">Guarde seu lugar</h3>
+      <h3 className="display mt-4 text-3xl text-cream">Guarde seu lugar</h3>
 
       <div className="mt-8 space-y-5">
         <Field label="Nome" name="nome" autoComplete="name" required />
@@ -136,16 +143,28 @@ function ReservationForm() {
         <div className="grid gap-5 sm:grid-cols-3">
           <Field label="Data" name="data" type="date" required />
           <Field label="Hora" name="hora" type="time" required defaultValue="20:00" />
-          <Field label="Pessoas" name="pessoas" type="number" min={1} max={20} defaultValue={2} required />
+          <Field
+            label="Pessoas"
+            name="pessoas"
+            type="number"
+            min={1}
+            max={20}
+            defaultValue={2}
+            required
+          />
         </div>
 
-        <Field label="Alguma observação" name="observacao" placeholder="Aniversário, restrição alimentar, mesa na varanda…" />
+        <Field
+          label="Alguma observação"
+          name="observacao"
+          placeholder="Aniversário, restrição alimentar, mesa na varanda…"
+        />
       </div>
 
       <button
         type="submit"
         disabled={state === 'sending'}
-        className="mt-8 w-full bg-ember px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-flare disabled:cursor-not-allowed disabled:opacity-60"
+        className="mt-8 w-full bg-gold px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
       >
         {state === 'sending' ? 'Enviando…' : 'Reservar mesa'}
       </button>
@@ -154,7 +173,7 @@ function ReservationForm() {
         <p
           role="status"
           className={`mt-4 font-mono text-xs leading-relaxed ${
-            state === 'error' ? 'text-ember' : 'text-jade'
+            state === 'error' ? 'text-ember' : 'text-sage'
           }`}
         >
           {message}
@@ -175,7 +194,7 @@ function Field({
       <input
         {...props}
         name={name}
-        className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-ash outline-none transition-colors placeholder:text-smoke/60 focus:border-ember"
+        className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors placeholder:text-smoke/60 focus:border-gold"
       />
     </label>
   )

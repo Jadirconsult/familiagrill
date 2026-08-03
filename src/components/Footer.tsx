@@ -5,10 +5,14 @@ export function Footer() {
     <footer className="border-t border-char py-14">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 sm:px-8 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="display text-4xl text-ash">
-            Família<span className="text-ember">·</span>Grill
-          </p>
-          <p className="mt-2 font-mono text-xs tracking-widest text-smoke uppercase">
+          <img
+            src="/logo-familia-grill.webp"
+            alt={brand.fullName}
+            width={112}
+            height={112}
+            className="size-28 rounded-full ring-1 ring-char"
+          />
+          <p className="mt-4 font-mono text-xs tracking-widest text-smoke uppercase">
             {brand.tagline}
           </p>
         </div>
@@ -18,7 +22,7 @@ export function Footer() {
             {brand.address.street} — {brand.address.city}/{brand.address.state}
           </p>
           <p className="mt-1">
-            <a href={brand.instagram} target="_blank" rel="noreferrer" className="hover:text-ash">
+            <a href={brand.instagram} target="_blank" rel="noreferrer" className="hover:text-cream">
               {brand.instagramHandle}
             </a>
           </p>

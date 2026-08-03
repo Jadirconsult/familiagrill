@@ -24,7 +24,9 @@ npm run dev
 Todo o texto, cardápio e horários vivem em [src/data/site.ts](src/data/site.ts). Nenhum
 componente tem conteúdo fixo — mudar o site é mudar esse arquivo.
 
-- `brand` — nome, endereço, links, WhatsApp
+- `brand` — nome, endereço, WhatsApp, Instagram, cardápio digital
+- `orderChannels` — canais de pedido **em ordem de prioridade**; o primeiro vira o
+  botão principal do header e do hero (hoje o 99Food)
 - `kitchens` — as três cozinhas e a temperatura de cada uma
 - `menu` — destaques por cozinha (sem preço, de propósito: os valores oficiais
   ficam no cardápio digital e mudam sem aviso)
@@ -53,8 +55,26 @@ do Supabase ou por um app autenticado.
 Dados levantados do perfil público [@churrascofamiliagrill](https://www.instagram.com/churrascofamiliagrill/).
 Antes de publicar, confirme:
 
+- **Links de 99Food e iFood** — em `orderChannels` apontam para a home de cada app,
+  não para a página da loja. Trocar pelas URLs diretas.
 - **Terça-feira** — o perfil não lista horário; está marcada como fechada
 - **Bairro e CEP** do endereço
-- **WhatsApp** — `brand.whatsapp` está `null`, o botão fica oculto até ser preenchido
 - **Itens do cardápio** — os destaques em `menu` são plausíveis, não copiados do
   cardápio digital (que é renderizado por JavaScript e não pôde ser lido)
+
+## Identidade visual
+
+A paleta e a tipografia saem da própria logo da casa, guardada em
+[public/logo-familia-grill.webp](public/logo-familia-grill.webp):
+
+| Token | Hex | De onde veio |
+| --- | --- | --- |
+| `cream` | `#e5dbb7` | lettering "FAMÍLIA GRILL" |
+| `gold` | `#cb8b26` | arco "✳ NA BRASA ✳" |
+| `soot` | `#272322` | fundo da logo — usado nas seções alternadas |
+| `coal` | `#191514` | fundo da página |
+| `ember` | `#c9481a` | brasa do churrasco |
+| `sage` | `#8fae9b` | o único tom frio, reservado ao sushi |
+
+O display é Cinzel — romana em caixa alta com serifas em cunha, o parente mais
+próximo do lettering da logo disponível no Google Fonts.

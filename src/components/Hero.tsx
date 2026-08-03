@@ -1,5 +1,5 @@
-import { MapPin } from 'lucide-react'
-import { brand } from '../data/site'
+import { MapPin, MessageCircle } from 'lucide-react'
+import { brand, primaryChannel } from '../data/site'
 import { NightMeter } from './NightMeter'
 
 export function Hero() {
@@ -12,20 +12,21 @@ export function Hero() {
       />
       <div
         aria-hidden
-        className="coals pointer-events-none absolute top-40 -right-24 size-[26rem] rounded-full bg-flare/15 blur-[120px]"
+        className="coals pointer-events-none absolute top-40 -right-24 size-[26rem] rounded-full bg-gold/15 blur-[120px]"
         style={{ animationDelay: '-3.5s' }}
       />
 
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
-        <p className="eyebrow">
+        {/* A própria marca já diz "na brasa" — a página começa pela voz dela. */}
+        <p className="brand-mark">✳ Na brasa ✳</p>
+        <p className="eyebrow mt-3">
           {brand.address.street} · {brand.address.city}/{brand.address.state}
         </p>
 
-        <h1 className="display mt-5 text-[clamp(3.25rem,13vw,9.5rem)] text-ash">
-          A brasa não
+        <h1 className="display mt-6 text-[clamp(2.5rem,8.5vw,6.5rem)] text-cream">
+          A brasa não apaga
           <br />
-          apaga à
-          <span className="text-ember"> meia-noite</span>
+          à <span className="text-gold">meia-noite</span>
         </h1>
 
         <div className="mt-10 grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-end">
@@ -38,16 +39,25 @@ export function Hero() {
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
-                href={brand.orderUrl}
+                href={primaryChannel.url}
                 target="_blank"
                 rel="noreferrer"
-                className="bg-ash px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-flare"
+                className="bg-cream px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-gold"
               >
-                Ver cardápio e pedir
+                Pedir no {primaryChannel.name}
+              </a>
+              <a
+                href={`https://wa.me/${brand.whatsapp}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+              >
+                <MessageCircle className="size-3.5" aria-hidden />
+                WhatsApp
               </a>
               <a
                 href="#visita"
-                className="inline-flex items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-ash uppercase transition-colors hover:border-ember hover:text-ember"
+                className="inline-flex items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <MapPin className="size-3.5" aria-hidden />
                 Como chegar

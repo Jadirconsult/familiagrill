@@ -2,17 +2,21 @@
  * Fonte única de conteúdo da landing page.
  * Edite este arquivo para atualizar o site — nenhum componente tem texto fixo.
  *
- * Dados confirmados no perfil @churrascofamiliagrill (Instagram, ago/2026).
- * Itens marcados com TODO precisam ser confirmados com o restaurante.
+ * Dados confirmados no perfil @churrascofamiliagrill (Instagram, ago/2026)
+ * e no cardápio digital da casa. Itens marcados com TODO precisam de confirmação.
  */
 
 export const brand = {
   name: 'Família Grill',
   fullName: 'Família Grill & Sushi',
   tagline: 'Churras, Burger & Sushi artesanal',
+  /** Frase que aparece no arco da própria logo. */
+  motto: 'Na brasa',
   instagram: 'https://www.instagram.com/churrascofamiliagrill/',
   instagramHandle: '@churrascofamiliagrill',
-  orderUrl: 'https://shop.beetech.com.br/churrascofamiliagrill',
+  /** Cardápio digital com os preços oficiais. */
+  menuUrl: 'https://shop.beetech.com.br/churrascofamiliagrill',
+  whatsapp: '5521997447808',
   address: {
     street: 'Av. Tamandaré, 389',
     city: 'Niterói',
@@ -20,11 +24,46 @@ export const brand = {
     // TODO: confirmar bairro e CEP com o restaurante.
     mapsQuery: 'Av. Tamandaré, 389, Niterói, RJ',
   },
-  // TODO: confirmar o número de WhatsApp. Deixe null para ocultar o botão.
-  whatsapp: null as string | null,
 } as const
 
-/** Escala de temperatura que organiza a página: brasa → brasa → frio. */
+/**
+ * Canais de pedido, em ordem de prioridade. O primeiro vira o botão principal
+ * do site — hoje o 99Food, por decisão da casa.
+ *
+ * TODO: trocar os links de 99Food e iFood pelas URLs diretas da loja. Os
+ * endereços abaixo levam à home de cada app, não à página do restaurante.
+ */
+export const orderChannels = [
+  {
+    id: '99food',
+    name: '99Food',
+    url: 'https://99food.com/',
+    note: 'O caminho mais rápido até a nossa cozinha',
+  },
+  {
+    id: 'ifood',
+    name: 'iFood',
+    url: 'https://www.ifood.com.br/',
+    note: 'Também estamos por lá',
+  },
+  {
+    id: 'whatsapp',
+    name: 'WhatsApp',
+    url: `https://wa.me/${brand.whatsapp}`,
+    note: 'Pedido, reserva ou dúvida — direto com o salão',
+  },
+  {
+    id: 'cardapio',
+    name: 'Cardápio digital',
+    url: brand.menuUrl,
+    note: 'Todos os itens e os preços atualizados',
+  },
+] as const
+
+/** Onde o CTA principal da página aponta. */
+export const primaryChannel = orderChannels[0]
+
+/** Escala de temperatura que organiza a página: brasa → chapa → frio. */
 export type Heat = 'ember' | 'flare' | 'cold'
 
 export const kitchens: {
@@ -67,7 +106,7 @@ export const kitchens: {
 /**
  * Destaques do cardápio.
  * Sem preços de propósito: os valores oficiais vivem no cardápio digital
- * (brand.orderUrl) e mudam sem aviso. Não duplique preço aqui.
+ * (brand.menuUrl) e mudam sem aviso. Não duplique preço aqui.
  */
 export const menu: { kitchen: string; items: { name: string; note: string }[] }[] = [
   {

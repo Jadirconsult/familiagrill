@@ -31,7 +31,7 @@ export function NightMeter() {
         <span className="eyebrow">A noite de hoje</span>
         <span
           className={`font-mono text-xs font-bold tracking-widest uppercase ${
-            status.open ? 'text-flare' : 'text-smoke'
+            status.open ? 'text-gold' : 'text-smoke'
           }`}
         >
           {status.open ? '● Aberto agora' : '○ Fechado'}
@@ -43,7 +43,7 @@ export function NightMeter() {
         <div
           className={`absolute inset-x-0 top-3 h-2 rounded-full ${
             status.open
-              ? 'bg-gradient-to-r from-char via-ember to-flare'
+              ? 'bg-gradient-to-r from-char via-ember to-gold'
               : 'bg-char'
           }`}
         />
@@ -53,7 +53,7 @@ export function NightMeter() {
             className="absolute top-0 -ml-2 transition-[left] duration-1000 ease-out"
             style={{ left: `${Math.min(Math.max(toPercent(currentMinutes), 0), 100)}%` }}
           >
-            <span className="block size-4 rounded-full bg-ash ring-4 ring-ember/40" />
+            <span className="block size-4 rounded-full bg-cream ring-4 ring-ember/40" />
           </div>
         )}
 
@@ -70,14 +70,14 @@ export function NightMeter() {
         {status.open ? (
           <>
             Grelha acesa até as{' '}
-            <strong className="font-bold text-ash">{formatMinutes(status.closesAt)}</strong>
+            <strong className="font-bold text-cream">{formatMinutes(status.closesAt)}</strong>
             {' — '}
             faltam {formatCountdown(status.minutesLeft)}.
           </>
         ) : (
           <>
             A brasa volta{' '}
-            <strong className="font-bold text-ash">{status.nextOpenLabel}</strong>.
+            <strong className="font-bold text-cream">{status.nextOpenLabel}</strong>.
           </>
         )}
       </p>

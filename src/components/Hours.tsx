@@ -19,7 +19,7 @@ export function Hours() {
     <section id="horarios" className="border-t border-char py-20 sm:py-28">
       <div ref={ref} className="reveal mx-auto max-w-6xl px-5 sm:px-8">
         <p className="eyebrow">Quando a grelha acende</p>
-        <h2 className="display mt-4 max-w-2xl text-[clamp(2.25rem,6vw,4.5rem)] text-ash">
+        <h2 className="display mt-4 max-w-3xl text-[clamp(1.75rem,4.5vw,3.25rem)] text-cream">
           Toda noite começa às 18h. O fim depende do dia.
         </h2>
 
@@ -32,7 +32,7 @@ export function Hours() {
               <div
                 key={day.day}
                 className={`grid grid-cols-[3.5rem_1fr] items-center gap-4 py-3 sm:grid-cols-[5rem_1fr_7rem] ${
-                  isToday ? 'text-ash' : 'text-smoke'
+                  isToday ? 'text-cream' : 'text-smoke'
                 }`}
               >
                 <span className="font-mono text-xs font-bold tracking-widest">
@@ -44,9 +44,7 @@ export function Hours() {
                   {shift && (
                     <div
                       className={`absolute inset-y-0 rounded-full ${
-                        isToday
-                          ? 'bg-gradient-to-r from-ember to-flare'
-                          : 'bg-char'
+                        isToday ? 'bg-gradient-to-r from-ember to-gold' : 'bg-char'
                       }`}
                       style={{
                         left: `${((shift.open - SPAN_START) / (SPAN_END - SPAN_START)) * 100}%`,

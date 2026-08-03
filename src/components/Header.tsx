@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { brand } from '../data/site'
+import { brand, primaryChannel } from '../data/site'
 
 const links = [
   { href: '#cozinhas', label: 'As três cozinhas' },
   { href: '#cardapio', label: 'Cardápio' },
+  { href: '#pedir', label: 'Delivery' },
   { href: '#horarios', label: 'Horários' },
   { href: '#visita', label: 'Onde estamos' },
 ]
@@ -24,9 +25,18 @@ export function Header() {
         scrolled ? 'border-b border-char bg-coal/90 backdrop-blur-md' : 'border-b border-transparent'
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-4 sm:px-8">
-        <a href="#topo" className="display text-2xl leading-none text-ash">
-          Família<span className="text-ember">·</span>Grill
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-3 sm:px-8">
+        <a href="#topo" className="flex items-center gap-3" aria-label={`${brand.fullName} — início`}>
+          <img
+            src="/logo-familia-grill.webp"
+            alt=""
+            width={48}
+            height={48}
+            className="size-12 rounded-full ring-1 ring-char"
+          />
+          <span className="display hidden text-lg leading-tight text-cream sm:block">
+            {brand.name}
+          </span>
         </a>
 
         <nav className="hidden items-center gap-7 lg:flex">
@@ -34,7 +44,7 @@ export function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="font-mono text-xs tracking-widest text-smoke uppercase transition-colors hover:text-ash"
+              className="font-mono text-xs tracking-widest text-smoke uppercase transition-colors hover:text-cream"
             >
               {link.label}
             </a>
@@ -42,12 +52,12 @@ export function Header() {
         </nav>
 
         <a
-          href={brand.orderUrl}
+          href={primaryChannel.url}
           target="_blank"
           rel="noreferrer"
-          className="shrink-0 bg-ember px-4 py-2.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-flare"
+          className="shrink-0 bg-gold px-4 py-2.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
         >
-          Pedir agora
+          Pedir no {primaryChannel.name}
         </a>
       </div>
     </header>
