@@ -33,34 +33,53 @@ export const brand = {
  * TODO: trocar os links de 99Food e iFood pelas URLs diretas da loja. Os
  * endereços abaixo levam à home de cada app, não à página do restaurante.
  */
-export const orderChannels = [
+export type OrderChannel = {
+  id: string
+  name: string
+  url: string
+  note: string
+  /** 'app' = entrega por aplicativo; 'direto' = fala direto com a casa. */
+  kind: 'app' | 'direto'
+}
+
+export const orderChannels: OrderChannel[] = [
   {
     id: '99food',
     name: '99Food',
     url: 'https://99food.com/',
     note: 'O caminho mais rápido até a nossa cozinha',
+    kind: 'app',
   },
   {
     id: 'ifood',
     name: 'iFood',
     url: 'https://www.ifood.com.br/',
-    note: 'Também estamos por lá',
+    note: 'A brasa entregue por quem você já usa',
+    kind: 'app',
   },
   {
     id: 'whatsapp',
     name: 'WhatsApp',
     url: `https://wa.me/${brand.whatsapp}`,
     note: 'Pedido, reserva ou dúvida — direto com o salão',
+    kind: 'direto',
   },
   {
     id: 'cardapio',
     name: 'Cardápio digital',
     url: brand.menuUrl,
     note: 'Todos os itens e os preços atualizados',
+    kind: 'direto',
   },
-] as const
+]
 
-/** Onde o CTA principal da página aponta. */
+/** Apps de entrega, na ordem em que aparecem lado a lado na seção Delivery. */
+export const deliveryApps = orderChannels.filter((c) => c.kind === 'app')
+
+/** Canais que falam direto com a casa, na faixa abaixo dos apps. */
+export const directChannels = orderChannels.filter((c) => c.kind === 'direto')
+
+/** Onde o CTA principal do header e do hero aponta. */
 export const primaryChannel = orderChannels[0]
 
 /** Escala de temperatura que organiza a página: brasa → chapa → frio. */
