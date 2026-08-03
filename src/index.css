@@ -1,17 +1,18 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Paleta amostrada da própria logo da casa:
-     fundo #272322, lettering creme #e5dbb7, arco "NA BRASA" em ouro #cb8b26.
-     A brasa é um tijolo queimado, não um laranja de neon — a marca é terrosa.
-     O sushi ganha o único tom frio, uma sálvia dessaturada que convive com o ouro. */
-  --color-coal: #191514;
-  --color-soot: #272322;
-  --color-char: #3a332f;
-  --color-ember: #c9481a;
-  --color-gold: #cb8b26;
-  --color-cream: #e5dbb7;
-  --color-smoke: #9c9082;
+  /* Paleta amostrada da própria logo da casa: creme #f5f5eb do fundo e o
+     coral #f2635f do hambúrguer. O coral é a cor de ação da marca.
+     A escala de temperatura das cozinhas segue viva: brasa de carvão no churras,
+     o coral da marca no burger, e uma sálvia dessaturada no balcão de sushi —
+     o único tom frio da página. */
+  --color-coal: #121110;
+  --color-soot: #1c1a18;
+  --color-char: #35312e;
+  --color-ember: #d4551d;
+  --color-coral: #f2635f;
+  --color-cream: #f5f5eb;
+  --color-smoke: #9a938a;
   --color-sage: #8fae9b;
 
   --font-display: 'Cinzel', 'Times New Roman', serif;
@@ -33,12 +34,12 @@
   }
 
   ::selection {
-    background-color: var(--color-gold);
+    background-color: var(--color-coral);
     color: var(--color-coal);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-gold);
+    outline: 2px solid var(--color-coral);
     outline-offset: 3px;
   }
 }
@@ -68,7 +69,7 @@
   font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--color-coral);
 }
 
 /* O calor do carvão sob o hero: respira devagar, como brasa de verdade. */

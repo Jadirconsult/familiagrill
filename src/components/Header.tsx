@@ -30,11 +30,11 @@ export function Header() {
       <div className="relative mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3 sm:gap-6 sm:px-8">
         <a href="#topo" className="flex items-center gap-3" aria-label={`${brand.fullName} — início`}>
           <img
-            src="/logo-familia-grill.webp"
+            src="/logo-familia-grill.png"
             alt=""
             width={48}
             height={48}
-            className="size-12 rounded-full ring-1 ring-char"
+            className="size-12 rounded-full"
           />
           <span className="display hidden text-lg leading-tight text-cream sm:block">
             {brand.name}
@@ -59,7 +59,7 @@ export function Header() {
           aria-controls="menu-mobile"
           aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
           onClick={() => setMenuOpen((open) => !open)}
-          className="grid size-11 place-items-center border border-char text-cream transition-colors hover:border-gold hover:text-gold lg:hidden"
+          className="grid size-11 place-items-center border border-char text-cream transition-colors hover:border-coral hover:text-coral lg:hidden"
         >
           {menuOpen ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
         </button>
@@ -68,7 +68,7 @@ export function Header() {
           href={primaryChannel.url}
           target="_blank"
           rel="noreferrer"
-          className="shrink-0 bg-gold px-4 py-2.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
+          className="shrink-0 bg-coral px-4 py-2.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
         >
           Pedir no {primaryChannel.name}
         </a>

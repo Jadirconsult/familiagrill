@@ -56,11 +56,11 @@ function Shell({ children }: { children: React.ReactNode }) {
     <div className="grid min-h-dvh place-items-center px-5 py-16">
       <div className="w-full max-w-sm">
         <img
-          src="/logo-familia-grill.webp"
+          src="/logo-familia-grill.png"
           alt=""
           width={72}
           height={72}
-          className="size-18 rounded-full ring-1 ring-char"
+          className="size-18 rounded-full"
         />
         <p className="eyebrow mt-6">Painel da equipe</p>
         <div className="mt-4">{children}</div>
@@ -101,7 +101,7 @@ function Login() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors focus:border-gold"
+            className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors focus:border-coral"
           />
         </label>
         <label className="block">
@@ -112,14 +112,14 @@ function Login() {
             required
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
-            className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors focus:border-gold"
+            className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors focus:border-coral"
           />
         </label>
 
         <button
           type="submit"
           disabled={busy}
-          className="w-full bg-gold px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:opacity-60"
+          className="w-full bg-coral px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:opacity-60"
         >
           {busy ? 'Entrando…' : 'Entrar'}
         </button>
@@ -186,11 +186,11 @@ function Board({ email }: { email: string }) {
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-5 py-3">
           <div className="flex items-center gap-3">
             <img
-              src="/logo-familia-grill.webp"
+              src="/logo-familia-grill.png"
               alt=""
               width={36}
               height={36}
-              className="size-9 rounded-full ring-1 ring-char"
+              className="size-9 rounded-full"
             />
             <span className="display text-sm text-cream">Reservas</span>
           </div>
@@ -200,14 +200,14 @@ function Board({ email }: { email: string }) {
               type="button"
               onClick={() => void load()}
               aria-label="Atualizar lista"
-              className="grid size-9 place-items-center border border-char text-smoke transition-colors hover:border-gold hover:text-gold"
+              className="grid size-9 place-items-center border border-char text-smoke transition-colors hover:border-coral hover:text-coral"
             >
               <RefreshCw className={`size-4 ${loading ? 'animate-spin' : ''}`} aria-hidden />
             </button>
             <button
               type="button"
               onClick={() => supabase?.auth.signOut()}
-              className="inline-flex items-center gap-2 border border-char px-3 py-2 font-mono text-[11px] tracking-widest text-smoke uppercase transition-colors hover:border-gold hover:text-gold"
+              className="inline-flex items-center gap-2 border border-char px-3 py-2 font-mono text-[11px] tracking-widest text-smoke uppercase transition-colors hover:border-coral hover:text-coral"
             >
               <LogOut className="size-3.5" aria-hidden />
               Sair
@@ -222,7 +222,7 @@ function Board({ email }: { email: string }) {
             type="button"
             onClick={() => shiftDay(-1)}
             aria-label="Dia anterior"
-            className="grid size-10 place-items-center border border-char text-cream transition-colors hover:border-gold hover:text-gold"
+            className="grid size-10 place-items-center border border-char text-cream transition-colors hover:border-coral hover:text-coral"
           >
             <ChevronLeft className="size-5" aria-hidden />
           </button>
@@ -239,7 +239,7 @@ function Board({ email }: { email: string }) {
             type="button"
             onClick={() => shiftDay(1)}
             aria-label="Próximo dia"
-            className="grid size-10 place-items-center border border-char text-cream transition-colors hover:border-gold hover:text-gold"
+            className="grid size-10 place-items-center border border-char text-cream transition-colors hover:border-coral hover:text-coral"
           >
             <ChevronRight className="size-5" aria-hidden />
           </button>
@@ -281,7 +281,7 @@ function Board({ email }: { email: string }) {
                       href={phoneHref(reserva.telefone)}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1 text-gold hover:underline"
+                      className="inline-flex items-center gap-1 text-coral hover:underline"
                     >
                       <MessageCircle className="size-3" aria-hidden />
                       {formatPhone(reserva.telefone)}

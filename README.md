@@ -63,17 +63,22 @@ Antes de publicar, confirme:
 
 ## Identidade visual
 
-A paleta e a tipografia saem da própria logo da casa, guardada em
-[public/logo-familia-grill.webp](public/logo-familia-grill.webp):
+A paleta sai da própria logo da casa, guardada em
+[public/logo-familia-grill.png](public/logo-familia-grill.png):
 
 | Token | Hex | De onde veio |
 | --- | --- | --- |
-| `cream` | `#e5dbb7` | lettering "FAMÍLIA GRILL" |
-| `gold` | `#cb8b26` | arco "✳ NA BRASA ✳" |
-| `soot` | `#272322` | fundo da logo — usado nas seções alternadas |
-| `coal` | `#191514` | fundo da página |
-| `ember` | `#c9481a` | brasa do churrasco |
+| `cream` | `#f5f5eb` | fundo da logo |
+| `coral` | `#f2635f` | hambúrguer da logo — cor de ação da marca |
+| `coal` | `#121110` | fundo da página |
+| `soot` | `#1c1a18` | seções alternadas |
+| `ember` | `#d4551d` | brasa do churrasco |
 | `sage` | `#8fae9b` | o único tom frio, reservado ao sushi |
 
-O display é Cinzel — romana em caixa alta com serifas em cunha, o parente mais
-próximo do lettering da logo disponível no Google Fonts.
+As três cozinhas seguem uma escala de temperatura: `ember` no churras, `coral`
+no burger, `sage` no sushi. O tom frio nunca aparece nas seções de fogo.
+
+O display é Cinzel — romana em caixa alta com serifas em cunha.
+
+> A logo atual tem 204×204 px. Quando chegar uma versão em alta resolução,
+> substitua o arquivo mantendo o mesmo nome — nenhum código muda.

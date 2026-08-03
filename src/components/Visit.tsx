@@ -49,7 +49,7 @@ export function Visit() {
                 href={mapsLink}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-coral hover:text-coral"
               >
                 <MapPin className="size-3.5" aria-hidden />
                 Abrir no mapa
@@ -58,7 +58,7 @@ export function Visit() {
                 href={`https://wa.me/${brand.whatsapp}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-coral hover:text-coral"
               >
                 <MessageCircle className="size-3.5" aria-hidden />
                 WhatsApp
@@ -67,7 +67,7 @@ export function Visit() {
                 href={brand.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-coral hover:text-coral"
               >
                 <AtSign className="size-3.5" aria-hidden />
                 Instagram
@@ -171,15 +171,15 @@ function ReservationForm() {
           A reserva online entra no ar assim que o Supabase for configurado.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-smoke">
-          Preencha <code className="font-mono text-gold">VITE_SUPABASE_URL</code> e{' '}
-          <code className="font-mono text-gold">VITE_SUPABASE_PUBLISHABLE_KEY</code> no
-          arquivo <code className="font-mono text-gold">.env.local</code>.
+          Preencha <code className="font-mono text-coral">VITE_SUPABASE_URL</code> e{' '}
+          <code className="font-mono text-coral">VITE_SUPABASE_PUBLISHABLE_KEY</code> no
+          arquivo <code className="font-mono text-coral">.env.local</code>.
         </p>
         <a
           href={`https://wa.me/${brand.whatsapp}`}
           target="_blank"
           rel="noreferrer"
-          className="mt-8 inline-flex items-center justify-center gap-2 bg-gold px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
+          className="mt-8 inline-flex items-center justify-center gap-2 bg-coral px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
         >
           <MessageCircle className="size-3.5" aria-hidden />
           Reservar pelo WhatsApp
@@ -260,7 +260,7 @@ function ReservationForm() {
         <button
           type="submit"
           disabled={sending}
-          className="mt-8 w-full bg-gold px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-8 w-full bg-coral px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
         >
           {sending ? 'Enviando…' : 'Reservar mesa'}
         </button>
@@ -305,7 +305,7 @@ function Field({
         ref={ref}
         name={name}
         onChange={(event) => onValue(event.target.value)}
-        className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors placeholder:text-smoke/50 focus:border-gold"
+        className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors placeholder:text-smoke/50 focus:border-coral"
       />
     </label>
   )

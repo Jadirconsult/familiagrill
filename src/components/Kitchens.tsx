@@ -3,7 +3,7 @@ import { useReveal } from '../hooks/useReveal'
 
 const accent = {
   ember: { text: 'text-ember', rule: 'bg-ember', hover: 'hover:border-ember/60' },
-  flare: { text: 'text-gold', rule: 'bg-gold', hover: 'hover:border-gold/60' },
+  flare: { text: 'text-coral', rule: 'bg-coral', hover: 'hover:border-coral/60' },
   cold: { text: 'text-sage', rule: 'bg-sage', hover: 'hover:border-sage/60' },
 } as const
 

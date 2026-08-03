@@ -6,11 +6,11 @@ export function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 sm:px-8 md:flex-row md:items-end md:justify-between">
         <div>
           <img
-            src="/logo-familia-grill.webp"
+            src="/logo-familia-grill.png"
             alt={brand.fullName}
             width={112}
             height={112}
-            className="size-28 rounded-full ring-1 ring-char"
+            className="size-28 rounded-full"
           />
           <p className="mt-4 font-mono text-xs tracking-widest text-smoke uppercase">
             {brand.tagline}
