@@ -1,10 +1,18 @@
-import { useState, type FormEvent } from 'react'
+import { useMemo, useRef, useState, type FormEvent } from 'react'
 import { AtSign, MapPin, MessageCircle } from 'lucide-react'
 import { brand } from '../data/site'
 import { isSupabaseConfigured, supabase } from '../lib/supabase'
+import { isWithinOpeningHours } from '../lib/hours'
+import {
+  formatWhen,
+  isPhoneComplete,
+  maskDate,
+  maskPhone,
+  maskTime,
+  parseDateTime,
+  toRestaurantTimestamp,
+} from '../lib/form'
 import { useReveal } from '../hooks/useReveal'
-
-type State = 'idle' | 'sending' | 'sent' | 'error'
 
 const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(brand.address.mapsQuery)}`
 const mapsEmbed = `https://www.google.com/maps?q=${encodeURIComponent(brand.address.mapsQuery)}&z=16&output=embed`
@@ -74,35 +82,85 @@ export function Visit() {
   )
 }
 
+const EMPTY = { nome: '', telefone: '', data: '', hora: '', pessoas: '2', observacao: '' }
+
 function ReservationForm() {
-  const [state, setState] = useState<State>('idle')
-  const [message, setMessage] = useState('')
+  const [form, setForm] = useState(EMPTY)
+  const [sending, setSending] = useState(false)
+  const [confirmation, setConfirmation] = useState('')
+  const [failure, setFailure] = useState('')
+  const nomeRef = useRef<HTMLInputElement>(null)
+
+  const set = (field: keyof typeof EMPTY) => (value: string) =>
+    setForm((current) => ({ ...current, [field]: value }))
+
+  /** O que ainda impede o envio. Vazio significa formulário pronto. */
+  const blockers = useMemo(() => {
+    const missing: string[] = []
+    if (form.nome.trim().length < 2) missing.push('nome')
+    if (!isPhoneComplete(form.telefone)) missing.push('telefone')
+
+    const pessoas = Number(form.pessoas)
+    if (!Number.isInteger(pessoas) || pessoas < 1 || pessoas > 20) missing.push('pessoas')
+
+    const when = parseDateTime(form.data, form.hora)
+    if (!when) {
+      if (form.data.length !== 10) missing.push('data')
+      if (form.hora.length !== 5) missing.push('hora')
+      if (form.data.length === 10 && form.hora.length === 5) {
+        return { missing, reason: 'Essa data ou hora não existe. Confira os números.' }
+      }
+      return { missing, reason: '' }
+    }
+
+    if (when.getTime() <= Date.now()) {
+      return { missing, reason: 'A reserva precisa ser para um horário futuro.' }
+    }
+    if (when.getTime() > Date.now() + 90 * 24 * 60 * 60 * 1000) {
+      return { missing, reason: 'Aceitamos reservas com até 90 dias de antecedência.' }
+    }
+    if (!isWithinOpeningHours(when)) {
+      return { missing, reason: 'A casa está fechada nesse horário. Confira os horários acima.' }
+    }
+
+    return { missing, reason: '' }
+  }, [form])
+
+  const isReady = blockers.missing.length === 0 && blockers.reason === ''
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!supabase) return
+    if (!supabase || !isReady) return
 
-    const form = event.currentTarget
-    const data = new FormData(form)
+    const when = parseDateTime(form.data, form.hora)!
+    const nome = form.nome.trim()
 
-    setState('sending')
+    setSending(true)
+    setFailure('')
+    setConfirmation('')
+
     const { error } = await supabase.from('reservas').insert({
-      nome: String(data.get('nome')).trim(),
-      telefone: String(data.get('telefone')).trim(),
-      data_hora: `${data.get('data')}T${data.get('hora')}`,
-      pessoas: Number(data.get('pessoas')),
-      observacao: String(data.get('observacao') ?? '').trim() || null,
+      nome,
+      telefone: form.telefone.replace(/\D/g, ''),
+      data_hora: toRestaurantTimestamp(when),
+      pessoas: Number(form.pessoas),
+      observacao: form.observacao.trim() || null,
     })
 
+    setSending(false)
+
     if (error) {
-      setState('error')
-      setMessage('A mesa não foi registrada. Tente de novo ou chame a gente no WhatsApp.')
+      setFailure('A mesa não foi registrada. Tente de novo ou chame a gente no WhatsApp.')
       return
     }
 
-    form.reset()
-    setState('sent')
-    setMessage('Mesa registrada. Confirmamos por telefone antes do horário.')
+    setConfirmation(
+      `Mesa reservada para ${nome} — ${formatWhen(when)}, ${form.pessoas} ${
+        Number(form.pessoas) === 1 ? 'pessoa' : 'pessoas'
+      }. Confirmamos por telefone antes do horário.`,
+    )
+    setForm(EMPTY)
+    nomeRef.current?.focus()
   }
 
   if (!isSupabaseConfigured) {
@@ -115,8 +173,7 @@ function ReservationForm() {
         <p className="mt-3 text-sm leading-relaxed text-smoke">
           Preencha <code className="font-mono text-gold">VITE_SUPABASE_URL</code> e{' '}
           <code className="font-mono text-gold">VITE_SUPABASE_PUBLISHABLE_KEY</code> no
-          arquivo <code className="font-mono text-gold">.env.local</code> e rode a migration
-          em <code className="font-mono text-gold">supabase/migrations</code>.
+          arquivo <code className="font-mono text-gold">.env.local</code>.
         </p>
         <a
           href={`https://wa.me/${brand.whatsapp}`}
@@ -132,51 +189,96 @@ function ReservationForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="border border-char p-8 sm:p-10">
+    <form onSubmit={handleSubmit} noValidate className="border border-char p-8 sm:p-10">
       <p className="eyebrow">Reservar mesa</p>
       <h3 className="display mt-4 text-3xl text-cream">Guarde seu lugar</h3>
 
       <div className="mt-8 space-y-5">
-        <Field label="Nome" name="nome" autoComplete="name" required />
-        <Field label="Telefone" name="telefone" type="tel" autoComplete="tel" required />
+        <Field
+          ref={nomeRef}
+          label="Nome"
+          name="nome"
+          autoComplete="name"
+          value={form.nome}
+          onValue={set('nome')}
+        />
+        <Field
+          label="Telefone"
+          name="telefone"
+          type="tel"
+          inputMode="numeric"
+          autoComplete="tel"
+          placeholder="(21) 99999-9999"
+          maxLength={15}
+          value={form.telefone}
+          onValue={(v) => set('telefone')(maskPhone(v))}
+        />
 
         <div className="grid gap-5 sm:grid-cols-3">
-          <Field label="Data" name="data" type="date" required />
-          <Field label="Hora" name="hora" type="time" required defaultValue="20:00" />
+          <Field
+            label="Data"
+            name="data"
+            inputMode="numeric"
+            placeholder="dd/mm/aaaa"
+            maxLength={10}
+            value={form.data}
+            onValue={(v) => set('data')(maskDate(v))}
+          />
+          <Field
+            label="Hora"
+            name="hora"
+            inputMode="numeric"
+            placeholder="20:00"
+            maxLength={5}
+            value={form.hora}
+            onValue={(v) => set('hora')(maskTime(v))}
+          />
           <Field
             label="Pessoas"
             name="pessoas"
             type="number"
             min={1}
             max={20}
-            defaultValue={2}
-            required
+            value={form.pessoas}
+            onValue={set('pessoas')}
           />
         </div>
 
         <Field
-          label="Alguma observação"
+          label="Alguma observação (opcional)"
           name="observacao"
           placeholder="Aniversário, restrição alimentar, mesa na varanda…"
+          maxLength={500}
+          value={form.observacao}
+          onValue={set('observacao')}
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={state === 'sending'}
-        className="mt-8 w-full bg-gold px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {state === 'sending' ? 'Enviando…' : 'Reservar mesa'}
-      </button>
+      {/* O botão só existe quando a reserva está completa. Enquanto isso, o
+          formulário diz o que falta — senão o visitante fica procurando o botão. */}
+      {isReady ? (
+        <button
+          type="submit"
+          disabled={sending}
+          className="mt-8 w-full bg-gold px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {sending ? 'Enviando…' : 'Reservar mesa'}
+        </button>
+      ) : (
+        <p className="mt-8 border border-char px-6 py-4 text-center font-mono text-[11px] leading-relaxed tracking-widest text-smoke uppercase">
+          {blockers.reason || `Falta preencher: ${blockers.missing.join(', ')}`}
+        </p>
+      )}
 
-      {message && (
+      {(confirmation || failure) && (
         <p
           role="status"
+          aria-live="polite"
           className={`mt-4 font-mono text-xs leading-relaxed ${
-            state === 'error' ? 'text-ember' : 'text-sage'
+            failure ? 'text-ember' : 'text-sage'
           }`}
         >
-          {message}
+          {failure || confirmation}
         </p>
       )}
     </form>
@@ -186,15 +288,24 @@ function ReservationForm() {
 function Field({
   label,
   name,
+  onValue,
+  ref,
   ...props
-}: { label: string; name: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+}: {
+  label: string
+  name: string
+  onValue: (value: string) => void
+  ref?: React.Ref<HTMLInputElement>
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
   return (
     <label className="block">
       <span className="eyebrow">{label}</span>
       <input
         {...props}
+        ref={ref}
         name={name}
-        className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors placeholder:text-smoke/60 focus:border-gold"
+        onChange={(event) => onValue(event.target.value)}
+        className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors placeholder:text-smoke/50 focus:border-gold"
       />
     </label>
   )

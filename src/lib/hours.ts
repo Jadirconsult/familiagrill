@@ -58,6 +58,24 @@ export function getStatus(now: Date): Status {
   return { open: false, nextDay: findDay(5), nextOpenLabel: 'sexta às 18h' }
 }
 
+/**
+ * A casa está aberta no momento escolhido para a reserva?
+ * Usa a mesma tabela de horários exibida na página — uma fonte de verdade só.
+ */
+export function isWithinOpeningHours(when: Date): boolean {
+  const minutes = when.getHours() * 60 + when.getMinutes()
+  const dayIndex = when.getDay()
+
+  // Turno que começou no dia anterior e atravessou a meia-noite.
+  const yesterday = findDay((dayIndex + 6) % 7)
+  if (isOpenDay(yesterday) && yesterday.close > DAY && minutes < yesterday.close - DAY) {
+    return true
+  }
+
+  const today = findDay(dayIndex)
+  return isOpenDay(today) && minutes >= today.open && minutes < today.close
+}
+
 export function formatCountdown(minutesLeft: number): string {
   const h = Math.floor(minutesLeft / 60)
   const m = minutesLeft % 60

@@ -17,8 +17,8 @@ export function Hero() {
       />
 
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
-        {/* A própria marca já diz "na brasa" — a página começa pela voz dela. */}
-        <p className="brand-mark">✳ Na brasa ✳</p>
+        {/* A página abre assinando com o nome da casa. */}
+        <p className="brand-mark">✳ {brand.name} ✳</p>
         <p className="eyebrow mt-3">
           {brand.address.street} · {brand.address.city}/{brand.address.state}
         </p>

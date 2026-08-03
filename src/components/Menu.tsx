@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type KeyboardEvent } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { brand, kitchens, menu } from '../data/site'
 import { useReveal } from '../hooks/useReveal'
@@ -15,6 +15,33 @@ export function Menu() {
 
   const kitchen = kitchens.find((k) => k.id === active)!
   const items = menu.find((m) => m.kitchen === active)?.items ?? []
+
+  function selectByOffset(offset: number) {
+    const current = kitchens.findIndex((k) => k.id === active)
+    const next = kitchens[(current + offset + kitchens.length) % kitchens.length]
+    setActive(next.id)
+    requestAnimationFrame(() => document.getElementById(`aba-${next.id}`)?.focus())
+  }
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    if (event.key === 'ArrowRight') {
+      event.preventDefault()
+      selectByOffset(1)
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault()
+      selectByOffset(-1)
+    } else if (event.key === 'Home') {
+      event.preventDefault()
+      setActive(kitchens[0].id)
+      requestAnimationFrame(() => document.getElementById(`aba-${kitchens[0].id}`)?.focus())
+    } else if (event.key === 'End') {
+      event.preventDefault()
+      setActive(kitchens[kitchens.length - 1].id)
+      requestAnimationFrame(() =>
+        document.getElementById(`aba-${kitchens[kitchens.length - 1].id}`)?.focus(),
+      )
+    }
+  }
 
   return (
     <section id="cardapio" className="border-t border-char bg-soot py-20 sm:py-28">
@@ -45,11 +72,14 @@ export function Menu() {
           {kitchens.map((k) => (
             <button
               key={k.id}
+              id={`aba-${k.id}`}
               role="tab"
               type="button"
               aria-selected={active === k.id}
               aria-controls={`painel-${k.id}`}
+              tabIndex={active === k.id ? 0 : -1}
               onClick={() => setActive(k.id)}
+              onKeyDown={handleTabKeyDown}
               className={`px-5 py-2.5 font-mono text-xs font-bold tracking-widest uppercase transition-colors ${
                 active === k.id
                   ? 'bg-cream text-coal'
@@ -61,7 +91,13 @@ export function Menu() {
           ))}
         </div>
 
-        <div id={`painel-${kitchen.id}`} role="tabpanel" className="mt-10">
+        <div
+          id={`painel-${kitchen.id}`}
+          role="tabpanel"
+          aria-labelledby={`aba-${kitchen.id}`}
+          tabIndex={0}
+          className="mt-10"
+        >
           <p className={`font-mono text-[11px] tracking-widest uppercase ${accent[kitchen.heat]}`}>
             {kitchen.temperature}
           </p>

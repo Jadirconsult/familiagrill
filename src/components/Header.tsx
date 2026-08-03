@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Menu, X } from 'lucide-react'
 import { brand, primaryChannel } from '../data/site'
 
 const links = [
@@ -11,6 +12,7 @@ const links = [
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -25,7 +27,7 @@ export function Header() {
         scrolled ? 'border-b border-char bg-coal/90 backdrop-blur-md' : 'border-b border-transparent'
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-3 sm:px-8">
+      <div className="relative mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3 sm:gap-6 sm:px-8">
         <a href="#topo" className="flex items-center gap-3" aria-label={`${brand.fullName} — início`}>
           <img
             src="/logo-familia-grill.webp"
@@ -51,6 +53,17 @@ export function Header() {
           ))}
         </nav>
 
+        <button
+          type="button"
+          aria-expanded={menuOpen}
+          aria-controls="menu-mobile"
+          aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+          onClick={() => setMenuOpen((open) => !open)}
+          className="grid size-11 place-items-center border border-char text-cream transition-colors hover:border-gold hover:text-gold lg:hidden"
+        >
+          {menuOpen ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
+        </button>
+
         <a
           href={primaryChannel.url}
           target="_blank"
@@ -59,6 +72,25 @@ export function Header() {
         >
           Pedir no {primaryChannel.name}
         </a>
+
+        {menuOpen && (
+          <nav
+            id="menu-mobile"
+            aria-label="Navegação principal"
+            className="absolute top-full right-5 left-5 grid border border-char bg-coal p-3 shadow-2xl sm:right-8 sm:left-8 lg:hidden"
+          >
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="px-4 py-3 font-mono text-xs tracking-widest text-smoke uppercase transition-colors hover:bg-soot hover:text-cream"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        )}
       </div>
     </header>
   )

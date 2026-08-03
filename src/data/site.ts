@@ -10,8 +10,6 @@ export const brand = {
   name: 'Família Grill',
   fullName: 'Família Grill & Sushi',
   tagline: 'Churras, Burger & Sushi artesanal',
-  /** Frase que aparece no arco da própria logo. */
-  motto: 'Na brasa',
   instagram: 'https://www.instagram.com/churrascofamiliagrill/',
   instagramHandle: '@churrascofamiliagrill',
   /** Cardápio digital com os preços oficiais. */
