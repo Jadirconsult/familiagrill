@@ -178,7 +178,7 @@ export function isOpenDay(
 
 export const hours: DayHours[] = [
   { day: 1, label: 'Segunda', short: 'SEG', open: 18 * 60, close: 25 * 60 },
-  { day: 2, label: 'Terça', short: 'TER', open: null, close: null },
+  { day: 2, label: 'Terça', short: 'TER', open: 18 * 60, close: 25 * 60 },
   { day: 3, label: 'Quarta', short: 'QUA', open: 18 * 60, close: 25 * 60 },
   { day: 4, label: 'Quinta', short: 'QUI', open: 18 * 60, close: 25 * 60 },
   { day: 5, label: 'Sexta', short: 'SEX', open: 18 * 60, close: 29 * 60 },

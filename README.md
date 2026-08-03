@@ -57,7 +57,6 @@ Antes de publicar, confirme:
 
 - **Links de 99Food e iFood** — em `orderChannels` apontam para a home de cada app,
   não para a página da loja. Trocar pelas URLs diretas.
-- **Terça-feira** — o perfil não lista horário; está marcada como fechada
 - **Bairro e CEP** do endereço
 - **Itens do cardápio** — os destaques em `menu` são plausíveis, não copiados do
   cardápio digital (que é renderizado por JavaScript e não pôde ser lido)
