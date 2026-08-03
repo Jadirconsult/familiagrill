@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { Session } from '@supabase/supabase-js'
 import { ChevronLeft, ChevronRight, LogOut, MessageCircle, RefreshCw } from 'lucide-react'
 import { brand } from '../data/site'
@@ -139,6 +140,7 @@ function Login() {
 }
 
 function Board({ email }: { email: string }) {
+  const navigate = useNavigate()
   const [day, setDay] = useState(() => new Date())
   const [reservas, setReservas] = useState<Reserva[]>([])
   const [loading, setLoading] = useState(true)
@@ -169,6 +171,12 @@ function Board({ email }: { email: string }) {
       setReservas(previous)
       setProblem('A alteração não foi salva. Tente de novo.')
     }
+  }
+
+  /** Sair devolve a pessoa ao site, não à tela de login do painel. */
+  async function signOut() {
+    await supabase?.auth.signOut()
+    navigate('/')
   }
 
   const shiftDay = (offset: number) => {
@@ -206,7 +214,7 @@ function Board({ email }: { email: string }) {
             </button>
             <button
               type="button"
-              onClick={() => supabase?.auth.signOut()}
+              onClick={() => void signOut()}
               className="inline-flex items-center gap-2 border border-char px-3 py-2 font-mono text-[11px] tracking-widest text-smoke uppercase transition-colors hover:border-gold hover:text-gold"
             >
               <LogOut className="size-3.5" aria-hidden />
