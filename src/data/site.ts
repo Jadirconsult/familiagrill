@@ -106,9 +106,9 @@ export const kitchens: {
     name: 'Burger',
     heat: 'flare',
     temperature: 'Chapa · selado na hora',
-    lede: 'Blend próprio, pão macio, queijo que escorre.',
+    lede: 'Cada um leva o nome de uma praia daqui.',
     detail:
-      'Smash e artesanal, montados no pedido. O mesmo açougue que abastece a grelha abastece a chapa.',
+      'Itacoatiara, Camboinhas, Piratininga, Itaipu — blend bovino selado na chapa, montado no pedido. O mesmo açougue que abastece a grelha abastece a chapa.',
   },
   {
     id: 'sushi',
@@ -139,11 +139,29 @@ export const menu: { kitchen: string; items: { name: string; note: string }[] }[
   },
   {
     kitchen: 'burger',
+    // Itens conferidos no cardápio digital da casa. Os nomes são bairros e
+    // praias de Niterói — vale manter a grafia exata.
     items: [
-      { name: 'Família Grill', note: 'Blend da casa, cheddar, bacon e molho da casa' },
-      { name: 'Smash duplo', note: 'Duas carnes prensadas, queijo derretido, picles' },
-      { name: 'Costela burger', note: 'A costela da grelha, agora no pão' },
-      { name: 'Frango crocante', note: 'Empanado na hora, maionese defumada' },
+      {
+        name: 'Família Grill',
+        note: 'Blend bovino, molho especial, cebola caramelizada, queijo, alface e picles',
+      },
+      {
+        name: 'Itacoatiara',
+        note: 'Blend bovino 200g, queijo cheddar e cebola caramelizada',
+      },
+      {
+        name: 'Camboinhas',
+        note: 'Blend bovino 200g, gorgonzola, muçarela, cream cheese e farofa de bacon',
+      },
+      {
+        name: 'Piratininga',
+        note: 'Blend bovino 200g, tomate confitado, gruyère, cream cheese, molho especial e alface americano',
+      },
+      {
+        name: 'Itaipu',
+        note: 'Dois blends de 120g, quatro fatias de queijo prato, bacon assado na brasa, rúcula, cebola e tomate italiano',
+      },
     ],
   },
   {
