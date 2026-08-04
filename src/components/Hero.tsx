@@ -33,8 +33,7 @@ export function Hero() {
           <div>
             <p className="max-w-md text-lg leading-relaxed text-smoke">
               Churrasco no carvão, hambúrguer na chapa e sushi artesanal no mesmo
-              salão. Abrimos às 18h — e nas sextas e sábados a cozinha só descansa
-              às 5h.
+              salão. Abrimos às 18h — e a cozinha só descansa às 2h da manhã.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -42,7 +41,7 @@ export function Hero() {
                 href={primaryChannel.url}
                 target="_blank"
                 rel="noreferrer"
-                className="bg-cream px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-gold"
+                className="bg-cream px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase shadow-[0_0_24px_rgba(245,245,235,0.18)] transition-all hover:bg-gold hover:shadow-[0_0_32px_rgba(203,139,38,0.45)] active:scale-[0.98]"
               >
                 Pedir no {primaryChannel.name}
               </a>
@@ -50,14 +49,14 @@ export function Hero() {
                 href={`https://wa.me/${brand.whatsapp}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+                className="inline-flex items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-all hover:border-gold hover:text-gold active:scale-[0.98]"
               >
                 <MessageCircle className="size-3.5" aria-hidden />
                 WhatsApp
               </a>
               <a
                 href="#visita"
-                className="inline-flex items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+                className="inline-flex items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-all hover:border-gold hover:text-gold active:scale-[0.98]"
               >
                 <MapPin className="size-3.5" aria-hidden />
                 Como chegar
