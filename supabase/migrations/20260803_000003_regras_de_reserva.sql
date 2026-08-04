@@ -10,8 +10,8 @@
 -- é deliberado: a interface precisa dos horários para desenhar a página, o banco
 -- precisa deles para recusar o que não passou pela página. Mudou um, mude o outro.
 --
--- Todos os dias abrem às 18h e fecham às 2h. A madrugada pertence ao turno
--- do dia anterior: 1h de quarta ainda é a noite de terça.
+-- Todos os dias abrem às 18h. O fim varia, e a madrugada pertence ao turno do
+-- dia anterior: 1h de quarta ainda é a noite de terça.
 
 create or replace function public.dentro_do_expediente(p_quando timestamptz)
 returns boolean
@@ -28,7 +28,10 @@ as $$
   )
   select case
     when minutos >= 1080 then true          -- 18h em diante: aberto todo dia
-    else minutos < 120                      -- madrugada até 2h = turno anterior
+    when dia = 0 then minutos < 300         -- madrugada de domingo = sábado, fecha 5h
+    when dia = 1 then minutos < 240         -- madrugada de segunda = domingo, fecha 4h
+    when dia = 6 then minutos < 300         -- madrugada de sábado = sexta, fecha 5h
+    else minutos < 60                       -- demais madrugadas fecham 1h
   end
   from momento;
 $$;

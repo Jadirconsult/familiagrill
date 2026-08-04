@@ -3,7 +3,7 @@ import { formatCountdown, formatMinutes, getStatus } from '../lib/hours'
 
 /**
  * O medidor da noite — o elemento assinatura da página.
- * A casa abre às 18h e fecha às 2h. Esse intervalo é desenhado como
+ * A casa abre às 18h e fecha entre 1h e 5h. Esse intervalo é desenhado como
  * uma faixa de brasa: quanto mais tarde, mais quente. Quando estamos abertos,
  * um ponto marca a hora atual e conta quanto ainda resta.
  */
@@ -16,8 +16,8 @@ export function NightMeter() {
   }, [])
 
   const status = getStatus(now)
-  const marks = [18, 20, 22, 24, 26]
-  const span = { start: 18 * 60, end: 26 * 60 }
+  const marks = [18, 20, 22, 24, 26, 28, 29]
+  const span = { start: 18 * 60, end: 29 * 60 }
   const toPercent = (minutes: number) =>
     ((minutes - span.start) / (span.end - span.start)) * 100
 

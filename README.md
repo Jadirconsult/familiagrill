@@ -31,7 +31,7 @@ componente tem conteúdo fixo — mudar o site é mudar esse arquivo.
 - `menu` — destaques por cozinha (sem preço, de propósito: os valores oficiais
   ficam no cardápio digital e mudam sem aviso)
 - `hours` — turnos da semana, em minutos desde 00:00; fechamentos depois da
-  meia-noite passam de 1440 (2h da manhã = `26 * 60`)
+  meia-noite passam de 1440 (5h da manhã = `29 * 60`)
 
 ## Supabase
 

@@ -22,9 +22,7 @@
 
 @layer base {
   html {
-    /* A âncora das seções para antes do header fixo, não embaixo dele. */
     scroll-behavior: smooth;
-    scroll-padding-top: 5.5rem;
   }
 
   body {
@@ -44,25 +42,6 @@
     outline: 2px solid var(--color-gold);
     outline-offset: 3px;
   }
-}
-
-/* Barra de rolagem no tom do carvão — discreta, combina com o fundo. */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-coal);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-char);
-  border: 2px solid var(--color-coal);
-  border-radius: 999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-smoke);
 }
 
 /* A logo é toda em caixa alta com serifas em cunha; o display da página

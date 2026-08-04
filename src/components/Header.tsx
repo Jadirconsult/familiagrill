@@ -46,14 +46,9 @@ export function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="group relative font-mono text-xs tracking-widest text-smoke uppercase transition-colors hover:text-cream"
+              className="font-mono text-xs tracking-widest text-smoke uppercase transition-colors hover:text-cream"
             >
               {link.label}
-              {/* Sublinhado de brasa: cresce da esquerda no hover. */}
-              <span
-                aria-hidden
-                className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-gold transition-transform duration-300 group-hover:scale-x-100"
-              />
             </a>
           ))}
         </nav>
@@ -73,7 +68,7 @@ export function Header() {
           href={primaryChannel.url}
           target="_blank"
           rel="noreferrer"
-          className="shrink-0 bg-gold px-4 py-2.5 font-mono text-xs font-bold tracking-widest text-coal uppercase shadow-[0_0_20px_rgba(203,139,38,0.3)] transition-all hover:bg-cream hover:shadow-[0_0_28px_rgba(203,139,38,0.5)]"
+          className="shrink-0 bg-gold px-4 py-2.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
         >
           Pedir no {primaryChannel.name}
         </a>

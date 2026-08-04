@@ -102,38 +102,14 @@ export function Menu() {
             {kitchen.temperature}
           </p>
 
-          <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-6 divide-y divide-char border-y border-char">
             {items.map((item) => (
               <li
                 key={item.name}
-                className="group border border-char bg-coal transition-colors hover:border-smoke"
+                className="flex flex-col gap-1 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
               >
-                <div className="aspect-[4/3] overflow-hidden bg-soot">
-                  {item.image ? (
-                    /* Sem alt descritivo de propósito: o nome do prato vem logo
-                       abaixo, e repeti-lo aqui só duplicaria a leitura em tela. */
-                    <img
-                      src={item.image}
-                      alt=""
-                      loading="lazy"
-                      className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                    />
-                  ) : (
-                    /* Sem foto: a inicial do prato na cor da cozinha. Marca o
-                       lugar sem fingir que é uma imagem do prato. */
-                    <span
-                      aria-hidden
-                      className={`display flex size-full items-center justify-center text-[clamp(3rem,8vw,5rem)] opacity-25 ${accent[kitchen.heat]}`}
-                    >
-                      {item.name.charAt(0)}
-                    </span>
-                  )}
-                </div>
-
-                <div className="p-5">
-                  <h3 className="display text-xl text-cream">{item.name}</h3>
-                  <p className="mt-2 text-sm text-smoke">{item.note}</p>
-                </div>
+                <span className="display text-2xl text-cream">{item.name}</span>
+                <span className="text-sm text-smoke sm:max-w-sm sm:text-right">{item.note}</span>
               </li>
             ))}
           </ul>

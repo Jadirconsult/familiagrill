@@ -117,7 +117,7 @@ export const kitchens: {
     temperature: 'Balcão frio · faca afiada',
     lede: 'O contraponto: peixe cru, arroz temperado, nada de fumaça.',
     detail:
-      'Combinados de 12 a 56 peças, montados no balcão. Também sai avulso: hots, harumakis, guiozas, tartares e sunomono.',
+      'Sushi artesanal montado no balcão. Combinados, temakis e hots para dividir na mesa — ou para segurar a madrugada.',
   },
 ]
 
@@ -126,19 +126,7 @@ export const kitchens: {
  * Sem preços de propósito: os valores oficiais vivem no cardápio digital
  * (brand.menuUrl) e mudam sem aviso. Não duplique preço aqui.
  */
-export type MenuItem = {
-  name: string
-  note: string
-  /**
-   * Caminho da foto do prato, a partir de public/ — ex.: '/pratos/itaipu.jpg'.
-   * Sem foto, o card mostra a inicial do prato na cor da cozinha.
-   * Use as fotos reais da casa: imagem genérica de banco de imagens vira
-   * reclamação de "não foi isso que veio".
-   */
-  image?: string
-}
-
-export const menu: { kitchen: string; items: MenuItem[] }[] = [
+export const menu: { kitchen: string; items: { name: string; note: string }[] }[] = [
   {
     kitchen: 'churras',
     // Itens conferidos no cardápio digital da casa, do maior para o individual.
@@ -194,33 +182,11 @@ export const menu: { kitchen: string; items: MenuItem[] }[] = [
   },
   {
     kitchen: 'sushi',
-    // Itens conferidos no cardápio digital da casa. Os combinados são
-    // nomeados por metal e pedra — vale manter a grafia exata.
     items: [
-      {
-        name: 'Ouro · 56 peças',
-        note: 'Sashimis de salmão, atum e peixe branco, sushis, bolinhos de salmão, haruhots e uramakis philadelphia',
-      },
-      {
-        name: 'Esmeralda · 48 peças',
-        note: 'Bolinhos de salmão com topo de camarão, sashimi de atum crost, joe bacon, joe salmão brûlée e uramaki de shitake',
-      },
-      {
-        name: 'Rubi · 36 peças',
-        note: 'Sashimi de salmão com ovas, salmão empanado, sushi de salmão tataki, haruhots e uramaki salmão lemon',
-      },
-      {
-        name: 'Prata · 36 peças',
-        note: 'Sushi e sashimi de salmão, philadelphia, hots philadelphia e hurumakis',
-      },
-      {
-        name: 'Usuzukuri shake toro',
-        note: 'Quinze lâminas finas de barriga de salmão, azeite trufado e flor de salmão',
-      },
-      {
-        name: 'Tartar misto',
-        note: 'Salmão, atum e camarão em cubos, temperos orientais, cebolinha e gergelim',
-      },
+      { name: 'Combinado da casa', note: 'Sashimi, niguiri e uramaki na mesma tábua' },
+      { name: 'Temaki salmão', note: 'Cone fechado no momento do pedido' },
+      { name: 'Hot roll', note: 'Empanado, quente por fora, cru por dentro' },
+      { name: 'Salmão maçaricado', note: 'A única peça do balcão que vê fogo' },
     ],
   },
 ]
@@ -228,7 +194,7 @@ export const menu: { kitchen: string; items: MenuItem[] }[] = [
 /**
  * Segunda = 1 … Domingo = 0. `open: null` marca dia fechado — hoje nenhum.
  * Minutos desde 00:00 do dia de abertura — fechamentos após a meia-noite
- * passam de 1440 (ex.: 2h da manhã = 26 * 60).
+ * passam de 1440 (ex.: 5h da manhã = 29 * 60).
  *
  * Mudou aqui? O SQL em supabase/migrations/20260803_000003 repete estes turnos
  * para barrar reserva fora do expediente vinda de fora do site. Atualize os dois.
@@ -249,11 +215,11 @@ export function isOpenDay(
 }
 
 export const hours: DayHours[] = [
-  { day: 1, label: 'Segunda', short: 'SEG', open: 18 * 60, close: 26 * 60 },
-  { day: 2, label: 'Terça', short: 'TER', open: 18 * 60, close: 26 * 60 },
-  { day: 3, label: 'Quarta', short: 'QUA', open: 18 * 60, close: 26 * 60 },
-  { day: 4, label: 'Quinta', short: 'QUI', open: 18 * 60, close: 26 * 60 },
-  { day: 5, label: 'Sexta', short: 'SEX', open: 18 * 60, close: 26 * 60 },
-  { day: 6, label: 'Sábado', short: 'SÁB', open: 18 * 60, close: 26 * 60 },
-  { day: 0, label: 'Domingo', short: 'DOM', open: 18 * 60, close: 26 * 60 },
+  { day: 1, label: 'Segunda', short: 'SEG', open: 18 * 60, close: 25 * 60 },
+  { day: 2, label: 'Terça', short: 'TER', open: 18 * 60, close: 25 * 60 },
+  { day: 3, label: 'Quarta', short: 'QUA', open: 18 * 60, close: 25 * 60 },
+  { day: 4, label: 'Quinta', short: 'QUI', open: 18 * 60, close: 25 * 60 },
+  { day: 5, label: 'Sexta', short: 'SEX', open: 18 * 60, close: 29 * 60 },
+  { day: 6, label: 'Sábado', short: 'SÁB', open: 18 * 60, close: 29 * 60 },
+  { day: 0, label: 'Domingo', short: 'DOM', open: 18 * 60, close: 28 * 60 },
 ]
