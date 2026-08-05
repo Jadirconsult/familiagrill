@@ -196,7 +196,7 @@ export const menu: { kitchen: string; items: { name: string; note: string }[] }[
  * Minutos desde 00:00 do dia de abertura — fechamentos após a meia-noite
  * passam de 1440 (ex.: 5h da manhã = 29 * 60).
  *
- * Mudou aqui? O SQL em supabase/migrations/20260803_000003 repete estes turnos
+ * Mudou aqui? O SQL em supabase/migrations/20260804_000001 repete estes turnos
  * para barrar reserva fora do expediente vinda de fora do site. Atualize os dois.
  */
 export type DayHours = {
@@ -214,12 +214,13 @@ export function isOpenDay(
   return day.open !== null && day.close !== null
 }
 
+/** Turno único da casa: abre 18h, fecha 2h da manhã seguinte, todo dia. */
 export const hours: DayHours[] = [
-  { day: 1, label: 'Segunda', short: 'SEG', open: 18 * 60, close: 25 * 60 },
-  { day: 2, label: 'Terça', short: 'TER', open: 18 * 60, close: 25 * 60 },
-  { day: 3, label: 'Quarta', short: 'QUA', open: 18 * 60, close: 25 * 60 },
-  { day: 4, label: 'Quinta', short: 'QUI', open: 18 * 60, close: 25 * 60 },
-  { day: 5, label: 'Sexta', short: 'SEX', open: 18 * 60, close: 29 * 60 },
-  { day: 6, label: 'Sábado', short: 'SÁB', open: 18 * 60, close: 29 * 60 },
-  { day: 0, label: 'Domingo', short: 'DOM', open: 18 * 60, close: 28 * 60 },
+  { day: 1, label: 'Segunda', short: 'SEG', open: 18 * 60, close: 26 * 60 },
+  { day: 2, label: 'Terça', short: 'TER', open: 18 * 60, close: 26 * 60 },
+  { day: 3, label: 'Quarta', short: 'QUA', open: 18 * 60, close: 26 * 60 },
+  { day: 4, label: 'Quinta', short: 'QUI', open: 18 * 60, close: 26 * 60 },
+  { day: 5, label: 'Sexta', short: 'SEX', open: 18 * 60, close: 26 * 60 },
+  { day: 6, label: 'Sábado', short: 'SÁB', open: 18 * 60, close: 26 * 60 },
+  { day: 0, label: 'Domingo', short: 'DOM', open: 18 * 60, close: 26 * 60 },
 ]
