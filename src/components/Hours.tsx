@@ -4,7 +4,7 @@ import { formatMinutes } from '../lib/hours'
 import { useReveal } from '../hooks/useReveal'
 
 const SPAN_START = 18 * 60
-const SPAN_END = 29 * 60
+const SPAN_END = 26 * 60
 
 export function Hours() {
   const [today, setToday] = useState(() => new Date().getDay())
@@ -20,7 +20,7 @@ export function Hours() {
       <div ref={ref} className="reveal mx-auto max-w-6xl px-5 sm:px-8">
         <p className="eyebrow">Quando a grelha acende</p>
         <h2 className="display mt-4 max-w-3xl text-[clamp(1.75rem,4.5vw,3.25rem)] text-cream">
-          Toda noite começa às 18h. O fim depende do dia.
+          Toda noite começa às 18h e termina às 2h.
         </h2>
 
         <div className="mt-14 space-y-1">
@@ -65,7 +65,7 @@ export function Hours() {
         </div>
 
         <p className="mt-10 max-w-md font-mono text-xs leading-relaxed text-smoke">
-          A barra representa a noite inteira, das 18h às 5h. O dia de hoje aparece
+          A barra representa a noite inteira, das 18h às 2h. O dia de hoje aparece
           aceso.
         </p>
       </div>

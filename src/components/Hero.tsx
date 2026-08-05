@@ -33,8 +33,7 @@ export function Hero() {
           <div>
             <p className="max-w-md text-lg leading-relaxed text-smoke">
               Churrasco no carvão, hambúrguer na chapa e sushi artesanal no mesmo
-              salão. Abrimos às 18h — e nas sextas e sábados a cozinha só descansa
-              às 5h.
+              salão. Abrimos todo dia às 18h — e a cozinha só descansa às 2h.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
