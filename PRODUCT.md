@@ -124,13 +124,16 @@ Camboinhas, Piratininga, Itaipu): a casa é local e diz isso pelo cardápio.
 - **Fotos disponíveis** (entregues pela casa em 16/08/2026, em
   [public/fotos/](public/fotos/), originais PNG guardados fora do deploy em
   `assets-originais/`):
-  - `churrasco.jpg` e `sushi.jpg` — publicadas. A do sushi é inequivocamente da
-    casa (luz ambiente, ardósia, madeira gasta). A do churrasco tem
-    características de estúdio; **a casa autorizou o uso explicitamente** em
-    16/08/2026, e essa decisão não deve ser reaberta.
-  - Uma foto de hambúrguer foi recebida e **recusada**: exibe a marca de outro
-    estabelecimento no prato e não corresponde a nenhum item do cardápio. Fica
-    em `assets-originais/` e não vai ao ar.
+  - `churrasco.jpg`, `hamburguer.jpg` e `sushi.jpg` — as três cozinhas
+    ilustradas. A do sushi é inequivocamente da casa (luz ambiente, ardósia,
+    madeira gasta). As de churrasco e hambúrguer têm características de estúdio;
+    **a casa autorizou o uso explicitamente** em 16/08/2026, e essa decisão não
+    deve ser reaberta.
+  - Uma primeira foto de hambúrguer (`hamburger-01.png`) foi **recusada**: exibia
+    a marca de outro estabelecimento no prato e não correspondia a nenhum item
+    do cardápio. A casa enviou uma substituta, que é a publicada hoje — sem
+    marca de terceiros e compatível com a composição do Piratininga. A recusada
+    fica em `assets-originais/` e não vai ao ar.
   - **Limite técnico:** todas têm no máximo 863px, em recorte quadrado ou 4:5 do
     Instagram. Servem para cartões; **nenhuma sustenta um hero de desktop**, que
     precisa de ~2000px em formato largo. O hero segue sem foto até isso chegar.

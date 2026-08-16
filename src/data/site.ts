@@ -92,7 +92,7 @@ export type Heat = 'ember' | 'flare' | 'cold'
  * desta cozinha — e a página trata a ausência como estado legítimo, nunca
  * preenchendo o buraco com imagem de banco.
  */
-export type KitchenPhoto = { src: string; alt: string }
+export type KitchenPhoto = { src: string; alt: string; width: number; height: number }
 
 export const kitchens: {
   id: string
@@ -114,6 +114,8 @@ export const kitchens: {
     photo: {
       src: '/fotos/churrasco.jpg',
       alt: 'Travessa branca com cortes de carne na brasa, parte deles fatiados, ao lado de pão de alho tostado e um ramo de alecrim.',
+      width: 863,
+      height: 862,
     },
   },
   {
@@ -124,9 +126,12 @@ export const kitchens: {
     lede: 'Cada um leva o nome de uma praia daqui.',
     detail:
       'Itacoatiara, Camboinhas, Piratininga, Itaipu — blend bovino selado na chapa, montado no pedido. O mesmo açougue que abastece a grelha abastece a chapa.',
-    // Sem foto: a única imagem de hambúrguer recebida exibe a marca de outro
-    // estabelecimento no prato e não corresponde a nenhum item deste cardápio.
-    photo: null,
+    photo: {
+      src: '/fotos/hamburguer.jpg',
+      alt: 'Hambúrguer de blend bovino selado em pão brioche, com queijo derretido, cream cheese, tomate confitado e alface, sobre tábua de madeira.',
+      width: 681,
+      height: 861,
+    },
   },
   {
     id: 'sushi',
@@ -139,6 +144,8 @@ export const kitchens: {
     photo: {
       src: '/fotos/sushi.jpg',
       alt: 'Sashimi de salmão arranjado em rosa sobre travessa de ardósia escura, finalizado com cebolinha fatiada.',
+      width: 687,
+      height: 863,
     },
   },
 ]

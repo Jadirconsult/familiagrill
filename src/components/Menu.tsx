@@ -102,9 +102,10 @@ export function Menu() {
             {kitchen.temperature}
           </p>
 
-          {/* A foto acompanha a cozinha escolhida. Quando não existe foto
-              autorizada, a lista simplesmente ocupa a largura toda — a ausência
-              é um estado do sistema, não um buraco a tapar. */}
+          {/* A foto acompanha a cozinha escolhida. Continua opcional de
+              propósito: se uma cozinha ficar sem foto autorizada, a lista ocupa
+              a largura toda em vez de abrir um buraco para tapar com banco de
+              imagens. */}
           <div
             className={`mt-6 gap-10 ${kitchen.photo ? 'lg:grid lg:grid-cols-[minmax(0,20rem)_1fr] lg:items-start' : ''}`}
           >
@@ -113,8 +114,8 @@ export function Menu() {
                 key={kitchen.photo.src}
                 src={kitchen.photo.src}
                 alt={kitchen.photo.alt}
-                width={863}
-                height={862}
+                width={kitchen.photo.width}
+                height={kitchen.photo.height}
                 loading="lazy"
                 decoding="async"
                 className="mb-8 aspect-square w-full border border-char object-cover lg:mb-0 lg:sticky lg:top-24"
