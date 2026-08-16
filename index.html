@@ -10,14 +10,21 @@
       name="description"
       content="Churrasco na brasa, hambúrguer na chapa e sushi artesanal na Av. Tamandaré, 389, Niterói. Todo dia: pedido a partir das 17h30, salão das 18h às 2h."
     />
-    <link rel="canonical" href="https://familiagrill.com.br/" />
+    <!--
+      Canonical e Open Graph apontam para o alias que realmente serve o site.
+      familiagrill.com.br ainda está na hospedagem antiga (Apache), onde a logo
+      responde 404 — e um og:image quebrado é card sem imagem em todo
+      compartilhamento. Quando o domínio passar a apontar para cá, troque as
+      três URLs abaixo de volta para https://familiagrill.com.br/.
+    -->
+    <link rel="canonical" href="https://familiagrillbr.vercel.app/" />
     <meta property="og:title" content="Família Grill & Sushi" />
     <meta
       property="og:description"
       content="Churras, Burger & Sushi artesanal — Niterói. Todo dia até as 2h da manhã."
     />
-    <meta property="og:image" content="https://familiagrill.com.br/logo-familia-grill.png" />
-    <meta property="og:url" content="https://familiagrill.com.br/" />
+    <meta property="og:image" content="https://familiagrillbr.vercel.app/logo-familia-grill.png" />
+    <meta property="og:url" content="https://familiagrillbr.vercel.app/" />
     <meta property="og:type" content="restaurant" />
     <meta property="og:locale" content="pt_BR" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
