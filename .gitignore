@@ -13,6 +13,11 @@ dist-ssr
 *.local
 .env
 
+# Skills instaladas localmente (código de terceiros, não faz parte do site)
+.agents/
+.claude/skills/
+skills-lock.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -1,0 +1,376 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-16T00:00:00Z",
+  "title": "Design System: Família Grill & Sushi",
+  "extensions": {
+    "colorMeta": {
+      "coal": {
+        "role": "neutral",
+        "displayName": "Carvão Apagado",
+        "canonical": "#121110",
+        "tonalRamp": [
+          "oklch(15% 0.004 60)",
+          "oklch(26% 0.004 60)",
+          "oklch(37% 0.004 60)",
+          "oklch(48% 0.004 60)",
+          "oklch(59% 0.004 60)",
+          "oklch(70% 0.004 60)",
+          "oklch(83% 0.003 60)",
+          "oklch(95% 0.002 60)"
+        ]
+      },
+      "soot": {
+        "role": "neutral",
+        "displayName": "Fuligem",
+        "canonical": "#1c1a18",
+        "tonalRamp": [
+          "oklch(15% 0.005 60)",
+          "oklch(26% 0.005 60)",
+          "oklch(37% 0.005 60)",
+          "oklch(48% 0.005 60)",
+          "oklch(59% 0.005 60)",
+          "oklch(70% 0.004 60)",
+          "oklch(83% 0.004 60)",
+          "oklch(95% 0.003 60)"
+        ]
+      },
+      "char": {
+        "role": "neutral",
+        "displayName": "Carvão Frio",
+        "canonical": "#35312e",
+        "tonalRamp": [
+          "oklch(15% 0.007 62)",
+          "oklch(26% 0.007 62)",
+          "oklch(37% 0.007 62)",
+          "oklch(48% 0.007 62)",
+          "oklch(59% 0.006 62)",
+          "oklch(70% 0.006 62)",
+          "oklch(83% 0.005 62)",
+          "oklch(95% 0.004 62)"
+        ]
+      },
+      "ember": {
+        "role": "secondary",
+        "displayName": "Brasa de Carvão",
+        "canonical": "#d4551d",
+        "tonalRamp": [
+          "oklch(15% 0.070 45)",
+          "oklch(26% 0.110 45)",
+          "oklch(37% 0.145 45)",
+          "oklch(48% 0.170 45)",
+          "oklch(62% 0.180 45)",
+          "oklch(74% 0.145 45)",
+          "oklch(85% 0.090 45)",
+          "oklch(95% 0.035 45)"
+        ]
+      },
+      "gold": {
+        "role": "primary",
+        "displayName": "Ouro de Chapa",
+        "canonical": "#cb8b26",
+        "tonalRamp": [
+          "oklch(15% 0.045 75)",
+          "oklch(26% 0.070 75)",
+          "oklch(37% 0.095 75)",
+          "oklch(48% 0.115 75)",
+          "oklch(68% 0.130 75)",
+          "oklch(78% 0.110 75)",
+          "oklch(87% 0.075 75)",
+          "oklch(95% 0.035 75)"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "Creme de Cinza",
+        "canonical": "#f5f5eb",
+        "tonalRamp": [
+          "oklch(15% 0.010 100)",
+          "oklch(26% 0.012 100)",
+          "oklch(37% 0.012 100)",
+          "oklch(48% 0.012 100)",
+          "oklch(62% 0.012 100)",
+          "oklch(76% 0.012 100)",
+          "oklch(88% 0.012 100)",
+          "oklch(96% 0.012 100)"
+        ]
+      },
+      "smoke": {
+        "role": "neutral",
+        "displayName": "Fumaça",
+        "canonical": "#9a938a",
+        "tonalRamp": [
+          "oklch(15% 0.010 80)",
+          "oklch(26% 0.012 80)",
+          "oklch(37% 0.013 80)",
+          "oklch(48% 0.013 80)",
+          "oklch(65% 0.013 80)",
+          "oklch(76% 0.012 80)",
+          "oklch(87% 0.010 80)",
+          "oklch(95% 0.007 80)"
+        ]
+      },
+      "sage": {
+        "role": "tertiary",
+        "displayName": "Sálvia de Balcão",
+        "canonical": "#8fae9b",
+        "tonalRamp": [
+          "oklch(15% 0.018 155)",
+          "oklch(26% 0.026 155)",
+          "oklch(37% 0.032 155)",
+          "oklch(48% 0.038 155)",
+          "oklch(71% 0.040 155)",
+          "oklch(80% 0.034 155)",
+          "oklch(88% 0.026 155)",
+          "oklch(95% 0.014 155)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Só o título do hero. Um por página."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Título de seção, limitado a max-w-3xl para quebrar em duas ou três linhas."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Nome próprio de coisa — cozinha, prato, aplicativo, canal."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "A única voz que pode quebrar em parágrafo. Larguras contidas por max-w-md/max-w-xs."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Botão, aba, navegação, horário, contagem regressiva, rodapé."
+      },
+      "eyebrow": {
+        "displayName": "Eyebrow",
+        "purpose": "O rótulo em fumaça que abre cada seção e cada campo de formulário."
+      },
+      "mark": {
+        "displayName": "Mark",
+        "purpose": "O menor degrau do sistema, exclusivo das marcas de hora sob o medidor da noite. Só instrumento usa esse tamanho."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sobreposicao",
+        "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+        "purpose": "Exclusiva de elementos que abrem por cima do conteúdo — hoje só o menu mobile."
+      },
+      {
+        "name": "anel-de-brasa",
+        "value": "0 0 0 4px rgb(212 85 29 / 0.4)",
+        "purpose": "Halo em volta do marcador de hora atual no medidor da noite. É calor, não elevação."
+      },
+      {
+        "name": "foco",
+        "value": "outline: 2px solid #cb8b26; outline-offset: 3px",
+        "purpose": "Anel global de :focus-visible. Nunca é removido de elemento interativo."
+      }
+    ],
+    "motion": [
+      {
+        "name": "breathe",
+        "value": "breathe 7s ease-in-out infinite (opacity .45→.75, scale 1→1.06)",
+        "purpose": "Os dois discos de brasa sob o hero. O segundo entra com -3.5s de atraso para os ciclos nunca coincidirem."
+      },
+      {
+        "name": "rise",
+        "value": "0.7s cubic-bezier(0.2, 0.7, 0.2, 1) — opacity 0→1, translateY 18px→0",
+        "purpose": "Revelação de bloco na entrada da viewport (IntersectionObserver, threshold 0.15, rootMargin 0 0 -60px). Escalonamento de 110ms entre irmãos."
+      },
+      {
+        "name": "state",
+        "value": "transition: color/background-color/border-color 150ms",
+        "purpose": "Toda mudança de estado de elemento interativo. Só cor — nunca translação, escala ou sombra."
+      },
+      {
+        "name": "header",
+        "value": "transition: colors 300ms",
+        "purpose": "A passagem do header de transparente para coal/90 com desfoque, aos 24px de rolagem."
+      },
+      {
+        "name": "marker",
+        "value": "transition: left 1000ms ease-out",
+        "purpose": "O deslizamento do ponto de hora atual pelo medidor da noite."
+      },
+      {
+        "name": "nudge",
+        "value": "transform: translate(2px, -2px) no hover do grupo",
+        "purpose": "A seta diagonal de link externo. Único movimento de transformação permitido, e só em ícone."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media (prefers-reduced-motion: reduce) — breathe e rise desligados, reveal em opacity 1, scroll-behavior auto",
+        "purpose": "Invariante: todo movimento novo precisa ter desligamento equivalente."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão de Abertura",
+      "kind": "button",
+      "refersTo": "button-opening",
+      "description": "O CTA de maior peso da página, um por página. Creme sobre carvão — o par de maior contraste do sistema.",
+      "html": "<a class=\"ds-btn-opening\" href=\"#\">Pedir no 99Food</a>",
+      "css": ".ds-btn-opening { display: inline-block; background: var(--color-cream, #f5f5eb); color: var(--color-coal, #121110); padding: 14px 24px; font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: none; border-radius: 0; transition: background-color 150ms; } .ds-btn-opening:hover { background: var(--color-gold, #cb8b26); } .ds-btn-opening:focus-visible { outline: 2px solid var(--color-gold, #cb8b26); outline-offset: 3px; }"
+    },
+    {
+      "name": "Botão de Ação",
+      "kind": "button",
+      "refersTo": "button-action",
+      "description": "A ação recorrente do sistema: header, envio de formulário, qualquer conversão depois da dobra.",
+      "html": "<a class=\"ds-btn-action\" href=\"#\">Reservar mesa</a>",
+      "css": ".ds-btn-action { display: inline-block; background: var(--color-gold, #cb8b26); color: var(--color-coal, #121110); padding: 14px 24px; font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: none; border-radius: 0; transition: background-color 150ms; } .ds-btn-action:hover { background: var(--color-cream, #f5f5eb); } .ds-btn-action:focus-visible { outline: 2px solid var(--color-gold, #cb8b26); outline-offset: 3px; }"
+    },
+    {
+      "name": "Botão de Contorno",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Ação secundária com ícone à esquerda. Borda e texto acendem juntos em ouro no hover.",
+      "html": "<a class=\"ds-btn-outline\" href=\"#\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/></svg>Como chegar</a>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--color-cream, #f5f5eb); padding: 14px 24px; border: 1px solid var(--color-char, #35312e); border-radius: 0; font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: color 150ms, border-color 150ms; } .ds-btn-outline svg { width: 14px; height: 14px; } .ds-btn-outline:hover { color: var(--color-gold, #cb8b26); border-color: var(--color-gold, #cb8b26); } .ds-btn-outline:focus-visible { outline: 2px solid var(--color-gold, #cb8b26); outline-offset: 3px; }"
+    },
+    {
+      "name": "Abas de Cozinha",
+      "kind": "chip",
+      "refersTo": "tab-active",
+      "description": "Filtro das três cozinhas no cardápio. Ativa é creme chapado; inativa é contorno em fumaça.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button class=\"ds-tab ds-tab-active\" role=\"tab\" aria-selected=\"true\">Churras</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Burger</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Sushi</button></div>",
+      "css": ".ds-tabs { display: flex; flex-wrap: wrap; gap: 8px; } .ds-tab { background: transparent; color: var(--color-smoke, #9a938a); border: 1px solid var(--color-char, #35312e); border-radius: 0; padding: 10px 20px; font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: color 150ms, border-color 150ms; } .ds-tab:hover { color: var(--color-cream, #f5f5eb); border-color: var(--color-smoke, #9a938a); } .ds-tab-active, .ds-tab-active:hover { background: var(--color-cream, #f5f5eb); color: var(--color-coal, #121110); border-color: transparent; } .ds-tab:focus-visible { outline: 2px solid var(--color-gold, #cb8b26); outline-offset: 3px; }"
+    },
+    {
+      "name": "Campo de Formulário",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Sem caixa: eyebrow acima, sublinhado de 1px abaixo. O foco acende o sublinhado em ouro.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Telefone</span><input class=\"ds-field-input\" type=\"tel\" placeholder=\"(21) 99999-9999\" /></label>",
+      "css": ".ds-field { display: block; } .ds-field-label { display: block; font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.6875rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-smoke, #9a938a); } .ds-field-input { margin-top: 8px; width: 100%; background: transparent; color: var(--color-cream, #f5f5eb); font-family: Archivo, system-ui, sans-serif; font-size: 1rem; border: none; border-bottom: 1px solid var(--color-char, #35312e); border-radius: 0; padding: 10px 0; outline: none; transition: border-color 150ms; } .ds-field-input::placeholder { color: color-mix(in srgb, var(--color-smoke, #9a938a) 50%, transparent); } .ds-field-input:focus { border-bottom-color: var(--color-gold, #cb8b26); }"
+    },
+    {
+      "name": "Cartão de Cozinha",
+      "kind": "card",
+      "refersTo": "card-kitchen",
+      "description": "Uma das três temperaturas da casa. Abre com o filete de acento; a borda acende na cor da própria cozinha no hover.",
+      "html": "<div class=\"ds-kitchen\"><span class=\"ds-kitchen-rule\" aria-hidden=\"true\"></span><h3 class=\"ds-kitchen-name\">Churras</h3><p class=\"ds-kitchen-temp\">Carvão · brasa viva</p><p class=\"ds-kitchen-lede\">A carne encosta na grelha e ninguém tem pressa.</p><p class=\"ds-kitchen-detail\">Travessa para dividir de quatro a seis, ou a jantinha no prato.</p></div>",
+      "css": ".ds-kitchen { background: var(--color-coal, #121110); border: 1px solid transparent; border-radius: 0; padding: 32px; max-width: 22rem; transition: border-color 150ms; } .ds-kitchen:hover { border-color: color-mix(in srgb, var(--color-ember, #d4551d) 60%, transparent); } .ds-kitchen-rule { display: block; height: 4px; width: 48px; background: var(--color-ember, #d4551d); } .ds-kitchen-name { margin: 24px 0 0; font-family: Cinzel, 'Times New Roman', serif; font-weight: 900; font-size: 2.25rem; line-height: 1; letter-spacing: 0.005em; text-transform: uppercase; color: var(--color-cream, #f5f5eb); } .ds-kitchen-temp { margin: 12px 0 0; font-family: 'Space Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ember, #d4551d); } .ds-kitchen-lede { margin: 24px 0 0; font-family: Archivo, system-ui, sans-serif; font-size: 1.125rem; line-height: 1.375; color: var(--color-cream, #f5f5eb); } .ds-kitchen-detail { margin: 12px 0 0; font-family: Archivo, system-ui, sans-serif; font-size: 0.875rem; line-height: 1.625; color: var(--color-smoke, #9a938a); }"
+    },
+    {
+      "name": "Cartão de Canal (preferido)",
+      "kind": "card",
+      "refersTo": "card-channel-featured",
+      "description": "O app de entrega preferido da casa — o único cartão preenchido da página. O concorrente aparece só em contorno.",
+      "html": "<a class=\"ds-channel\" href=\"#\"><span><span class=\"ds-channel-tag\">Nosso app preferido</span><span class=\"ds-channel-name\">99Food</span><span class=\"ds-channel-note\">O caminho mais rápido até a nossa cozinha</span></span><span class=\"ds-channel-cta\">Abrir o 99Food<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 17 17 7\"/><path d=\"M7 7h10v10\"/></svg></span></a>",
+      "css": ".ds-channel { display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: 16rem; max-width: 24rem; background: var(--color-gold, #cb8b26); color: var(--color-coal, #121110); padding: 32px; border-radius: 0; text-decoration: none; transition: background-color 150ms; } .ds-channel:hover { background: var(--color-cream, #f5f5eb); } .ds-channel-tag { display: block; font-family: 'Space Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.7; } .ds-channel-name { display: block; margin-top: 16px; font-family: Cinzel, 'Times New Roman', serif; font-weight: 900; font-size: 3rem; line-height: 1; text-transform: uppercase; } .ds-channel-note { display: block; margin-top: 16px; max-width: 20ch; font-family: Archivo, system-ui, sans-serif; font-size: 1rem; line-height: 1.375; } .ds-channel-cta { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; } .ds-channel-cta svg { width: 16px; height: 16px; transition: transform 150ms; } .ds-channel:hover .ds-channel-cta svg { transform: translate(2px, -2px); } .ds-channel:focus-visible { outline: 2px solid var(--color-gold, #cb8b26); outline-offset: 3px; }"
+    },
+    {
+      "name": "Navegação do Header",
+      "kind": "nav",
+      "refersTo": "tab-idle",
+      "description": "Links em mono maiúsculo sobre o header fixo já rolado (coal a 90% com desfoque e fio inferior).",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\">As três cozinhas</a><a href=\"#\">Cardápio</a><a href=\"#\">Delivery</a><a href=\"#\">Horários</a><a href=\"#\">Onde estamos</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; background: color-mix(in srgb, var(--color-coal, #121110) 90%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-char, #35312e); padding: 16px 20px; } .ds-nav a { font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-smoke, #9a938a); text-decoration: none; transition: color 150ms; } .ds-nav a:hover { color: var(--color-cream, #f5f5eb); } .ds-nav a:focus-visible { outline: 2px solid var(--color-gold, #cb8b26); outline-offset: 3px; }"
+    },
+    {
+      "name": "Medidor da Noite",
+      "kind": "custom",
+      "refersTo": "card-kitchen",
+      "description": "O componente assinatura: a noite das 17h30 às 2h vira uma régua, e as duas janelas da casa — pedido e salão — são desenhadas sobre ela como faixas de brasa, com o ponto da hora atual deslizando pela que está valendo.",
+      "html": "<div class=\"ds-meter\"><div class=\"ds-meter-head\"><span class=\"ds-meter-eyebrow\">A noite de hoje</span><span class=\"ds-meter-status\">● Aberto agora</span></div><div class=\"ds-meter-tracks\"><div><div class=\"ds-meter-legend\"><span class=\"ds-meter-name\">Pedido</span><span class=\"ds-meter-range\">17h30 — 01h45</span></div><div class=\"ds-meter-track\"><div class=\"ds-meter-bed\"></div><div class=\"ds-meter-fill\" style=\"left:0%;right:2.9%\"></div><div class=\"ds-meter-dot\" style=\"left:62%\"><span></span></div></div></div><div><div class=\"ds-meter-legend\"><span class=\"ds-meter-name\">Salão</span><span class=\"ds-meter-range\">18h — 02h</span></div><div class=\"ds-meter-track\"><div class=\"ds-meter-bed\"></div><div class=\"ds-meter-fill\" style=\"left:5.9%;right:0%\"></div><div class=\"ds-meter-dot\" style=\"left:62%\"><span></span></div></div></div></div><div class=\"ds-meter-marks\"><span style=\"left:5.9%\">18</span><span style=\"left:29.4%\">20</span><span style=\"left:52.9%\">22</span><span style=\"left:76.5%\">00</span><span style=\"right:0\">02</span></div><p class=\"ds-meter-note\">Grelha acesa até as <strong>02h</strong> — faltam 3h20. Ainda dá para pedir por mais 3h05.</p></div>",
+      "css": ".ds-meter { width: 100%; max-width: 36rem; } .ds-meter-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; } .ds-meter-eyebrow { font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.6875rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-smoke, #9a938a); } .ds-meter-status { font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-gold, #cb8b26); } .ds-meter-tracks { display: grid; gap: 16px; margin-top: 20px; } .ds-meter-legend { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; } .ds-meter-name { font-family: 'Space Mono', ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-cream, #f5f5eb); } .ds-meter-range { font-family: 'Space Mono', ui-monospace, monospace; font-size: 11px; font-variant-numeric: tabular-nums; color: var(--color-smoke, #9a938a); } .ds-meter-track { position: relative; height: 16px; margin-top: 8px; } .ds-meter-bed { position: absolute; inset-inline: 0; top: 4px; height: 8px; border-radius: 9999px; background: color-mix(in srgb, var(--color-char, #35312e) 70%, transparent); } .ds-meter-fill { position: absolute; top: 4px; height: 8px; border-radius: 9999px; background: linear-gradient(to right, var(--color-ember, #d4551d), var(--color-gold, #cb8b26)); } .ds-meter-dot { position: absolute; top: 0; margin-left: -8px; transition: left 1000ms ease-out; } .ds-meter-dot span { display: block; width: 16px; height: 16px; border-radius: 9999px; background: var(--color-cream, #f5f5eb); box-shadow: 0 0 0 4px rgb(212 85 29 / 0.4); } .ds-meter-marks { position: relative; height: 16px; margin-top: 8px; } .ds-meter-marks span { position: absolute; transform: translateX(-50%); font-family: 'Space Mono', ui-monospace, monospace; font-size: 10px; font-variant-numeric: tabular-nums; color: var(--color-smoke, #9a938a); } .ds-meter-marks span:last-child { transform: none; } .ds-meter-note { margin: 24px 0 0; font-family: 'Space Mono', ui-monospace, monospace; font-size: 0.875rem; line-height: 1.625; color: var(--color-smoke, #9a938a); } .ds-meter-note strong { font-weight: 700; color: var(--color-cream, #f5f5eb); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Brasa que Não Apaga",
+    "overview": "A página é um carvão em brasa visto no escuro. O fundo é carvão apagado (coal), e todo o calor da interface vem de dois discos de brasa desfocados que respiram sob o hero em ciclos de sete segundos — não há foto de comida, não há gradiente de banner, não há fumaça decorativa. O calor é luz, não ilustração. A tipografia de display é uma romana em caixa alta que grava o nome da casa como se estivesse cravado em placa, e o corpo é uma grotesca neutra que sai da frente do conteúdo.\n\nO sistema é organizado por uma escala de temperatura, e essa escala é estrutura, não enfeite: brasa de carvão (ember) no churrasco, ouro de chapa (gold) no hambúrguer, sálvia dessaturada (sage) no balcão de sushi. O único tom frio da paleta existe para marcar a única cozinha que trabalha contra o fogo, e por isso nunca aparece em contexto de brasa. O ouro é decisão de tela, não da marca: o coral da logo puxava para vermelho de alerta sobre o carvão, então a cor de ação foi deslocada para o ouro, que lê como brasa quente no escuro.\n\nA estrutura por baixo do calor é fria e reta. Nada tem canto arredondado, nada projeta sombra, nada flutua: as seções são placas retangulares separadas por fios de 1px em char, e a profundidade vem de um único degrau tonal entre coal e soot. A página inteira encosta na margem esquerda — não há um bloco de texto centralizado em lugar nenhum. A única coisa que se move por conta própria é o calor.",
+    "keyCharacteristics": [
+      "Fundo de carvão permanente; não existe modo claro nem inversão de tema",
+      "Escala de temperatura ember → gold → sage como sistema de significado",
+      "Zero raio de canto e zero sombra ambiente; profundidade só tonal e por fio de 1px",
+      "Três vozes tipográficas com funções que não se cruzam: Cinzel nomeia, Archivo explica, Space Mono mede",
+      "Alinhamento à esquerda em toda a página, sem exceção",
+      "Movimento reservado ao calor e à revelação de entrada; o resto é imóvel"
+    ],
+    "rules": [
+      {
+        "name": "A Regra do Canto Frio",
+        "body": "sage nunca encosta em contexto de fogo. Ele marca o sushi e a confirmação de reserva; qualquer outro uso quebra a escala de temperatura que organiza o conteúdo.",
+        "section": "colors"
+      },
+      {
+        "name": "A Regra da Abertura",
+        "body": "O creme abre, o ouro repete. O CTA de maior peso da página — o primeiro da dobra — é creme sobre carvão, o par de maior contraste do sistema, e vira ouro no hover. Toda ação recorrente depois dele é ouro. Duas superfícies creme nunca disputam a mesma dobra.",
+        "section": "colors"
+      },
+      {
+        "name": "A Regra da Brasa como Luz",
+        "body": "ember é emitido, não pintado: blur, gradiente, anel, filete. Nunca preenche um bloco nem vira fundo de botão.",
+        "section": "colors"
+      },
+      {
+        "name": "A Regra das Três Vozes",
+        "body": "Cinzel nomeia, Archivo explica, Space Mono mede. Nenhuma faz o trabalho da outra: um parágrafo nunca é mono, um botão nunca é serifado, um número de horário nunca é Archivo.",
+        "section": "typography"
+      },
+      {
+        "name": "A Regra da Caixa Alta",
+        "body": "Cinzel e Space Mono são sempre maiúsculas. Archivo nunca é — se um texto em Archivo precisa de caixa alta, ele estava na voz errada.",
+        "section": "typography"
+      },
+      {
+        "name": "A Regra da Marca em Arco",
+        "body": "A assinatura ✳ FAMÍLIA GRILL ✳, em mono com tracking 0.3em e cor ouro, cita o arco \"NA BRASA\" da logo. É o único lugar onde um ornamento tipográfico aparece.",
+        "section": "typography"
+      },
+      {
+        "name": "A Regra da Costura",
+        "body": "Seções vizinhas são separadas por um fio de 1px em char, nunca por espaço em branco sozinho. O corte precisa ser visível.",
+        "section": "layout"
+      },
+      {
+        "name": "A Regra da Margem Esquerda",
+        "body": "Nada de texto centralizado. A página inteira é lida a partir de uma única aresta vertical.",
+        "section": "layout"
+      },
+      {
+        "name": "A Regra do Plano",
+        "body": "Toda superfície assentada é plana. Se algo precisa de sombra para se destacar, ou ele está realmente sobreposto, ou o problema é de contraste tonal e se resolve em soot, char ou tipografia.",
+        "section": "elevation"
+      },
+      {
+        "name": "A Regra do Raio Físico",
+        "body": "Raio de canto só existe onde a coisa é redonda de verdade. Um retângulo com canto arredondado é a única forma que o sistema não aceita.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do manter o fundo de carvão (#121110) em qualquer superfície nova. O sistema não tem tema claro.",
+      "Do usar o ouro para toda ação recorrente e reservar o creme ao CTA de abertura, um por página.",
+      "Do aplicar o acento da cozinha certa a cada contexto: ember no churrasco, gold no hambúrguer, sage no sushi.",
+      "Do separar seções com fio de 1px em char e alternar o fundo no máximo um degrau, para soot.",
+      "Do alinhar tudo à esquerda dentro do contêiner de 72rem.",
+      "Do escrever rótulo, botão e horário em Space Mono maiúsculo com tracking de 0.1em.",
+      "Do revelar blocos na entrada com o rise de 700ms e escalonamento de 110ms entre irmãos, e desligar todo movimento em prefers-reduced-motion.",
+      "Do manter o anel de foco em ouro com 3px de deslocamento em qualquer elemento interativo novo."
+    ],
+    "donts": [
+      "Don't arredondar cantos de retângulo. Raio só onde a forma é redonda de verdade.",
+      "Don't aplicar sombra a superfície assentada. Sombra é privilégio do que realmente sobrepõe o conteúdo.",
+      "Don't usar sage em contexto de fogo, nem ember como fundo de bloco ou de botão.",
+      "Don't centralizar texto.",
+      "Don't colocar Archivo em caixa alta, nem escrever parágrafo em mono.",
+      "Don't introduzir foto de comida de banco de imagens ou textura de fumaça: o calor da página é luz desfocada, e as únicas imagens legítimas são as da casa.",
+      "Don't animar botão com translação, escala ou sombra no hover — só cor.",
+      "Don't ampliar a paleta. Oito tokens cobrem o sistema inteiro; uma cor nova precisa justificar por que a escala de temperatura não dava conta."
+    ]
+  }
+}
