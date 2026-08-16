@@ -21,20 +21,35 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // No celular o menu cobre o conteúdo: Esc precisa fechá-lo, como qualquer
+  // camada sobreposta.
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [menuOpen])
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
         scrolled ? 'border-b border-char bg-coal/90 backdrop-blur-md' : 'border-b border-transparent'
       }`}
     >
-      <div className="relative mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3 sm:gap-6 sm:px-8">
-        <a href="#topo" className="flex items-center gap-3" aria-label={`${brand.fullName} — início`}>
+      <div className="shell relative flex items-center justify-between gap-2 py-3 sm:gap-6">
+        <a
+          href="#topo"
+          className="flex items-center gap-3"
+          aria-label={`${brand.fullName} — início`}
+        >
           <img
             src="/logo-familia-grill.png"
             alt=""
             width={48}
             height={48}
-            className="size-12 rounded-full bg-white"
+            className="size-10 rounded-full bg-white sm:size-12"
           />
           <span className="display hidden text-lg leading-tight text-cream sm:block">
             {brand.name}
@@ -64,13 +79,15 @@ export function Header() {
           {menuOpen ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
         </button>
 
+        {/* Em tela estreita o rótulo encolhe para o verbo: "Pedir no 99Food"
+            não cabe ao lado da logo e do botão de menu em 320px. */}
         <a
           href={primaryChannel.url}
           target="_blank"
           rel="noreferrer"
-          className="shrink-0 bg-gold px-4 py-2.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
+          className="inline-flex min-h-11 shrink-0 items-center bg-gold px-3.5 font-mono text-[11px] font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream sm:px-4 sm:text-xs"
         >
-          Pedir no {primaryChannel.name}
+          Pedir<span className="hidden sm:inline">&nbsp;no {primaryChannel.name}</span>
         </a>
 
         {menuOpen && (
@@ -84,7 +101,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="px-4 py-3 font-mono text-xs tracking-widest text-smoke uppercase transition-colors hover:bg-soot hover:text-cream"
+                className="flex min-h-11 items-center px-4 py-3 font-mono text-xs tracking-widest text-smoke uppercase transition-colors hover:bg-soot hover:text-cream"
               >
                 {link.label}
               </a>

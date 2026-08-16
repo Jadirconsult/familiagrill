@@ -23,7 +23,7 @@ export function Visit() {
 
   return (
     <section id="visita" className="border-t border-char bg-soot py-20 sm:py-28">
-      <div ref={ref} className="reveal mx-auto max-w-6xl px-5 sm:px-8">
+      <div ref={ref} className="reveal shell">
         <p className="eyebrow">Onde estamos</p>
         <h2 className="display mt-4 max-w-3xl text-[clamp(1.75rem,4.5vw,3.25rem)] text-cream">
           {brand.address.street}
@@ -35,7 +35,7 @@ export function Visit() {
 
         <div className="mt-12 grid gap-10 lg:grid-cols-2">
           <div className="space-y-6">
-            <div className="aspect-[4/3] w-full overflow-hidden border border-char">
+            <div className="aspect-[4/3] w-full overflow-hidden border border-char sm:aspect-[16/10] lg:aspect-[4/3]">
               <iframe
                 title={`Mapa de ${brand.fullName}`}
                 src={mapsEmbed}
@@ -50,7 +50,7 @@ export function Visit() {
                 href={mapsLink}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+                className="inline-flex min-h-11 items-center gap-2 border border-char px-5 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <MapPin className="size-3.5" aria-hidden />
                 Abrir no mapa
@@ -59,7 +59,7 @@ export function Visit() {
                 href={`https://wa.me/${brand.whatsapp}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+                className="inline-flex min-h-11 items-center gap-2 border border-char px-5 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <MessageCircle className="size-3.5" aria-hidden />
                 WhatsApp
@@ -68,7 +68,7 @@ export function Visit() {
                 href={brand.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-char px-5 py-3 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+                className="inline-flex min-h-11 items-center gap-2 border border-char px-5 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <AtSign className="size-3.5" aria-hidden />
                 Instagram
@@ -166,7 +166,7 @@ function ReservationForm() {
 
   if (!isSupabaseConfigured) {
     return (
-      <div className="flex flex-col justify-center border border-char p-8 sm:p-10">
+      <div className="flex flex-col justify-center border border-char p-6 sm:p-8 lg:p-10">
         <Link to="/reservas" className="eyebrow transition-colors hover:text-gold">
           Reserve sua Mesa
         </Link>
@@ -192,7 +192,7 @@ function ReservationForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="border border-char p-8 sm:p-10">
+    <form onSubmit={handleSubmit} noValidate className="border border-char p-6 sm:p-8 lg:p-10">
       {/* O mesmo rótulo leva a equipe ao painel — discreto para o visitante,
           e protegido por login de qualquer forma. */}
       <Link

@@ -5,18 +5,20 @@ import { NightMeter } from './NightMeter'
 export function Hero() {
   return (
     <section id="topo" className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
-      {/* O carvão sob o texto: dois focos de calor, sem imagem, sem gradiente de banner. */}
+      {/* O carvão sob o texto: dois focos de calor, sem imagem, sem gradiente de
+          banner. Menores e menos desfocados no celular — um blur de 130px sobre
+          544px custa caro em aparelho modesto. */}
       <div
         aria-hidden
-        className="coals pointer-events-none absolute -top-24 -left-32 size-[34rem] rounded-full bg-ember/25 blur-[130px]"
+        className="coals pointer-events-none absolute -top-24 -left-32 size-[22rem] rounded-full bg-ember/25 blur-[90px] sm:size-[34rem] sm:blur-[130px]"
       />
       <div
         aria-hidden
-        className="coals pointer-events-none absolute top-40 -right-24 size-[26rem] rounded-full bg-gold/15 blur-[120px]"
+        className="coals pointer-events-none absolute top-40 -right-24 size-[17rem] rounded-full bg-gold/15 blur-[80px] sm:size-[26rem] sm:blur-[120px]"
         style={{ animationDelay: '-3.5s' }}
       />
 
-      <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
+      <div className="shell relative">
         {/* A página abre assinando com o nome da casa. */}
         <p className="brand-mark">✳ {brand.name} ✳</p>
         <p className="eyebrow mt-3">
@@ -33,7 +35,7 @@ export function Hero() {
           <div>
             <p className="max-w-md text-lg leading-relaxed text-smoke">
               Churrasco no carvão, hambúrguer na chapa e sushi artesanal no mesmo
-              salão. Abrimos todo dia às 18h — e a cozinha só descansa às 2h.
+              salão. {brand.promise}
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">

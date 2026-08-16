@@ -10,6 +10,9 @@ export const brand = {
   name: 'Família Grill',
   fullName: 'Família Grill & Sushi',
   tagline: 'Churras, Burger & Sushi artesanal',
+  /** A promessa da casa, nas palavras da casa. Abre o hero. */
+  promise:
+    'Comida boa, porção generosa, preço acessível e lugar para reunir a família e os amigos.',
   site: 'https://familiagrill.com.br',
   instagram: 'https://www.instagram.com/churrascofamiliagrill/',
   instagramHandle: '@churrascofamiliagrill',
@@ -192,12 +195,58 @@ export const menu: { kitchen: string; items: { name: string; note: string }[] }[
 ]
 
 /**
- * Segunda = 1 … Domingo = 0. `open: null` marca dia fechado — hoje nenhum.
- * Minutos desde 00:00 do dia de abertura — fechamentos após a meia-noite
- * passam de 1440 (ex.: 2h da manhã = 26 * 60).
+ * Os dois expedientes da casa, ambos todos os dias. Não são dois canais: são
+ * duas coisas diferentes — a janela em que a casa aceita pedido e a janela em
+ * que ela atende presencialmente.
  *
- * Mudou aqui? O SQL em supabase/migrations/20260804_000001 repete estes turnos
- * para barrar reserva fora do expediente vinda de fora do site. Atualize os dois.
+ * Tudo em minutos desde 00:00 do dia de abertura; fechamentos após a meia-noite
+ * passam de 1440 (1h45 da manhã = 25 * 60 + 45; 2h = 26 * 60).
+ *
+ * O pedido abre meia hora antes e encerra quinze minutos antes do salão: a
+ * cozinha precisa da folga para dar conta do último pedido e ainda fechar a casa.
+ */
+export type Service = {
+  id: string
+  name: string
+  /** O que essa janela significa, em uma linha. */
+  scope: string
+  open: number
+  close: number
+  note: string
+}
+
+export const services: Service[] = [
+  {
+    id: 'pedido',
+    name: 'Pedido',
+    scope: 'Delivery e retirada',
+    open: 17 * 60 + 30,
+    close: 25 * 60 + 45,
+    note: 'A cozinha começa meia hora antes de o salão abrir. O último pedido entra 1h45.',
+  },
+  {
+    id: 'salao',
+    name: 'Salão',
+    scope: 'Atendimento presencial',
+    open: 18 * 60,
+    close: 26 * 60,
+    note: 'A mesa é sua das 18h até as 2h — a reserva segue este horário.',
+  },
+]
+
+export const orderService = services[0]
+export const dineInService = services[1]
+
+/**
+ * Segunda = 1 … Domingo = 0. `open: null` marca dia fechado — hoje nenhum.
+ *
+ * A tabela é derivada do turno do salão, e não copiada dele: é ela que valida a
+ * reserva de mesa. Mudou o salão? O SQL em
+ * supabase/migrations/20260804_000001 repete a mesma janela para barrar reserva
+ * fora do expediente vinda de fora do site. Atualize os dois.
+ *
+ * A janela de pedido não entra aqui de propósito — ninguém reserva mesa para
+ * receber em casa.
  */
 export type DayHours = {
   day: number
@@ -214,13 +263,18 @@ export function isOpenDay(
   return day.open !== null && day.close !== null
 }
 
-/** Turno único da casa: abre 18h, fecha 2h da manhã seguinte, todo dia. */
-export const hours: DayHours[] = [
-  { day: 1, label: 'Segunda', short: 'SEG', open: 18 * 60, close: 26 * 60 },
-  { day: 2, label: 'Terça', short: 'TER', open: 18 * 60, close: 26 * 60 },
-  { day: 3, label: 'Quarta', short: 'QUA', open: 18 * 60, close: 26 * 60 },
-  { day: 4, label: 'Quinta', short: 'QUI', open: 18 * 60, close: 26 * 60 },
-  { day: 5, label: 'Sexta', short: 'SEX', open: 18 * 60, close: 26 * 60 },
-  { day: 6, label: 'Sábado', short: 'SÁB', open: 18 * 60, close: 26 * 60 },
-  { day: 0, label: 'Domingo', short: 'DOM', open: 18 * 60, close: 26 * 60 },
+const week = [
+  { day: 1, label: 'Segunda', short: 'SEG' },
+  { day: 2, label: 'Terça', short: 'TER' },
+  { day: 3, label: 'Quarta', short: 'QUA' },
+  { day: 4, label: 'Quinta', short: 'QUI' },
+  { day: 5, label: 'Sexta', short: 'SEX' },
+  { day: 6, label: 'Sábado', short: 'SÁB' },
+  { day: 0, label: 'Domingo', short: 'DOM' },
 ]
+
+export const hours: DayHours[] = week.map((day) => ({
+  ...day,
+  open: dineInService.open,
+  close: dineInService.close,
+}))

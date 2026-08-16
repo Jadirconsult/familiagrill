@@ -1,7 +1,31 @@
-import { hours, isOpenDay, type DayHours } from '../data/site'
+import { hours, isOpenDay, services, type DayHours, type Service } from '../data/site'
 
 /** Horários passam da meia-noite, então tudo vive em minutos desde as 00:00 do dia de abertura. */
 const DAY = 24 * 60
+
+/**
+ * A noite inteira da casa, do primeiro pedido ao fim do atendimento presencial.
+ * É a régua compartilhada pelo medidor: toda janela é desenhada sobre ela.
+ */
+export const NIGHT = {
+  start: Math.min(...services.map((s) => s.open)),
+  end: Math.max(...services.map((s) => s.close)),
+}
+
+/** Onde um instante cai na régua da noite, de 0 a 100. */
+export function nightPercent(minutes: number): number {
+  const raw = ((minutes - NIGHT.start) / (NIGHT.end - NIGHT.start)) * 100
+  return Math.min(Math.max(raw, 0), 100)
+}
+
+/**
+ * Põe um relógio na régua da noite. Antes do meio-dia a madrugada ainda pertence
+ * ao turno da véspera, então ela continua a contagem em vez de voltar a zero.
+ */
+export function toNightMinutes(now: Date): number {
+  const minutes = now.getHours() * 60 + now.getMinutes()
+  return minutes < 12 * 60 ? minutes + DAY : minutes
+}
 
 export function formatMinutes(minutes: number): string {
   const m = ((minutes % DAY) + DAY) % DAY
@@ -14,53 +38,45 @@ export function findDay(day: number): DayHours {
   return hours.find((h) => h.day === day)!
 }
 
-export type Status =
-  | { open: true; closesAt: number; minutesLeft: number; today: DayHours }
-  | { open: false; nextDay: DayHours; nextOpenLabel: string }
-
-/**
- * Aberto agora? Considera tanto o turno que começou hoje quanto o de ontem
- * que ainda não terminou — a madrugada de sábado pertence à sexta.
- */
-export function getStatus(now: Date): Status {
-  const minutes = now.getHours() * 60 + now.getMinutes()
-  const todayIndex = now.getDay()
-
-  const yesterday = findDay((todayIndex + 6) % 7)
-  if (isOpenDay(yesterday) && yesterday.close > DAY && minutes < yesterday.close - DAY) {
-    const closesAt = yesterday.close - DAY
-    return { open: true, closesAt, minutesLeft: closesAt - minutes, today: yesterday }
-  }
-
-  const today = findDay(todayIndex)
-  if (isOpenDay(today) && minutes >= today.open && minutes < today.close) {
-    return {
-      open: true,
-      closesAt: today.close,
-      minutesLeft: today.close - minutes,
-      today,
-    }
-  }
-
-  // Fechado: procura o próximo turno, começando por hoje se ainda não abriu.
-  for (let i = 0; i < 7; i++) {
-    const candidate = findDay((todayIndex + i) % 7)
-    if (!isOpenDay(candidate)) continue
-    if (i === 0 && minutes >= candidate.open) continue
-    const when = i === 0 ? 'hoje' : i === 1 ? 'amanhã' : candidate.label.toLowerCase()
-    return {
-      open: false,
-      nextDay: candidate,
-      nextOpenLabel: `${when} às ${formatMinutes(candidate.open)}`,
-    }
-  }
-
-  return { open: false, nextDay: findDay(5), nextOpenLabel: 'sexta às 18h' }
+export type ServiceStatus = {
+  service: Service
+  open: boolean
+  /** Quanto falta para fechar, em minutos. Só faz sentido com `open`. */
+  minutesLeft: number
+  /** Quando essa janela abre de novo, ex.: "hoje às 17h30". */
+  opensLabel: string
 }
 
 /**
- * A casa está aberta no momento escolhido para a reserva?
- * Usa a mesma tabela de horários exibida na página — uma fonte de verdade só.
+ * A janela está valendo agora? Considera tanto o turno que começou hoje quanto
+ * o de ontem que ainda não terminou — a madrugada de sábado pertence à sexta.
+ */
+export function statusOf(now: Date, service: Service): ServiceStatus {
+  const onTheRuler = toNightMinutes(now)
+  const open = onTheRuler >= service.open && onTheRuler < service.close
+
+  // A abertura de hoje ainda não chegou enquanto o relógio de parede não passar
+  // dela; depois disso, a próxima é a de amanhã.
+  const minutes = now.getHours() * 60 + now.getMinutes()
+  const when = minutes < service.open ? 'hoje' : 'amanhã'
+
+  return {
+    service,
+    open,
+    minutesLeft: open ? service.close - onTheRuler : 0,
+    opensLabel: `${when} às ${formatMinutes(service.open)}`,
+  }
+}
+
+/** As duas janelas de uma vez, na ordem em que a casa as anuncia. */
+export function statusOfAll(now: Date): ServiceStatus[] {
+  return services.map((service) => statusOf(now, service))
+}
+
+/**
+ * A casa atende presencialmente no momento escolhido para a reserva?
+ * Usa a tabela de dias derivada do salão — a mesma janela que o SQL aplica no
+ * banco. A janela de pedido não vale aqui: reserva é mesa, não entrega.
  */
 export function isWithinOpeningHours(when: Date): boolean {
   const minutes = when.getHours() * 60 + when.getMinutes()

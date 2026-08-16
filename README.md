@@ -30,8 +30,12 @@ componente tem conteúdo fixo — mudar o site é mudar esse arquivo.
 - `kitchens` — as três cozinhas e a temperatura de cada uma
 - `menu` — destaques por cozinha (sem preço, de propósito: os valores oficiais
   ficam no cardápio digital e mudam sem aviso)
-- `hours` — turnos da semana, em minutos desde 00:00; fechamentos depois da
-  meia-noite passam de 1440 (2h da manhã = `26 * 60`)
+- `services` — os **dois expedientes**, em minutos desde 00:00; fechamentos
+  depois da meia-noite passam de 1440 (2h da manhã = `26 * 60`):
+  - **Pedido** (delivery e retirada), 17h30 às 1h45
+  - **Salão** (atendimento presencial), 18h às 2h
+- `hours` — a semana, **derivada do salão**. É ela que valida a reserva de mesa,
+  então espelha o SQL em `supabase/migrations`. Mudou o salão, mude os dois.
 
 ## Supabase
 

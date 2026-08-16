@@ -7,7 +7,7 @@ export function Order() {
 
   return (
     <section id="pedir" className="border-t border-char py-20 sm:py-28">
-      <div ref={ref} className="reveal mx-auto max-w-6xl px-5 sm:px-8">
+      <div ref={ref} className="reveal shell">
         <p className="eyebrow">Peça de casa</p>
         <h2 className="display mt-4 max-w-3xl text-[clamp(1.75rem,4.5vw,3.25rem)] text-cream">
           A brasa também sai para entrega
@@ -28,7 +28,7 @@ export function Order() {
               href={channel.url}
               target="_blank"
               rel="noreferrer"
-              className="group flex items-center justify-between gap-6 border border-char px-6 py-5 transition-colors hover:border-gold sm:px-8"
+              className="group flex items-center justify-between gap-4 border border-char px-5 py-5 transition-colors hover:border-gold sm:gap-6 sm:px-8"
             >
               <span>
                 <span className="display block text-xl text-cream">{channel.name}</span>
@@ -52,7 +52,7 @@ function AppCard({ channel, featured }: { channel: OrderChannel; featured: boole
       href={channel.url}
       target="_blank"
       rel="noreferrer"
-      className={`group flex min-h-64 flex-col justify-between gap-10 p-8 transition-colors sm:p-10 ${
+      className={`group flex min-h-56 flex-col justify-between gap-8 p-8 transition-colors sm:min-h-64 sm:gap-10 sm:p-10 md:p-8 lg:p-10 ${
         featured
           ? 'bg-gold text-coal hover:bg-cream'
           : 'border border-gold/40 text-cream hover:border-gold hover:bg-soot'
@@ -66,7 +66,7 @@ function AppCard({ channel, featured }: { channel: OrderChannel; featured: boole
         >
           {featured ? 'Nosso app preferido' : 'Também entregamos por aqui'}
         </span>
-        <p className="display mt-4 text-5xl">{channel.name}</p>
+        <p className="display mt-4 text-4xl sm:text-5xl">{channel.name}</p>
         <p className="mt-4 max-w-xs text-base leading-snug">{channel.note}</p>
       </div>
 

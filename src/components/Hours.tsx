@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react'
-import { hours, isOpenDay } from '../data/site'
+import { hours, services } from '../data/site'
 import { formatMinutes } from '../lib/hours'
 import { useReveal } from '../hooks/useReveal'
-
-const SPAN_START = 18 * 60
-const SPAN_END = 26 * 60
 
 export function Hours() {
   const [today, setToday] = useState(() => new Date().getDay())
@@ -17,56 +14,59 @@ export function Hours() {
 
   return (
     <section id="horarios" className="border-t border-char py-20 sm:py-28">
-      <div ref={ref} className="reveal mx-auto max-w-6xl px-5 sm:px-8">
+      <div ref={ref} className="reveal shell">
         <p className="eyebrow">Quando a grelha acende</p>
         <h2 className="display mt-4 max-w-3xl text-[clamp(1.75rem,4.5vw,3.25rem)] text-cream">
-          Toda noite começa às 18h e termina às 2h.
+          Todo dia. O pedido às 17h30, a mesa às 18h.
         </h2>
 
-        <div className="mt-14 space-y-1">
-          {hours.map((day) => {
-            const isToday = day.day === today
-            const shift = isOpenDay(day) ? day : null
+        {/* Duas janelas, não sete linhas iguais: o que muda na semana não é o
+            dia, é o que a casa está fazendo em cada faixa da noite. */}
+        <dl className="mt-12 grid gap-px bg-char sm:mt-14 md:grid-cols-2">
+          {services.map((service) => (
+            <div key={service.id} className="bg-coal p-8 sm:p-10">
+              <dt>
+                <span className="brand-mark">{service.name}</span>
+                <span className="eyebrow mt-2 block">{service.scope}</span>
+              </dt>
+              <dd className="mt-5">
+                <span className="display block text-[clamp(2rem,7vw,3rem)] tabular-nums text-cream">
+                  {formatMinutes(service.open)}
+                  <span className="mx-2 text-smoke">—</span>
+                  {formatMinutes(service.close)}
+                </span>
+                <p className="mt-4 max-w-sm text-sm leading-relaxed text-smoke">
+                  {service.note}
+                </p>
+              </dd>
+            </div>
+          ))}
+        </dl>
 
-            return (
-              <div
-                key={day.day}
-                className={`grid grid-cols-[3.5rem_1fr] items-center gap-4 py-3 sm:grid-cols-[5rem_1fr_7rem] ${
-                  isToday ? 'text-cream' : 'text-smoke'
-                }`}
-              >
-                <span className="font-mono text-xs font-bold tracking-widest">
+        <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-4">
+          <p className="eyebrow">Todos os dias</p>
+          <ul className="flex flex-wrap gap-2">
+            {hours.map((day) => {
+              const isToday = day.day === today
+              return (
+                <li
+                  key={day.day}
+                  aria-current={isToday ? 'date' : undefined}
+                  className={`border px-3 py-2 font-mono text-[11px] font-bold tracking-widest uppercase ${
+                    isToday ? 'border-gold text-gold' : 'border-char text-smoke'
+                  }`}
+                >
                   {day.short}
-                </span>
-
-                <div className="relative h-2.5">
-                  <div className="absolute inset-0 rounded-full bg-char/70" />
-                  {shift && (
-                    <div
-                      className={`absolute inset-y-0 rounded-full ${
-                        isToday ? 'bg-gradient-to-r from-ember to-gold' : 'bg-char'
-                      }`}
-                      style={{
-                        left: `${((shift.open - SPAN_START) / (SPAN_END - SPAN_START)) * 100}%`,
-                        right: `${100 - ((shift.close - SPAN_START) / (SPAN_END - SPAN_START)) * 100}%`,
-                      }}
-                    />
-                  )}
-                </div>
-
-                <span className="col-span-2 font-mono text-xs sm:col-span-1 sm:text-right">
-                  {shift
-                    ? `${formatMinutes(shift.open)} — ${formatMinutes(shift.close)}`
-                    : 'Fechado'}
-                </span>
-              </div>
-            )
-          })}
+                  {isToday && <span className="sr-only"> (hoje)</span>}
+                </li>
+              )
+            })}
+          </ul>
         </div>
 
-        <p className="mt-10 max-w-md font-mono text-xs leading-relaxed text-smoke">
-          A barra representa a noite inteira, das 18h às 2h. O dia de hoje aparece
-          aceso.
+        <p className="mt-8 max-w-md font-mono text-xs leading-relaxed text-smoke">
+          Sem folga na semana: a casa abre todo dia, e a madrugada pertence à noite
+          anterior — 1h de quarta ainda é a terça-feira à mesa.
         </p>
       </div>
     </section>
