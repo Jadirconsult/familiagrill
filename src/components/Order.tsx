@@ -1,5 +1,13 @@
+import { useEffect, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
-import { deliveryApps, directChannels, primaryChannel, type OrderChannel } from '../data/site'
+import {
+  deliveryApps,
+  directChannels,
+  orderService,
+  primaryChannel,
+  type OrderChannel,
+} from '../data/site'
+import { formatCountdown, formatMinutes, statusOf } from '../lib/hours'
 import { useReveal } from '../hooks/useReveal'
 
 export function Order() {
@@ -12,6 +20,8 @@ export function Order() {
         <h2 className="display mt-4 max-w-3xl text-[clamp(1.75rem,4.5vw,3.25rem)] text-cream">
           A brasa também sai para entrega
         </h2>
+
+        <OrderWindow />
 
         {/* Os dois apps dividem a largura: mesmo tamanho, tratamentos diferentes.
             O preferido da casa é o único preenchido; o outro vem em contorno. */}
@@ -46,6 +56,42 @@ export function Order() {
   )
 }
 
+/**
+ * A página inteira sabe que horas são, mas era justamente aqui — no momento da
+ * compra — que ela não consultava o relógio: os dois cartões acendiam iguais à
+ * 1h50, quinze minutos depois de a cozinha parar de aceitar pedido.
+ */
+function OrderWindow() {
+  const [now, setNow] = useState(() => new Date())
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 60_000)
+    return () => clearInterval(id)
+  }, [])
+
+  const status = statusOf(now, orderService)
+
+  return (
+    <p
+      role="status"
+      className="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1 font-mono text-xs leading-relaxed"
+    >
+      <span
+        className={`font-bold tracking-widest uppercase ${
+          status.open ? 'text-gold' : 'text-smoke'
+        }`}
+      >
+        {status.open ? '● Aceitando pedido' : '○ Fora do horário de pedido'}
+      </span>
+      <span className="text-smoke">
+        {status.open
+          ? `O último entra às ${formatMinutes(orderService.close)} — faltam ${formatCountdown(status.minutesLeft)}.`
+          : `A cozinha volta a aceitar ${status.opensLabel}.`}
+      </span>
+    </p>
+  )
+}
+
 function AppCard({ channel, featured }: { channel: OrderChannel; featured: boolean }) {
   return (
     <a
@@ -59,9 +105,12 @@ function AppCard({ channel, featured }: { channel: OrderChannel; featured: boole
       }`}
     >
       <div>
+        {/* Sem opacidade: carvão a 70% sobre o ouro dava 4,0:1 e reprovava em AA
+            justamente no cartão de conversão. Em opacidade cheia dá 6,52:1, e a
+            hierarquia já está garantida pelos 11px contra os 48px do nome. */}
         <span
           className={`font-mono text-[11px] font-bold tracking-[0.3em] uppercase ${
-            featured ? 'opacity-70' : 'text-gold'
+            featured ? 'text-coal' : 'text-gold'
           }`}
         >
           {featured ? 'Nosso app preferido' : 'Também entregamos por aqui'}

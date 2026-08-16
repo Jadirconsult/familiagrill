@@ -1,6 +1,6 @@
 import { useState, type KeyboardEvent } from 'react'
 import { ArrowUpRight } from 'lucide-react'
-import { brand, kitchens, menu } from '../data/site'
+import { brand, kitchens, menu, primaryChannel } from '../data/site'
 import { useReveal } from '../hooks/useReveal'
 
 const accent = {
@@ -49,8 +49,8 @@ export function Menu() {
         <div className="flex flex-wrap items-end justify-between gap-6 sm:gap-8">
           <div>
             <p className="eyebrow">O que sai da cozinha</p>
-            <h2 className="display mt-4 text-[clamp(1.75rem,4.5vw,3.25rem)] text-cream">
-              Alguns destaques
+            <h2 className="display mt-4 max-w-3xl text-[clamp(1.75rem,4.5vw,3.25rem)] text-cream">
+              O que a gente faz melhor, em cada fogo.
             </h2>
           </div>
 
@@ -102,21 +102,66 @@ export function Menu() {
             {kitchen.temperature}
           </p>
 
-          <ul className="mt-6 divide-y divide-char border-y border-char">
-            {items.map((item) => (
-              // Nome e descrição só se dividem em duas colunas quando cabem lado
-              // a lado: abaixo de 1024px o nome longo era espremido em três linhas.
-              <li
-                key={item.name}
-                className="flex flex-col gap-1.5 py-5 lg:flex-row lg:items-baseline lg:justify-between lg:gap-8"
-              >
-                <span className="display text-xl text-cream sm:text-2xl">{item.name}</span>
-                <span className="text-sm leading-relaxed text-smoke lg:max-w-sm lg:text-right">
-                  {item.note}
-                </span>
-              </li>
-            ))}
-          </ul>
+          {/* A foto acompanha a cozinha escolhida. Quando não existe foto
+              autorizada, a lista simplesmente ocupa a largura toda — a ausência
+              é um estado do sistema, não um buraco a tapar. */}
+          <div
+            className={`mt-6 gap-10 ${kitchen.photo ? 'lg:grid lg:grid-cols-[minmax(0,20rem)_1fr] lg:items-start' : ''}`}
+          >
+            {kitchen.photo && (
+              <img
+                key={kitchen.photo.src}
+                src={kitchen.photo.src}
+                alt={kitchen.photo.alt}
+                width={863}
+                height={862}
+                loading="lazy"
+                decoding="async"
+                className="mb-8 aspect-square w-full border border-char object-cover lg:mb-0 lg:sticky lg:top-24"
+              />
+            )}
+
+            <ul className="divide-y divide-char border-y border-char">
+              {items.map((item) => (
+                // Nome e descrição só se dividem em duas colunas quando cabem lado
+                // a lado: abaixo de 1024px o nome longo era espremido em três linhas.
+                <li
+                  key={item.name}
+                  className="flex flex-col gap-1.5 py-5 lg:flex-row lg:items-baseline lg:justify-between lg:gap-8"
+                >
+                  <span className="display text-xl text-cream sm:text-2xl">{item.name}</span>
+                  <span className="text-sm leading-relaxed text-smoke lg:max-w-xs lg:text-right">
+                    {item.note}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* A lista terminava num fio de 1px, no exato momento em que a vontade
+            estava no pico. Agora ela termina no pedido. */}
+        <div className="mt-10 flex flex-wrap items-center gap-4">
+          <a
+            href={primaryChannel.url}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-11 items-center bg-gold px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
+          >
+            Pedir no {primaryChannel.name}
+          </a>
+          <a
+            href={brand.menuUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="group inline-flex min-h-11 items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
+          >
+            <span>Ver preços</span>
+            <ArrowUpRight
+              className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              aria-hidden
+            />
+          </a>
         </div>
       </div>
     </section>

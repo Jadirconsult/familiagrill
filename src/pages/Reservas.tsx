@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import type { Session } from '@supabase/supabase-js'
 import { ChevronLeft, ChevronRight, LogOut, MessageCircle, RefreshCw } from 'lucide-react'
 import { brand } from '../data/site'
-import { isSupabaseConfigured, supabase } from '../lib/supabase'
+import { getSupabase, isSupabaseConfigured } from '../lib/supabase'
 import {
   addDays,
   fetchReservas,
@@ -20,16 +20,27 @@ export function Reservas() {
   const [checking, setChecking] = useState(true)
 
   useEffect(() => {
-    if (!supabase) {
-      setChecking(false)
-      return
-    }
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session)
-      setChecking(false)
+    let unsubscribe: (() => void) | undefined
+    let cancelled = false
+
+    getSupabase().then((client) => {
+      if (!client || cancelled) {
+        setChecking(false)
+        return
+      }
+      client.auth.getSession().then(({ data }) => {
+        if (cancelled) return
+        setSession(data.session)
+        setChecking(false)
+      })
+      const { data: sub } = client.auth.onAuthStateChange((_event, next) => setSession(next))
+      unsubscribe = () => sub.subscription.unsubscribe()
     })
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => setSession(next))
-    return () => sub.subscription.unsubscribe()
+
+    return () => {
+      cancelled = true
+      unsubscribe?.()
+    }
   }, [])
 
   if (!isSupabaseConfigured) {
@@ -79,11 +90,16 @@ function Login() {
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
-    if (!supabase) return
 
     setBusy(true)
     setError('')
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password: senha })
+    const client = await getSupabase()
+    if (!client) {
+      setBusy(false)
+      setError('O painel está sem conexão com o banco.')
+      return
+    }
+    const { error: authError } = await client.auth.signInWithPassword({ email, password: senha })
     setBusy(false)
 
     if (authError) {
@@ -176,7 +192,7 @@ function Board({ email }: { email: string }) {
 
   /** Sair devolve a pessoa ao site, não à tela de login do painel. */
   async function signOut() {
-    await supabase?.auth.signOut()
+    await (await getSupabase())?.auth.signOut()
     navigate('/')
   }
 

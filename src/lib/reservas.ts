@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { getSupabase } from './supabase'
 
 const TZ = 'America/Sao_Paulo'
 
@@ -46,6 +46,7 @@ export function addDays(day: Date, offset: number): Date {
 }
 
 export async function fetchReservas(day: Date): Promise<Reserva[]> {
+  const supabase = await getSupabase()
   if (!supabase) return []
   const { start, end } = nightWindow(day)
 
@@ -61,6 +62,7 @@ export async function fetchReservas(day: Date): Promise<Reserva[]> {
 }
 
 export async function setStatus(id: string, status: Reserva['status']) {
+  const supabase = await getSupabase()
   if (!supabase) return
   const { error } = await supabase.from('reservas').update({ status }).eq('id', id)
   if (error) throw error

@@ -70,7 +70,8 @@ export function NightMeter() {
         })}
       </div>
 
-      <p className="mt-6 font-mono text-sm leading-relaxed text-smoke">
+      {/* Frase de leitura, não leitura de instrumento: vai em Archivo. */}
+      <p className="mt-6 text-sm leading-relaxed text-smoke">
         {salao.open ? (
           <>
             Grelha acesa até as{' '}
@@ -136,7 +137,7 @@ function Track({ status, position }: { status: ServiceStatus; position: number }
         />
         {open && (
           <div
-            className="absolute top-0 -ml-2 transition-[left] duration-1000 ease-out"
+            className="marker absolute top-0 -ml-2 transition-[left] duration-1000 ease-out"
             style={{ left: `${position}%` }}
           >
             <span className="block size-4 rounded-full bg-cream ring-4 ring-ember/40" />

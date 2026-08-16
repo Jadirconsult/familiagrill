@@ -87,6 +87,13 @@ export const primaryChannel = orderChannels[0]
 /** Escala de temperatura que organiza a página: brasa → chapa → frio. */
 export type Heat = 'ember' | 'flare' | 'cold'
 
+/**
+ * Foto da cozinha. `null` significa que ainda não existe uma foto autorizada
+ * desta cozinha — e a página trata a ausência como estado legítimo, nunca
+ * preenchendo o buraco com imagem de banco.
+ */
+export type KitchenPhoto = { src: string; alt: string }
+
 export const kitchens: {
   id: string
   name: string
@@ -94,6 +101,7 @@ export const kitchens: {
   temperature: string
   lede: string
   detail: string
+  photo: KitchenPhoto | null
 }[] = [
   {
     id: 'churras',
@@ -103,6 +111,10 @@ export const kitchens: {
     lede: 'A carne encosta na grelha e ninguém tem pressa.',
     detail:
       'Travessa para dividir de quatro a seis, ou a jantinha no prato. Carne, linguiça, frango, suíno e coração — com arroz, feijão tropeiro, farofa e banana frita.',
+    photo: {
+      src: '/fotos/churrasco.jpg',
+      alt: 'Travessa branca com cortes de carne na brasa, parte deles fatiados, ao lado de pão de alho tostado e um ramo de alecrim.',
+    },
   },
   {
     id: 'burger',
@@ -112,6 +124,9 @@ export const kitchens: {
     lede: 'Cada um leva o nome de uma praia daqui.',
     detail:
       'Itacoatiara, Camboinhas, Piratininga, Itaipu — blend bovino selado na chapa, montado no pedido. O mesmo açougue que abastece a grelha abastece a chapa.',
+    // Sem foto: a única imagem de hambúrguer recebida exibe a marca de outro
+    // estabelecimento no prato e não corresponde a nenhum item deste cardápio.
+    photo: null,
   },
   {
     id: 'sushi',
@@ -121,6 +136,10 @@ export const kitchens: {
     lede: 'O contraponto: peixe cru, arroz temperado, nada de fumaça.',
     detail:
       'Sushi artesanal montado no balcão. Combinados, temakis e hots para dividir na mesa — ou para segurar a madrugada.',
+    photo: {
+      src: '/fotos/sushi.jpg',
+      alt: 'Sashimi de salmão arranjado em rosa sobre travessa de ardósia escura, finalizado com cebolinha fatiada.',
+    },
   },
 ]
 

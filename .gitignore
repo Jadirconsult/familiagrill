@@ -13,6 +13,10 @@ dist-ssr
 *.local
 .env
 
+# Fotos originais em PNG, guardadas para reprocessar. O site serve os JPEG
+# convertidos em public/fotos/ — os originais somam 3,4 MB e não vão ao deploy.
+assets-originais/
+
 # Skills instaladas localmente (código de terceiros, não faz parte do site)
 .agents/
 .claude/skills/

@@ -67,7 +67,9 @@ export function Hours() {
           </ul>
         </div>
 
-        <p className="mt-8 max-w-md font-mono text-xs leading-relaxed text-smoke">
+        {/* Texto de leitura vai em Archivo: "um parágrafo nunca é mono" é regra
+            do próprio sistema, e Space Mono a 12px em três linhas custa caro. */}
+        <p className="mt-8 max-w-md text-sm leading-relaxed text-smoke">
           Sem folga na semana: a casa abre todo dia, e a madrugada pertence à noite
           anterior — 1h de quarta ainda é a terça-feira à mesa.
         </p>

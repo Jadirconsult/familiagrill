@@ -25,8 +25,56 @@
     />
     <meta property="og:image" content="https://familiagrillbr.vercel.app/logo-familia-grill.png" />
     <meta property="og:url" content="https://familiagrillbr.vercel.app/" />
-    <meta property="og:type" content="restaurant" />
+    <!-- "restaurant" não é tipo válido de Open Graph; scrapers caíam para o
+         padrão de qualquer jeito. O tipo do lugar é dito no JSON-LD abaixo. -->
+    <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
+
+    <!--
+      Dados estruturados para Google Maps e buscadores. Espelha src/data/site.ts,
+      assim como a migration do Supabase espelha o horário do salão: mudou o
+      expediente ou o endereço lá, mude aqui.
+      Sem bairro e sem CEP de propósito — nunca foram confirmados com a casa.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "Família Grill & Sushi",
+        "description": "Churrasco na brasa, hambúrguer na chapa e sushi artesanal em Niterói.",
+        "url": "https://familiagrillbr.vercel.app/",
+        "logo": "https://familiagrillbr.vercel.app/logo-familia-grill.png",
+        "image": "https://familiagrillbr.vercel.app/fotos/churrasco.jpg",
+        "telephone": "+5521997447808",
+        "servesCuisine": ["Churrasco", "Hambúrguer", "Sushi"],
+        "menu": "https://shop.beetech.com.br/churrascofamiliagrill",
+        "acceptsReservations": true,
+        "sameAs": ["https://www.instagram.com/churrascofamiliagrill/"],
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Av. Tamandaré, 389",
+          "addressLocality": "Niterói",
+          "addressRegion": "RJ",
+          "addressCountry": "BR"
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday"
+            ],
+            "opens": "18:00",
+            "closes": "02:00"
+          }
+        ]
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

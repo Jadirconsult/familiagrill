@@ -44,7 +44,7 @@ export function Header() {
       <div className="shell relative flex items-center justify-between gap-2 py-3 sm:gap-4 xl:gap-6">
         <a
           href="#topo"
-          className="flex items-center gap-3"
+          className="flex min-h-11 items-center gap-3"
           aria-label={`${brand.fullName} — início`}
         >
           <img
@@ -64,7 +64,7 @@ export function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="font-mono text-xs tracking-widest text-smoke uppercase transition-colors hover:text-cream"
+              className="inline-flex min-h-11 items-center font-mono text-xs tracking-widest text-smoke uppercase transition-colors hover:text-cream"
             >
               {link.label}
             </a>
@@ -82,15 +82,16 @@ export function Header() {
           {menuOpen ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
         </button>
 
-        {/* Em tela estreita o rótulo encolhe para o verbo: "Pedir no 99Food"
-            não cabe ao lado da logo e do botão de menu em 320px. */}
+        {/* O rótulo carrega o destino em toda largura: um CTA persistente que diz
+            só o verbo não vende nada. Cabe em 320px — Space Mono tem avanço de
+            0,6em, então o rótulo inteiro mede ~143px contra ~172px disponíveis. */}
         <a
           href={primaryChannel.url}
           target="_blank"
           rel="noreferrer"
           className="inline-flex min-h-11 shrink-0 items-center bg-gold px-3.5 font-mono text-[11px] font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream sm:px-4 sm:text-xs"
         >
-          Pedir<span className="hidden sm:inline">&nbsp;no {primaryChannel.name}</span>
+          Pedir no {primaryChannel.name}
         </a>
 
         {menuOpen && (

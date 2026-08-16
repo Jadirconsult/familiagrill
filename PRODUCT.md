@@ -121,10 +121,23 @@ Camboinhas, Piratininga, Itaipu): a casa é local e diz isso pelo cardápio.
   os hambúrgueres com nome de praia, com suas composições.
 - **Não confirmado:** os itens de sushi listados em `menu` são plausíveis, não
   copiados do cardápio oficial.
-- **Não existe no repositório:** nenhuma foto da casa, do salão, da equipe ou da
-  comida. O único ativo visual é a logo. Trabalho futuro que precise de imagem
-  precisa pedir os arquivos à casa — não gerar comida falsa nem usar banco de
-  imagens genérico como se fosse a casa.
+- **Fotos disponíveis** (entregues pela casa em 16/08/2026, em
+  [public/fotos/](public/fotos/), originais PNG guardados fora do deploy em
+  `assets-originais/`):
+  - `churrasco.jpg` e `sushi.jpg` — publicadas. A do sushi é inequivocamente da
+    casa (luz ambiente, ardósia, madeira gasta). A do churrasco tem
+    características de estúdio; **a casa autorizou o uso explicitamente** em
+    16/08/2026, e essa decisão não deve ser reaberta.
+  - Uma foto de hambúrguer foi recebida e **recusada**: exibe a marca de outro
+    estabelecimento no prato e não corresponde a nenhum item do cardápio. Fica
+    em `assets-originais/` e não vai ao ar.
+  - **Limite técnico:** todas têm no máximo 863px, em recorte quadrado ou 4:5 do
+    Instagram. Servem para cartões; **nenhuma sustenta um hero de desktop**, que
+    precisa de ~2000px em formato largo. O hero segue sem foto até isso chegar.
+- **Ainda não existe:** foto do salão, da equipe, e uma imagem de hambúrguer da
+  própria casa. Não substitua por banco de imagens.
+- **Não existe e não pode ser fabricado:** depoimento, avaliação, nota, número de
+  clientes, tempo de casa, prêmio ou selo.
 - **Não existe e não pode ser fabricado:** depoimento, avaliação, nota, número de
   clientes, tempo de casa, prêmio, selo ou qualquer prova social. Nada disso foi
   levantado.

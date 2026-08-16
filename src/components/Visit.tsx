@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { AtSign, MapPin, MessageCircle } from 'lucide-react'
-import { brand } from '../data/site'
-import { isSupabaseConfigured, supabase } from '../lib/supabase'
-import { isWithinOpeningHours } from '../lib/hours'
+import { brand, dineInService } from '../data/site'
+import { getSupabase, isSupabaseConfigured } from '../lib/supabase'
+import { formatMinutes, isWithinOpeningHours } from '../lib/hours'
 import {
   formatWhen,
   isPhoneComplete,
@@ -95,7 +95,14 @@ function ReservationForm() {
   const set = (field: keyof typeof EMPTY) => (value: string) =>
     setForm((current) => ({ ...current, [field]: value }))
 
-  /** O que ainda impede o envio. Vazio significa formulário pronto. */
+  /**
+   * O que ainda impede o envio. Vazio significa formulário pronto.
+   *
+   * `missing` e `reason` são acumulados, nunca alternativos: a versão anterior
+   * retornava cedo com o motivo e engolia a lista de campos em falta, então
+   * quem digitava uma data passada com o nome vazio via só o erro da data — e o
+   * formulário parecia inventar exigências novas quando a data era corrigida.
+   */
   const blockers = useMemo(() => {
     const missing: string[] = []
     if (form.nome.trim().length < 2) missing.push('nome')
@@ -105,33 +112,32 @@ function ReservationForm() {
     if (!Number.isInteger(pessoas) || pessoas < 1 || pessoas > 20) missing.push('pessoas')
 
     const when = parseDateTime(form.data, form.hora)
+    let reason = ''
+
     if (!when) {
       if (form.data.length !== 10) missing.push('data')
       if (form.hora.length !== 5) missing.push('hora')
       if (form.data.length === 10 && form.hora.length === 5) {
-        return { missing, reason: 'Essa data ou hora não existe. Confira os números.' }
+        reason = 'Essa data ou hora não existe. Confira os números.'
       }
-      return { missing, reason: '' }
+    } else if (when.getTime() <= Date.now()) {
+      reason = 'A reserva precisa ser para um horário futuro.'
+    } else if (when.getTime() > Date.now() + 90 * 24 * 60 * 60 * 1000) {
+      reason = 'Aceitamos reservas com até 90 dias de antecedência.'
+    } else if (!isWithinOpeningHours(when)) {
+      reason = `O salão atende das ${formatMinutes(dineInService.open)} às ${formatMinutes(
+        dineInService.close,
+      )}. Escolha um horário dentro dessa faixa.`
     }
 
-    if (when.getTime() <= Date.now()) {
-      return { missing, reason: 'A reserva precisa ser para um horário futuro.' }
-    }
-    if (when.getTime() > Date.now() + 90 * 24 * 60 * 60 * 1000) {
-      return { missing, reason: 'Aceitamos reservas com até 90 dias de antecedência.' }
-    }
-    if (!isWithinOpeningHours(when)) {
-      return { missing, reason: 'A casa está fechada nesse horário. Confira os horários acima.' }
-    }
-
-    return { missing, reason: '' }
+    return { missing, reason }
   }, [form])
 
   const isReady = blockers.missing.length === 0 && blockers.reason === ''
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!supabase || !isReady) return
+    if (!isReady) return
 
     const when = parseDateTime(form.data, form.hora)!
     const nome = form.nome.trim()
@@ -140,7 +146,16 @@ function ReservationForm() {
     setFailure('')
     setConfirmation('')
 
-    const { error } = await supabase.from('reservas').insert({
+    // A biblioteca do banco chega agora, no envio — não no carregamento da
+    // página, que é quando quase ninguém vai reservar.
+    const client = await getSupabase()
+    if (!client) {
+      setSending(false)
+      setFailure('A reserva online está indisponível agora. Chame a gente no WhatsApp.')
+      return
+    }
+
+    const { error } = await client.from('reservas').insert({
       nome,
       telefone: form.telefone.replace(/\D/g, ''),
       data_hora: toRestaurantTimestamp(when),
@@ -193,17 +208,20 @@ function ReservationForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="border border-char p-6 sm:p-8 lg:p-10">
-      {/* O mesmo rótulo leva a equipe ao painel — discreto para o visitante,
-          e protegido por login de qualquer forma. */}
-      <Link
-        to="/reservas"
-        title="Painel da equipe — consultar reservas"
-        aria-label="Painel da equipe: consultar reservas (acesso restrito)"
-        className="eyebrow transition-colors hover:text-gold"
-      >
-        Reserve sua Mesa
-      </Link>
-      <h3 className="display mt-4 text-3xl text-cream">Guarde seu lugar</h3>
+      {/* O rótulo visível dizia "Reserve sua Mesa" e levava ao login da equipe:
+          o cliente clicava na própria intenção e caía num muro. Agora a porta da
+          equipe diz que é da equipe — e o texto visível bate com o nome
+          acessível, como exige a WCAG 2.5.3. */}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <p className="eyebrow">Reserva de mesa</p>
+        <Link
+          to="/reservas"
+          className="inline-flex min-h-11 items-center font-mono text-[11px] tracking-widest text-smoke uppercase transition-colors hover:text-gold"
+        >
+          Equipe
+        </Link>
+      </div>
+      <h3 className="display mt-2 text-3xl text-cream">Guarde seu lugar</h3>
 
       <div className="mt-8 space-y-5">
         <Field
@@ -211,6 +229,7 @@ function ReservationForm() {
           label="Nome"
           name="nome"
           autoComplete="name"
+          aria-required
           value={form.nome}
           onValue={set('nome')}
         />
@@ -222,6 +241,7 @@ function ReservationForm() {
           autoComplete="tel"
           placeholder="(21) 99999-9999"
           maxLength={15}
+          aria-required
           value={form.telefone}
           onValue={(v) => set('telefone')(maskPhone(v))}
         />
@@ -232,7 +252,9 @@ function ReservationForm() {
             name="data"
             inputMode="numeric"
             placeholder="dd/mm/aaaa"
+            hint="dia/mês/ano"
             maxLength={10}
+            aria-required
             value={form.data}
             onValue={(v) => set('data')(maskDate(v))}
           />
@@ -241,7 +263,9 @@ function ReservationForm() {
             name="hora"
             inputMode="numeric"
             placeholder="20:00"
+            hint={`${formatMinutes(dineInService.open)} às ${formatMinutes(dineInService.close)}`}
             maxLength={5}
+            aria-required
             value={form.hora}
             onValue={(v) => set('hora')(maskTime(v))}
           />
@@ -251,6 +275,7 @@ function ReservationForm() {
             type="number"
             min={1}
             max={20}
+            aria-required
             value={form.pessoas}
             onValue={set('pessoas')}
           />
@@ -266,28 +291,49 @@ function ReservationForm() {
         />
       </div>
 
-      {/* O botão só existe quando a reserva está completa. Enquanto isso, o
-          formulário diz o que falta — senão o visitante fica procurando o botão. */}
-      {isReady ? (
-        <button
-          type="submit"
-          disabled={sending}
-          className="mt-8 w-full bg-gold px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
+      {/* O botão continua no DOM mesmo incompleto, apenas desabilitado: some-lo
+          fazia quem usa leitor de tela sair do último campo para o nada, sem
+          nenhum controle anunciado, e concluir que o formulário estava quebrado. */}
+      <button
+        type="submit"
+        disabled={!isReady || sending}
+        aria-describedby={isReady ? undefined : 'reserva-pendencias'}
+        className="mt-8 w-full bg-gold px-6 py-4 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream disabled:cursor-not-allowed disabled:bg-char disabled:text-smoke"
+      >
+        {sending ? 'Enviando…' : 'Reservar mesa'}
+      </button>
+
+      {!isReady && (
+        <p
+          id="reserva-pendencias"
+          role="status"
+          aria-live="polite"
+          className="mt-4 border border-char px-6 py-4 font-mono text-[11px] leading-relaxed tracking-widest text-smoke uppercase"
         >
-          {sending ? 'Enviando…' : 'Reservar mesa'}
-        </button>
-      ) : (
-        <p className="mt-8 border border-char px-6 py-4 text-center font-mono text-[11px] leading-relaxed tracking-widest text-smoke uppercase">
-          {blockers.reason || `Falta preencher: ${blockers.missing.join(', ')}`}
+          {[
+            blockers.missing.length ? `Falta preencher: ${blockers.missing.join(', ')}` : '',
+            blockers.reason,
+          ]
+            .filter(Boolean)
+            .join(' ')}
         </p>
       )}
+
+      {/* A garantia que faz alguém entregar o telefone aparecia só depois do
+          envio, quando o número já tinha ido. */}
+      <p className="mt-4 text-sm leading-relaxed text-smoke">
+        Confirmamos por telefone antes do horário. Não usamos seu número para mais nada.
+      </p>
 
       {(confirmation || failure) && (
         <p
           role="status"
           aria-live="polite"
-          className={`mt-4 font-mono text-xs leading-relaxed ${
-            failure ? 'text-ember' : 'text-sage'
+          className={`mt-4 border-l pl-4 text-sm leading-relaxed ${
+            // text-ember sobre soot dava 4,23:1 e reprovava em AA a 12px. O texto
+            // vai em creme (16,2:1) e o ember vira o filete — que é o papel que o
+            // DESIGN.md dá a ele: brasa é luz emitida, não corpo de texto.
+            failure ? 'border-ember text-cream' : 'border-sage text-cream'
           }`}
         >
           {failure || confirmation}
@@ -300,15 +346,20 @@ function ReservationForm() {
 function Field({
   label,
   name,
+  hint,
   onValue,
   ref,
   ...props
 }: {
   label: string
   name: string
+  /** Dica persistente. O placeholder some na primeira tecla; o formato, não. */
+  hint?: string
   onValue: (value: string) => void
   ref?: React.Ref<HTMLInputElement>
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+  const hintId = hint ? `${name}-hint` : undefined
+
   return (
     <label className="block">
       <span className="eyebrow">{label}</span>
@@ -316,9 +367,17 @@ function Field({
         {...props}
         ref={ref}
         name={name}
+        aria-describedby={hintId}
         onChange={(event) => onValue(event.target.value)}
-        className="mt-2 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors placeholder:text-smoke/50 focus:border-gold"
+        // placeholder:text-smoke/50 dava 2,43:1 — reprovava até para texto
+        // grande. O smoke cheio dá 6,21:1.
+        className="mt-2 min-h-11 w-full border-b border-char bg-transparent py-2.5 text-cream outline-none transition-colors placeholder:text-smoke focus:border-gold"
       />
+      {hint && (
+        <span id={hintId} className="mt-1.5 block font-mono text-[11px] text-smoke">
+          {hint}
+        </span>
+      )}
     </label>
   )
 }
