@@ -38,7 +38,10 @@ export function Header() {
         scrolled ? 'border-b border-char bg-coal/90 backdrop-blur-md' : 'border-b border-transparent'
       }`}
     >
-      <div className="shell relative flex items-center justify-between gap-2 py-3 sm:gap-6">
+      {/* Os vãos abrem só quando há largura para eles: em 1024px a navegação
+          completa, a marca e o CTA somam quase o contêiner inteiro, e o
+          overflow-x: hidden do body esconderia o estouro em vez de denunciá-lo. */}
+      <div className="shell relative flex items-center justify-between gap-2 py-3 sm:gap-4 xl:gap-6">
         <a
           href="#topo"
           className="flex items-center gap-3"
@@ -56,7 +59,7 @@ export function Header() {
           </span>
         </a>
 
-        <nav className="hidden items-center gap-7 lg:flex">
+        <nav className="hidden items-center gap-4 lg:flex xl:gap-7">
           {links.map((link) => (
             <a
               key={link.href}

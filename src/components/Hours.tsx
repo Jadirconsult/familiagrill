@@ -24,13 +24,16 @@ export function Hours() {
             dia, é o que a casa está fazendo em cada faixa da noite. */}
         <dl className="mt-12 grid gap-px bg-char sm:mt-14 md:grid-cols-2">
           {services.map((service) => (
-            <div key={service.id} className="bg-coal p-8 sm:p-10">
+            <div key={service.id} className="bg-coal p-6 sm:p-8 md:p-6 lg:p-10">
               <dt>
                 <span className="brand-mark">{service.name}</span>
                 <span className="eyebrow mt-2 block">{service.scope}</span>
               </dt>
               <dd className="mt-5">
-                <span className="display block text-[clamp(2rem,7vw,3rem)] tabular-nums text-cream">
+                {/* O teto do clamp é modesto de propósito: a partir de 768px este
+                    bloco vive em duas colunas, e o vw mede a viewport inteira —
+                    o horário cresceria enquanto o espaço real encolhe pela metade. */}
+                <span className="display block text-[clamp(1.75rem,5vw,2.5rem)] tabular-nums text-cream">
                   {formatMinutes(service.open)}
                   <span className="mx-2 text-smoke">—</span>
                   {formatMinutes(service.close)}
