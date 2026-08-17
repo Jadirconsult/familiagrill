@@ -1,0 +1,75 @@
+name: Manter o Supabase acordado
+
+# O plano gratuito do Supabase pausa o projeto depois de sete dias sem
+# atividade. Projeto pausado derruba o formulário de reserva e o painel da
+# equipe — e volta só com alguém entrando no painel do Supabase para religar.
+#
+# Segundas e quintas: o maior intervalo entre duas execuções é de quatro dias,
+# metade da janela de sete. Sobra folga para uma execução falhar sem que o
+# projeto durma.
+on:
+  schedule:
+    - cron: '0 12 * * 1,4'
+  workflow_dispatch:
+
+# Este job não clona o repositório nem escreve nada: só fala com o Supabase.
+# Sem nenhuma permissão, um comprometimento aqui não alcança o repositório.
+permissions: {}
+
+concurrency:
+  group: manter-supabase-acordado
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Acordar o banco
+        # As variáveis entram por env, nunca interpoladas dentro do run: valor
+        # de secret expandido direto no shell vira comando quando contém aspas.
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_URL}" ] || [ -z "${SUPABASE_KEY}" ]; then
+            echo "Faltam as secrets VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY."
+            exit 1
+          fi
+
+          # Chama dentro_do_expediente em vez de ler uma tabela. A função tem
+          # grant para anon e roda SQL de verdade no Postgres — é atividade no
+          # banco, não só no PostgREST. Um select em reservas devolveria lista
+          # vazia pela RLS e não prova que o Postgres trabalhou.
+          RESPOSTA=$(curl -sS -m 30 \
+            -w '\n%{http_code}' \
+            -X POST "${SUPABASE_URL}/rest/v1/rpc/dentro_do_expediente" \
+            -H "apikey: ${SUPABASE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_KEY}" \
+            -H "Content-Type: application/json" \
+            -d '{"p_quando":"2026-01-01T20:00:00-03:00"}')
+
+          CODIGO=$(printf '%s' "${RESPOSTA}" | tail -n 1)
+          CORPO=$(printf '%s' "${RESPOSTA}" | sed '$d')
+
+          echo "HTTP ${CODIGO} — resposta: ${CORPO}"
+
+          # 200 com "true" é o esperado: 20h de um dia qualquer está dentro do
+          # expediente. Qualquer outro código significa projeto pausado, chave
+          # trocada ou função ausente — todos merecem falhar visível, porque o
+          # silêncio aqui é o próprio problema que este arquivo evita.
+          if [ "${CODIGO}" != "200" ]; then
+            echo "O Supabase não respondeu como esperado. O projeto pode estar pausado."
+            exit 1
+          fi
+
+          echo "Banco acordado."
+
+# LIMITE CONHECIDO — o GitHub desativa workflows agendados em repositório sem
+# nenhuma atividade por sessenta dias, e avisa por e-mail antes. Se este projeto
+# ficar dois meses parado, o agendamento morre calado e o Supabase pausa em
+# seguida. Havendo commit de vez em quando, não acontece. Se o repositório for
+# hibernar de verdade, use o botão "Run workflow" uma vez para reativar, ou
+# mova este ping para um cron externo.
