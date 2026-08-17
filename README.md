@@ -37,6 +37,44 @@ componente tem conteúdo fixo — mudar o site é mudar esse arquivo.
 - `hours` — a semana, **derivada do salão**. É ela que valida a reserva de mesa,
   então espelha o SQL em `supabase/migrations`. Mudou o salão, mude os dois.
 
+## Deploy
+
+**Produção é a hospedagem própria** (cPanel, Apache, `38.58.181.243`), servindo
+`https://www.familiagrill.com.br`. **A Vercel é preview de branch**, não
+produção — o alias `familiagrillbr.vercel.app` serve para ver o trabalho em
+andamento, e nenhuma URL do site aponta para ele.
+
+Publicar é dar push na `main`:
+[.github/workflows/deploy-hospedagem.yml](.github/workflows/deploy-hospedagem.yml)
+builda no CI e envia `dist/` por FTPS. Precisa de cinco secrets no repositório:
+`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`, `VITE_SUPABASE_URL` e
+`VITE_SUPABASE_PUBLISHABLE_KEY` — as duas últimas porque o Vite embute as
+variáveis no bundle em tempo de build.
+
+[public/.htaccess](public/.htaccess) é obrigatório e vive em `public/` para o
+Vite copiá-lo ao `dist/` a cada build. É o equivalente Apache do `vercel.json`:
+sem o rewrite dele, abrir `/reservas` direto responde 404, porque o Apache
+procura uma pasta com esse nome antes de o React Router existir. Ele também
+força HTTPS e o `www`, faz a compressão e separa o cache — `/assets/` é eterno
+porque leva hash no nome; imagem dura um dia, porque a logo é feita para ser
+trocada mantendo o mesmo arquivo.
+
+Duas coisas que confundem quem olha o servidor depois de um deploy:
+
+- **Assets antigos se acumulam em `public_html/assets/`.** O envio é
+  incremental (`dangerous-clean-slate: false`) para que um deploy interrompido
+  não derrube o site. O preço é que hashes órfãos ficam lá para sempre — vale
+  uma limpeza manual de vez em quando.
+- **Deploy que não altera o front-end não envia asset nenhum.** O build gera os
+  mesmos hashes, e o FTP só manda o que mudou. A pasta parecer intocada é o
+  comportamento correto, não falha do envio.
+
+O Supabase gratuito pausa o projeto após sete dias sem atividade, o que derruba
+a reserva e o painel.
+[.github/workflows/manter-supabase-acordado.yml](.github/workflows/manter-supabase-acordado.yml)
+faz um ping segundas e quintas. Atenção: o GitHub desativa workflows agendados
+em repositório parado por 60 dias.
+
 ## Supabase
 
 O formulário de reserva grava na tabela `reservas`. Aplique a migration em
@@ -50,9 +88,17 @@ VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 Sem essas variáveis a página continua funcionando: a seção de reserva mostra um
 aviso no lugar do formulário.
 
-A RLS permite `insert` anônimo (só para datas futuras, até 90 dias) e restringe
-`select`/`update` a usuários autenticados — a equipe lê as reservas pelo painel
-do Supabase ou por um app autenticado.
+A RLS permite `insert` anônimo e restringe `select`, `update` e `delete` a quem
+está na tabela `staff` — não basta estar autenticado. A equipe lê as reservas
+em `/reservas`, rota fora do menu e protegida por login.
+
+O `insert` público passa por cinco condições, todas no banco, porque a chave
+publicável fica no navegador de qualquer visitante e quem chama a API direto
+ignora o formulário: data futura, teto de 90 dias, `status` inicial obrigatório,
+horário dentro do expediente e os freios de volume. Os freios valem sobre o
+telefone **normalizado em dígitos** — a coluna gerada `telefone_digitos` —
+porque comparar a string crua deixava `(21) 99999-9999` e `21999999999` passarem
+como pessoas diferentes.
 
 ## A confirmar com o restaurante
 

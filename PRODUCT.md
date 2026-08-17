@@ -50,14 +50,25 @@ Camboinhas, Piratininga, Itaipu): a casa é local e diz isso pelo cardápio.
 - **E-mail.** `contato@familiagrill.com.br`, criado em 17/08/2026 e lido pelo
   webmail da hospedagem. **Ainda não aparece em nenhuma superfície do site** —
   publicar é decisão em aberto, não esquecimento.
-- **O site está na Vercel; o e-mail não.** O DNS fica no cPanel (nameservers
-  `ns9`/`ns10.srvif.com`) e é dividido: `www` e apex apontam para a Vercel,
-  enquanto `MX`, `mail`, SPF, DKIM e DMARC continuam no servidor da hospedagem
-  (`38.58.181.243`, Exim em `cloud4.srvif.com`). Quem for mexer em DNS precisa
-  saber disso: apontar o `MX` para o apex — que hoje é a Vercel — derruba o
-  e-mail, porque a Vercel não entrega correio. Por isso o `MX` aponta para
-  `mail.familiagrill.com.br`, que tem registro A próprio e fixo, e o SPF não
-  usa mais `+a`.
+- **Produção é a hospedagem própria; a Vercel é preview.** Desde 17/08/2026 a
+  zona autoritativa aponta site e e-mail para o mesmo servidor cPanel
+  (`38.58.181.243`): apex em registro A, `www` em CNAME para o apex, e `MX`,
+  `mail`, SPF, DKIM e DMARC onde sempre estiveram. O DNS fica no cPanel
+  (nameservers `ns9`/`ns10.srvif.com`).
+- **A Vercel continua servindo, de propósito.** Os domínios seguem anexados ao
+  projeto lá enquanto houver resolver com o IP antigo em cache — o TTL da zona
+  é de 4 horas. Removê-los antes da propagação faria essas pessoas caírem em
+  erro; com eles no lugar, a troca é invisível. Depois disso a Vercel fica só
+  como preview de branch.
+- **Ao verificar DNS recém-alterado, pergunte ao autoritativo.** `nslookup
+  familiagrill.com.br ns9.srvif.com`. Resolver público (`8.8.8.8`, o do
+  provedor, o do sistema) devolve o valor em cache e faz uma virada concluída
+  parecer pendente durante horas.
+- **O `MX` nunca pode apontar para o apex.** Hoje o apex é a hospedagem e isso
+  seria inofensivo, mas a regra é durável: no dia em que o apex voltar a
+  responder por um serviço que não entrega correio, e-mail para o domínio some
+  em silêncio. Por isso o `MX` aponta para `mail.familiagrill.com.br`, que tem
+  registro A próprio e fixo, e o SPF não usa mais `+a`.
 - **Cardápio digital externo.** Os preços oficiais vivem em
   `shop.beetech.com.br/churrascofamiliagrill` e mudam sem aviso.
 - **Reserva de mesa.** O formulário público grava na tabela `reservas` do
@@ -116,11 +127,11 @@ Camboinhas, Piratininga, Itaipu): a casa é local e diz isso pelo cardápio.
   autorizada sobre porção e preço — e não abre exceção à regra de nunca publicar
   valores.
 - Domínio oficial: `familiagrill.com.br`, no ar desde 17/08/2026. O **`www` é o
-  host canônico**; o apex responde 308 para ele na Vercel. Toda URL absoluta do
-  projeto — canonical, Open Graph, JSON-LD, sitemap e `brand.site` — leva `www`,
-  e nenhuma usa o alias `.vercel.app`, que continua servindo mas não é endereço
-  público. O `www` é um CNAME para a Vercel e acompanha sozinho uma troca de IP
-  dela; o apex depende de um registro A fixo no cPanel.
+  host canônico**; o apex redireciona 301 para ele, e quem faz esse
+  redirecionamento é o `.htaccess`, não mais a Vercel. Toda URL absoluta do
+  projeto — canonical, Open Graph, JSON-LD, sitemap e `brand.site` — leva `www`.
+  Mudar o host canônico exige mudar os três: as URLs do `index.html`,
+  `brand.site` e a regra do `public/.htaccess`.
 - Instagram: [@churrascofamiliagrill](https://www.instagram.com/churrascofamiliagrill/) — única
   presença social confirmada.
 - Logo em [public/logo-familia-grill.png](public/logo-familia-grill.png) e a
