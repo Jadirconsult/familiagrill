@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Uma URL só, e é de propósito: a landing é página única, e /reservas é o painel
-  da equipe (barrado no robots.txt). Sempre o apex, nunca o www nem o alias
-  .vercel.app — o sitemap tem que concordar com o canonical do index.html.
+  da equipe (barrado no robots.txt). Sempre com www, nunca o apex nem o alias
+  .vercel.app — o sitemap tem que concordar com o canonical do index.html, e o
+  apex responde 308 para o www.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://familiagrill.com.br/</loc>
+    <loc>https://www.familiagrill.com.br/</loc>
     <lastmod>2026-08-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>

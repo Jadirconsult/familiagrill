@@ -11,20 +11,23 @@
       content="Churrasco na brasa, hambúrguer na chapa e sushi artesanal na Av. Tamandaré, 389, Niterói. Todo dia: pedido a partir das 17h30, salão das 18h às 2h."
     />
     <!--
-      O host canônico é o apex, familiagrill.com.br — o mesmo que brand.site em
-      src/data/site.ts. O www redireciona para cá na Vercel; nenhuma URL abaixo
-      leva www, senão o canonical aponta para um redirecionamento.
+      O host canônico é o www — o mesmo que brand.site em src/data/site.ts.
+      O apex responde 308 para cá na Vercel, então toda URL abaixo leva www:
+      apontar o canonical para o apex seria apontar para um redirecionamento.
+      Por que o www e não o apex: o www é um CNAME para a Vercel e acompanha
+      sozinho uma eventual troca de IP dela, enquanto o apex depende de um
+      registro A fixo no cPanel, que envelhece calado.
       O alias familiagrillbr.vercel.app continua servindo o site, mas não é
       endereço público: não use em canonical, og: nem JSON-LD.
     -->
-    <link rel="canonical" href="https://familiagrill.com.br/" />
+    <link rel="canonical" href="https://www.familiagrill.com.br/" />
     <meta property="og:title" content="Família Grill & Sushi" />
     <meta
       property="og:description"
       content="Churras, Burger & Sushi artesanal — Niterói. Todo dia até as 2h da manhã."
     />
-    <meta property="og:image" content="https://familiagrill.com.br/logo-familia-grill.png" />
-    <meta property="og:url" content="https://familiagrill.com.br/" />
+    <meta property="og:image" content="https://www.familiagrill.com.br/logo-familia-grill.png" />
+    <meta property="og:url" content="https://www.familiagrill.com.br/" />
     <!-- "restaurant" não é tipo válido de Open Graph; scrapers caíam para o
          padrão de qualquer jeito. O tipo do lugar é dito no JSON-LD abaixo. -->
     <meta property="og:type" content="website" />
@@ -42,9 +45,9 @@
         "@type": "Restaurant",
         "name": "Família Grill & Sushi",
         "description": "Churrasco na brasa, hambúrguer na chapa e sushi artesanal em Niterói.",
-        "url": "https://familiagrill.com.br/",
-        "logo": "https://familiagrill.com.br/logo-familia-grill.png",
-        "image": "https://familiagrill.com.br/fotos/churrasco.jpg",
+        "url": "https://www.familiagrill.com.br/",
+        "logo": "https://www.familiagrill.com.br/logo-familia-grill.png",
+        "image": "https://www.familiagrill.com.br/fotos/churrasco.jpg",
         "telephone": "+5521997447808",
         "servesCuisine": ["Churrasco", "Hambúrguer", "Sushi"],
         "menu": "https://shop.beetech.com.br/churrascofamiliagrill",

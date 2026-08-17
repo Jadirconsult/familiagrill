@@ -47,6 +47,17 @@ Camboinhas, Piratininga, Itaipu): a casa é local e diz isso pelo cardápio.
   e o primeiro item vira automaticamente o CTA principal do header e do hero.
 - **Contato direto.** WhatsApp (`5521997447808`) atende pedido, reserva e dúvida
   falando com o salão.
+- **E-mail.** `contato@familiagrill.com.br`, criado em 17/08/2026 e lido pelo
+  webmail da hospedagem. **Ainda não aparece em nenhuma superfície do site** —
+  publicar é decisão em aberto, não esquecimento.
+- **O site está na Vercel; o e-mail não.** O DNS fica no cPanel (nameservers
+  `ns9`/`ns10.srvif.com`) e é dividido: `www` e apex apontam para a Vercel,
+  enquanto `MX`, `mail`, SPF, DKIM e DMARC continuam no servidor da hospedagem
+  (`38.58.181.243`, Exim em `cloud4.srvif.com`). Quem for mexer em DNS precisa
+  saber disso: apontar o `MX` para o apex — que hoje é a Vercel — derruba o
+  e-mail, porque a Vercel não entrega correio. Por isso o `MX` aponta para
+  `mail.familiagrill.com.br`, que tem registro A próprio e fixo, e o SPF não
+  usa mais `+a`.
 - **Cardápio digital externo.** Os preços oficiais vivem em
   `shop.beetech.com.br/churrascofamiliagrill` e mudam sem aviso.
 - **Reserva de mesa.** O formulário público grava na tabela `reservas` do
@@ -104,10 +115,12 @@ Camboinhas, Piratininga, Itaipu): a casa é local e diz isso pelo cardápio.
   Abre o hero, guardada em `brand.promise`. É a única afirmação qualitativa
   autorizada sobre porção e preço — e não abre exceção à regra de nunca publicar
   valores.
-- Domínio oficial: `familiagrill.com.br`. O **apex é o host canônico**; o `www`
-  redireciona para ele na Vercel. Toda URL absoluta do projeto — canonical,
-  Open Graph, JSON-LD, sitemap e `brand.site` — usa o apex, sem `www` e sem o
-  alias `.vercel.app`.
+- Domínio oficial: `familiagrill.com.br`, no ar desde 17/08/2026. O **`www` é o
+  host canônico**; o apex responde 308 para ele na Vercel. Toda URL absoluta do
+  projeto — canonical, Open Graph, JSON-LD, sitemap e `brand.site` — leva `www`,
+  e nenhuma usa o alias `.vercel.app`, que continua servindo mas não é endereço
+  público. O `www` é um CNAME para a Vercel e acompanha sozinho uma troca de IP
+  dela; o apex depende de um registro A fixo no cPanel.
 - Instagram: [@churrascofamiliagrill](https://www.instagram.com/churrascofamiliagrill/) — única
   presença social confirmada.
 - Logo em [public/logo-familia-grill.png](public/logo-familia-grill.png) e a

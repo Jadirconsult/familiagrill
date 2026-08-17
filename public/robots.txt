@@ -5,4 +5,4 @@ User-agent: *
 Allow: /
 Disallow: /reservas
 
-Sitemap: https://familiagrill.com.br/sitemap.xml
+Sitemap: https://www.familiagrill.com.br/sitemap.xml

@@ -13,7 +13,8 @@ export const brand = {
   /** A promessa da casa, nas palavras da casa. Abre o hero. */
   promise:
     'Comida boa, porção generosa, preço acessível e lugar para reunir a família e os amigos.',
-  site: 'https://familiagrill.com.br',
+  /** Host canônico: com www. O apex responde 308 para cá. */
+  site: 'https://www.familiagrill.com.br',
   instagram: 'https://www.instagram.com/churrascofamiliagrill/',
   instagramHandle: '@churrascofamiliagrill',
   /** Cardápio digital com os preços oficiais. */
