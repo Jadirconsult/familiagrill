@@ -14,6 +14,13 @@ concurrency:
   group: deploy-producao
   cancel-in-progress: false
 
+# O GITHUB_TOKEN deste job só precisa clonar o repositório. Sem este bloco ele
+# herda o padrão da conta, que em repositório antigo ainda pode ser escrita em
+# tudo — e aí uma ação de terceiro comprometida não levaria só as credenciais de
+# FTP, levaria junto a permissão de escrever no próprio repositório.
+permissions:
+  contents: read
+
 jobs:
   build-e-deploy:
     runs-on: ubuntu-latest
@@ -42,8 +49,15 @@ jobs:
       - name: Conferir se o build gerou os arquivos
         run: test -f dist/index.html && test -f dist/.htaccess
 
+      # Fixada no commit, não na tag. Tag do git é ponteiro móvel: quem tomar a
+      # conta do autor reaponta v4.3.5 para código próprio, e na execução
+      # seguinte esse código roda aqui com FTP_SERVER, FTP_USERNAME e
+      # FTP_PASSWORD no ambiente — ou seja, com escrita no servidor da casa. Foi
+      # exatamente assim que a tj-actions/changed-files vazou segredo de milhares
+      # de repositórios em 2025. O SHA abaixo é a v4.3.5 e não muda sozinho.
+      # Para atualizar: leia o SHA novo da tag desejada e troque aqui.
       - name: Enviar para a hospedagem por FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
