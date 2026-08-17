@@ -1,0 +1,85 @@
+# Configuração do Apache para a hospedagem própria (cPanel).
+#
+# Vive em public/ para que o Vite copie para dist/ em todo build — assim ele
+# sobe junto com os arquivos e não fica para trás numa publicação apressada.
+# É o equivalente Apache do vercel.json: enquanto a Vercel servir o preview de
+# desenvolvimento, os dois precisam continuar dizendo a mesma coisa.
+
+# A hospedagem já mostrou "Index of /" neste domínio. Sem isso, qualquer pasta
+# sem index vira listagem pública de arquivos.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # --- 1. HTTPS ---------------------------------------------------------
+  # A Vercel fazia isso sozinha; o Apache precisa ser mandado. As duas
+  # condições valem em conjunto: se houver proxy ou CDN na frente, quem diz a
+  # verdade é o X-Forwarded-Proto, e checar só %{HTTPS} entraria em laço.
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://www.familiagrill.com.br%{REQUEST_URI} [L,R=301]
+
+  # --- 2. O host canônico é o www ---------------------------------------
+  # Precisa concordar com o canonical do index.html e com brand.site. Se um dia
+  # a casa preferir o domínio curto, mude nos três lugares, nunca só aqui.
+  RewriteCond %{HTTP_HOST} !^www\.familiagrill\.com\.br$ [NC]
+  RewriteRule ^ https://www.familiagrill.com.br%{REQUEST_URI} [L,R=301]
+
+  # --- 3. A regra que faz o site funcionar ------------------------------
+  # O site é uma página só com rotas no navegador. Pedir /reservas direto faz o
+  # Apache procurar uma pasta com esse nome e responder 404 antes de o React
+  # Router existir. Aqui todo caminho que não seja arquivo ou pasta de verdade
+  # é entregue como index.html, e o roteamento acontece no navegador.
+  # É o mesmo que o rewrite do vercel.json faz.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule mod_deflate.c>
+  # Compressão. A Vercel comprimia sozinha; sem isto o JS principal viaja
+  # 267 kB em vez de 85 kB — em celular na rua, é a diferença que se sente.
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE application/xml image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Os arquivos de /assets/ levam hash no nome (index-Hr2iC1ke.js): mudou o
+  # conteúdo, muda o nome. Podem ficar guardados para sempre sem risco.
+  <FilesMatch "\.(js|css)$">
+    ExpiresDefault "access plus 1 year"
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # As imagens NÃO levam hash, e a logo é feita para ser substituída mantendo o
+  # mesmo nome quando chegar a versão em alta — está escrito no PRODUCT.md.
+  # Um ano de cache aqui significaria a casa trocando a foto e ninguém vendo.
+  <FilesMatch "\.(png|jpe?g|webp|avif|svg|ico)$">
+    ExpiresDefault "access plus 1 day"
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+
+  # O index.html precisa ser reconferido sempre: é ele que aponta para o hash
+  # novo do JS. Guardado, o visitante fica preso na versão anterior do site.
+  <FilesMatch "\.(html|xml|txt|json)$">
+    ExpiresDefault "access plus 0 seconds"
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+  # O navegador respeita o tipo declarado em vez de adivinhar pelo conteúdo.
+  Header set X-Content-Type-Options "nosniff"
+  # O painel /reservas não deve poder ser embutido em iframe de terceiros.
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# UTF-8 explícito: os textos do site têm acento em quase toda linha, e servidor
+# entregando latin-1 transforma "Família" em "FamÃ­lia".
+AddDefaultCharset UTF-8
