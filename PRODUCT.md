@@ -103,6 +103,12 @@ Camboinhas, Piratininga, Itaipu): a casa é local e diz isso pelo cardápio.
 - Reserva aceita de 1 a 20 pessoas, só para horário futuro, até 90 dias de
   antecedência, e só dentro do expediente. As mesmas regras são aplicadas no
   banco, não apenas no formulário.
+- **Reserva não fica guardada para sempre.** Um gatilho apaga toda reserva cuja
+  data passou há mais de um mês, e ele dispara a cada nova reserva — sem
+  agendador, sem depender de nada fora do banco. São nome e telefone de gente
+  real, e a confirmação é feita por telefone, fora do sistema: passada a mesa,
+  o dado não tem mais uso e só representa risco. O prazo vive num único
+  intervalo em `20260817_000002_limpeza_de_reservas.sql`.
 - RLS: `insert` anônimo permitido; `select`/`update` restritos a usuários
   autenticados.
 - Sem `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` a página continua

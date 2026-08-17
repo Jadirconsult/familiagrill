@@ -92,6 +92,10 @@ A RLS permite `insert` anônimo e restringe `select`, `update` e `delete` a quem
 está na tabela `staff` — não basta estar autenticado. A equipe lê as reservas
 em `/reservas`, rota fora do menu e protegida por login.
 
+Reserva com mais de um mês de passada é apagada sozinha: um gatilho de `after
+insert` faz a faxina a cada nova reserva. Não apaga mesa futura, e não roda se
+ninguém reservar — o que também significa que nada novo se acumula nesse tempo.
+
 O `insert` público passa por cinco condições, todas no banco, porque a chave
 publicável fica no navegador de qualquer visitante e quem chama a API direto
 ignora o formulário: data futura, teto de 90 dias, `status` inicial obrigatório,
