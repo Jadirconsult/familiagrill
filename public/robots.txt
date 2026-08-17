@@ -1,0 +1,8 @@
+# O site é uma landing só. A única rota que não deve ser indexada é o painel
+# da equipe, que fica fora do menu e é protegido por login do Supabase —
+# vale barrar mesmo assim, para não aparecer em busca por "família grill reservas".
+User-agent: *
+Allow: /
+Disallow: /reservas
+
+Sitemap: https://familiagrill.com.br/sitemap.xml

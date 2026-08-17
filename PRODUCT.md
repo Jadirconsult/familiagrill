@@ -104,7 +104,10 @@ Camboinhas, Piratininga, Itaipu): a casa é local e diz isso pelo cardápio.
   Abre o hero, guardada em `brand.promise`. É a única afirmação qualitativa
   autorizada sobre porção e preço — e não abre exceção à regra de nunca publicar
   valores.
-- Domínio oficial: `familiagrill.com.br`.
+- Domínio oficial: `familiagrill.com.br`. O **apex é o host canônico**; o `www`
+  redireciona para ele na Vercel. Toda URL absoluta do projeto — canonical,
+  Open Graph, JSON-LD, sitemap e `brand.site` — usa o apex, sem `www` e sem o
+  alias `.vercel.app`.
 - Instagram: [@churrascofamiliagrill](https://www.instagram.com/churrascofamiliagrill/) — única
   presença social confirmada.
 - Logo em [public/logo-familia-grill.png](public/logo-familia-grill.png) e a
