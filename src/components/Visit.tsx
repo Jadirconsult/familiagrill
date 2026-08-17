@@ -166,6 +166,42 @@ function ReservationForm() {
     setSending(false)
 
     if (error) {
+      // Sem isto, todo erro do banco vira a mesma frase na tela e a causa se
+      // perde. Foi o que aconteceu quando dois aparelhos enviaram a mesma mesa:
+      // o motivo estava na resposta e ninguém conseguia vê-lo.
+      console.error('[reserva] insert recusado', error)
+
+      // 23505 — o índice reservas_sem_duplicata barrou telefone e horário
+      // repetidos. Isso não é falha: é o segundo envio da mesma mesa, e a
+      // primeira passou. Acontece com duplo toque, com reenvio de formulário e
+      // com a mesma pessoa em dois aparelhos. Chamar de erro e mandar "tente de
+      // novo" empurra o cliente a insistir no que nunca vai passar, e ele acaba
+      // ligando para pedir uma mesa que já tem — aí a casa cria a segunda, e a
+      // duplicata que o índice evitou acontece pelo telefone.
+      if (error.code === '23505') {
+        setConfirmation(
+          `Essa mesa já estava reservada para ${formatWhen(when)} nesse telefone. ` +
+            'Não precisa reservar de novo — confirmamos por telefone antes do horário.',
+        )
+        setForm(EMPTY)
+        nomeRef.current?.focus()
+        return
+      }
+
+      // 42501 é a política de RLS recusando; 23514, um check da tabela. Chega
+      // aqui o que a página deixou passar mas o banco não aceita — horário fora
+      // do expediente, data vencida entre o preenchimento e o envio, ou volume
+      // de tentativas. Nenhum desses melhora repetindo o mesmo envio, então a
+      // saída oferecida é conferir o horário ou falar com o salão.
+      if (error.code === '42501' || error.code === '23514') {
+        setFailure(
+          'Não conseguimos registrar essa mesa. Confira o horário ou chame a gente no WhatsApp.',
+        )
+        return
+      }
+
+      // O que sobra é rede ou indisponibilidade — aí tentar de novo é a atitude
+      // certa, e a frase só vale para esses casos.
       setFailure('A mesa não foi registrada. Tente de novo ou chame a gente no WhatsApp.')
       return
     }
