@@ -283,11 +283,16 @@ partir de 640px, e começa com um fio de 1px em `char` na borda superior. A
 alternância de fundo é de um degrau só — `coal` por padrão, `soot` no Cardápio e
 no Onde estamos.
 
-Grades por seção, todas colapsando para uma coluna no celular: três colunas para
-as cozinhas a partir de 768px (com `gap-px` sobre fundo `char`, que transforma o
-próprio vão em linha de grade), duas colunas para os apps de delivery e para os
-canais diretos, e um par assimétrico `1.05fr / 1fr` no hero a partir de 1024px,
-alinhado pela base — o texto e o medidor da noite terminam na mesma linha.
+Grades por seção, todas colapsando para uma coluna no celular: duas colunas para
+os apps de delivery e para os canais diretos, o par `20rem / 1fr` do cardápio a
+partir de 1024px — foto à esquerda, itens à direita — e um par assimétrico
+`1.05fr / 1fr` no hero a partir de 1024px, alinhado pela base: o texto e o
+medidor da noite terminam na mesma linha.
+
+As três cozinhas já tiveram grade própria, de três colunas, numa seção logo
+acima do cardápio. Ela saiu: repetia o que as abas do cardápio já diziam, com o
+mesmo rótulo de temperatura na tela duas vezes. A tese das três cozinhas agora
+abre o próprio cardápio, e as abas respondem por uma cozinha de cada vez.
 
 O header é fixo, transparente no topo, e ao passar de 24px de rolagem ganha fundo
 `coal` a 90% com desfoque de 12px e um fio inferior. O hero compensa com 128px de

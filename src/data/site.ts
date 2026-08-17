@@ -101,6 +101,17 @@ export const kitchens: {
   heat: Heat
   temperature: string
   lede: string
+  /**
+   * Fora de uso desde que a seção das três cozinhas foi fundida ao cardápio:
+   * este parágrafo enumerava os pratos que a lista de itens já mostra logo
+   * abaixo, e era metade da sensação de estar lendo a mesma coisa duas vezes.
+   *
+   * Fica guardado, não apagado, porque não é só resumo de cardápio — a linha
+   * do burger ("o mesmo açougue que abastece a grelha abastece a chapa") é
+   * prova do "três cozinhas, uma casa" do PRODUCT.md, e não vive em nenhum
+   * outro lugar do site. Se for reaproveitada, que seja como posicionamento,
+   * não como lista.
+   */
   detail: string
   photo: KitchenPhoto | null
 }[] = [

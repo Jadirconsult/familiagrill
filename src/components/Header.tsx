@@ -3,7 +3,8 @@ import { Menu, X } from 'lucide-react'
 import { brand, primaryChannel } from '../data/site'
 
 const links = [
-  { href: '#cozinhas', label: 'As três cozinhas' },
+  // A seção das três cozinhas e a do cardápio viraram uma só: dois itens aqui
+  // levariam ao mesmo lugar, e um deles apontaria para uma âncora inexistente.
   { href: '#cardapio', label: 'Cardápio' },
   { href: '#pedir', label: 'Delivery' },
   { href: '#horarios', label: 'Horários' },

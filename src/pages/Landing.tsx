@@ -1,6 +1,5 @@
 import { Header } from '../components/Header'
 import { Hero } from '../components/Hero'
-import { Kitchens } from '../components/Kitchens'
 import { Menu } from '../components/Menu'
 import { Order } from '../components/Order'
 import { Hours } from '../components/Hours'
@@ -13,7 +12,8 @@ export function Landing() {
       <Header />
       <main>
         <Hero />
-        <Kitchens />
+        {/* Menu absorveu a antiga Kitchens: as duas eram vizinhas e diziam a
+            mesma coisa duas vezes. */}
         <Menu />
         <Order />
         <Hours />

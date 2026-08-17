@@ -48,9 +48,15 @@ export function Menu() {
       <div ref={ref} className="reveal shell">
         <div className="flex flex-wrap items-end justify-between gap-6 sm:gap-8">
           <div>
-            <p className="eyebrow">O que sai da cozinha</p>
+            {/* Esta seção absorveu a antiga Kitchens. Eram duas, adjacentes, lendo
+                o mesmo array: a de cima anunciava as três cozinhas e a de baixo as
+                repetia como abas, com o mesmo "carvão · brasa viva" na tela duas
+                vezes. Pior, o parágrafo de cada card já listava os itens que a aba
+                mostrava logo abaixo. Agora a tese abre a seção e cada aba responde
+                por uma cozinha inteira. */}
+            <p className="eyebrow">Três cozinhas, um salão</p>
             <h2 className="display mt-4 max-w-3xl text-[clamp(1.75rem,4.5vw,3.25rem)] text-cream">
-              O que a gente faz melhor, em cada fogo.
+              Duas trabalham com fogo. Uma trabalha contra ele.
             </h2>
           </div>
 
@@ -100,6 +106,14 @@ export function Menu() {
         >
           <p className={`font-mono text-[11px] tracking-widest uppercase ${accent[kitchen.heat]}`}>
             {kitchen.temperature}
+          </p>
+
+          {/* A frase que era o lede do card. Aqui ela é o que separa uma aba da
+              outra: sem isso, trocar de aba trocava só a lista, e as três
+              cozinhas ficavam com o mesmo rosto. O `detail` fica de fora de
+              propósito — ele enumerava os pratos que a lista abaixo já traz. */}
+          <p className="mt-3 max-w-2xl text-xl leading-snug text-cream sm:text-2xl">
+            {kitchen.lede}
           </p>
 
           {/* A foto acompanha a cozinha escolhida. Continua opcional de
