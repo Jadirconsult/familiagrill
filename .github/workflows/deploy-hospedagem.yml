@@ -1,0 +1,61 @@
+name: Deploy para a hospedagem
+
+# Roda a cada push na main e tambem manualmente pelo botao "Run workflow".
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Impede que dois deploys rodem ao mesmo tempo e embaralhem os arquivos no servidor.
+# cancel-in-progress fica FALSE de propósito: cancelar um deploy no meio do envio
+# deixa o servidor com metade dos arquivos — um index.html novo apontando para
+# assets que ainda não subiram derruba o site. Enfileirar é mais lento e seguro.
+concurrency:
+  group: deploy-producao
+  cancel-in-progress: false
+
+jobs:
+  build-e-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Build de producao
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: npm run build
+
+      # Falha cedo se o build nao gerou o index.html, em vez de subir uma pasta vazia
+      # e derrubar o site no ar.
+      - name: Conferir se o build gerou os arquivos
+        run: test -f dist/index.html && test -f dist/.htaccess
+
+      - name: Enviar para a hospedagem por FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./dist/
+          server-dir: ./
+          # Envia apenas o que mudou. Nunca apaga a pasta inteira antes de subir,
+          # entao um deploy interrompido nao deixa o site fora do ar.
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
