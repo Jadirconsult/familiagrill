@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 /**
  * A mídia da cozinha escolhida no cardápio: o filme, quando existe, e a foto
@@ -21,8 +21,14 @@ import { useEffect, useRef, useState } from 'react'
  * 3. Nada é baixado antes da aba ser escolhida. Quem entra no cardápio e vai
  *    direto para o sushi nunca paga os 616 KB do churrasco.
  *
- * 4. Com "reduzir movimento" ligado no sistema, fica só a foto. É acessibilidade
- *    e é banda: 616 KB que não se baixa à toa.
+ * 4. Este componente NÃO respeita `prefers-reduced-motion`, e a hero respeita.
+ *    A distinção é deliberada: a hero é fundo de tela cheia com movimento
+ *    periférico e contínuo — exatamente o que causa desconforto em quem liga
+ *    essa preferência. Aqui é um quadrado de 320px que toca uma vez, por oito
+ *    segundos, e congela. Some-se a isso que boa parte de quem tem a preferência
+ *    ligada no Windows a ligou para deixar a interface rápida, sem intenção de
+ *    recusar vídeo de comida. Se um dia chegar reclamação de enjoo, o caminho de
+ *    volta é uma linha: devolver a checagem de mídia e cair na foto.
  */
 
 type Foto = { src: string; alt: string; width: number; height: number }
@@ -47,16 +53,7 @@ const classes =
 
 export function KitchenMedia({ kitchenId, photo }: { kitchenId: string; photo: Foto }) {
   const filme = filmes[kitchenId]
-  const [semMovimento, setSemMovimento] = useState(true)
   const videoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const aplica = () => setSemMovimento(mq.matches)
-    aplica()
-    mq.addEventListener('change', aplica)
-    return () => mq.removeEventListener('change', aplica)
-  }, [])
 
   // Trocar de aba recomeça o filme do zero, senão a segunda visita mostraria
   // só o quadro congelado do fim.
@@ -67,7 +64,7 @@ export function KitchenMedia({ kitchenId, photo }: { kitchenId: string; photo: F
     void v.play().catch(() => {})
   }, [kitchenId])
 
-  if (!filme || semMovimento) {
+  if (!filme) {
     return (
       <img
         key={photo.src}
