@@ -50,7 +50,7 @@
   # quando chegar a versão em alta resolução. Um ano com "immutable" aqui
   # significaria a casa trocando a foto e ninguém vendo — nem com refresh
   # forçado, porque "immutable" manda o navegador nem perguntar.
-  <FilesMatch "\.(png|jpe?g|webp|avif|gif|ico|svg)$">
+  <FilesMatch "\.(png|jpe?g|webp|avif|gif|ico|svg|mp4|webm)$">
     Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
 
@@ -73,6 +73,9 @@
   AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript
   AddOutputFilterByType DEFLATE application/javascript application/json
   AddOutputFilterByType DEFLATE application/xml image/svg+xml
+
+  # Video fica de fora de propósito: mp4 já é formato comprimido, e passá-lo
+  # pelo deflate gasta CPU do servidor sem economizar um byte.
 </IfModule>
 
 # 5. Não listar o conteúdo das pastas. A hospedagem já mostrou "Index of /"

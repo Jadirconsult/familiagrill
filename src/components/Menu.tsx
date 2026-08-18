@@ -1,4 +1,5 @@
 import { useState, type KeyboardEvent } from 'react'
+import { KitchenMedia } from './KitchenMedia'
 import { ArrowUpRight } from 'lucide-react'
 import { brand, kitchens, menu, primaryChannel } from '../data/site'
 import { useReveal } from '../hooks/useReveal'
@@ -124,16 +125,7 @@ export function Menu() {
             className={`mt-6 gap-10 ${kitchen.photo ? 'lg:grid lg:grid-cols-[minmax(0,20rem)_1fr] lg:items-start' : ''}`}
           >
             {kitchen.photo && (
-              <img
-                key={kitchen.photo.src}
-                src={kitchen.photo.src}
-                alt={kitchen.photo.alt}
-                width={kitchen.photo.width}
-                height={kitchen.photo.height}
-                loading="lazy"
-                decoding="async"
-                className="mb-8 aspect-square w-full border border-char object-cover lg:mb-0 lg:sticky lg:top-24"
-              />
+              <KitchenMedia kitchenId={kitchen.id} photo={kitchen.photo} />
             )}
 
             <ul className="divide-y divide-char border-y border-char">
