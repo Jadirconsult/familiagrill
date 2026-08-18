@@ -1,10 +1,13 @@
 import { MapPin, MessageCircle } from 'lucide-react'
 import { brand, primaryChannel } from '../data/site'
+import { HeroBackdrop } from './HeroBackdrop'
 import { NightMeter } from './NightMeter'
 
 export function Hero() {
   return (
     <section id="topo" className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
+      <HeroBackdrop />
+
       {/* O carvão sob o texto: dois focos de calor, sem imagem, sem gradiente de
           banner. Menores e menos desfocados no celular — um blur de 130px sobre
           544px custa caro em aparelho modesto. */}

@@ -109,8 +109,9 @@ Camboinhas, Piratininga, Itaipu): a casa é local e diz isso pelo cardápio.
   real, e a confirmação é feita por telefone, fora do sistema: passada a mesa,
   o dado não tem mais uso e só representa risco. O prazo vive num único
   intervalo em `20260817_000002_limpeza_de_reservas.sql`.
-- RLS: `insert` anônimo permitido; `select`/`update` restritos a usuários
-  autenticados.
+- RLS: `insert` anônimo permitido; `select`, `update` e `delete` exigem estar na
+  tabela `staff` — estar autenticado não basta. Quem loga fora da `staff` entra
+  e vê uma lista vazia, o que parece defeito e é a política trabalhando.
 - Sem `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` a página continua
   funcionando — a seção de reserva mostra um aviso e o botão de WhatsApp no
   lugar do formulário. Esse estado degradado é intencional e deve sobreviver.
@@ -168,8 +169,15 @@ Camboinhas, Piratininga, Itaipu): a casa é local e diz isso pelo cardápio.
     marca de terceiros e compatível com a composição do Piratininga. A recusada
     fica em `assets-originais/` e não vai ao ar.
   - **Limite técnico:** todas têm no máximo 863px, em recorte quadrado ou 4:5 do
-    Instagram. Servem para cartões; **nenhuma sustenta um hero de desktop**, que
-    precisa de ~2000px em formato largo. O hero segue sem foto até isso chegar.
+    Instagram. Servem para cartões — e é o que fazem no cardápio.
+- **Filmes curtos das três cozinhas** (`public/videos/`), em recorte quadrado,
+  usados nas abas do cardápio. Cada aba só baixa o seu quando é escolhida, e
+  com "reduzir movimento" ligado nenhuma baixa: fica a foto.
+- **O hero tem fundo em movimento** desde 17/08/2026: `hero-churrasco.mp4`,
+  850x720 depois de cortadas as tarjas do original. Não é o formato largo de
+  ~2000px que um hero de desktop pediria — quem resolve o recorte é o
+  `object-cover`, e dois véus em gradiente seguram o contraste do texto. Uma
+  peça larga de verdade continua sendo bem-vinda; esta não a torna dispensável.
 - **Ainda não existe:** foto do salão, da equipe, e uma imagem de hambúrguer da
   própria casa. Não substitua por banco de imagens.
 - **Não existe e não pode ser fabricado:** depoimento, avaliação, nota, número de
