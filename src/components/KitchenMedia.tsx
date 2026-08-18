@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from 'react'
  * A mídia da cozinha escolhida no cardápio: o filme, quando existe, e a foto
  * quando não existe.
  *
- * Churras e burger já têm filme. O sushi continua mostrando a foto, sem
- * buraco e sem placeholder — quando os arquivos chegarem em public/videos/,
- * basta acrescentar a linha no mapa `filmes` abaixo e nada mais muda.
+ * As três cozinhas têm filme. A foto continua sendo o caminho de volta: se um
+ * filme for removido do mapa `filmes`, aquela cozinha volta a mostrar a foto
+ * sozinha, sem buraco e sem placeholder.
  *
  * Quatro decisões que não são óbvias:
  *
@@ -36,7 +36,10 @@ const filmes: Record<string, { src: string; poster: string }> = {
     src: '/videos/hamburguer-quadrado.mp4',
     poster: '/videos/hamburguer-quadrado.jpg',
   },
-  // sushi: { src: '/videos/sushi-quadrado.mp4', poster: '/videos/sushi-quadrado.jpg' },
+  sushi: {
+    src: '/videos/sushi-quadrado.mp4',
+    poster: '/videos/sushi-quadrado.jpg',
+  },
 }
 
 const classes =
