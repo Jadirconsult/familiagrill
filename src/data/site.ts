@@ -33,8 +33,8 @@ export const brand = {
  * Canais de pedido, em ordem de prioridade. O primeiro vira o botão principal
  * do site — hoje o 99Food, por decisão da casa.
  *
- * TODO: trocar os links de 99Food e iFood pelas URLs diretas da loja. Os
- * endereços abaixo levam à home de cada app, não à página do restaurante.
+ * TODO: trocar o link do iFood pela URL direta da loja. O endereço abaixo
+ * leva à home do app, não à página do restaurante.
  */
 export type OrderChannel = {
   id: string
@@ -49,7 +49,7 @@ export const orderChannels: OrderChannel[] = [
   {
     id: '99food',
     name: '99Food',
-    url: 'https://99food.com/',
+    url: 'https://oia.99app.com/dlp9/yfYKIz?area=BR',
     note: 'O caminho mais rápido até a nossa cozinha',
     kind: 'app',
   },
