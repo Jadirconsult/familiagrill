@@ -3,6 +3,7 @@ import { KitchenMedia } from './KitchenMedia'
 import { ArrowUpRight } from 'lucide-react'
 import { brand, kitchens, menu, primaryChannel } from '../data/site'
 import { useReveal } from '../hooks/useReveal'
+import { LinkExterno } from './LinkExterno'
 
 const accent = {
   ember: 'text-ember',
@@ -13,9 +14,6 @@ const accent = {
 export function Menu() {
   const [active, setActive] = useState(kitchens[0].id)
   const ref = useReveal<HTMLDivElement>()
-
-  const kitchen = kitchens.find((k) => k.id === active)!
-  const items = menu.find((m) => m.kitchen === active)?.items ?? []
 
   function selectByOffset(offset: number) {
     const current = kitchens.findIndex((k) => k.id === active)
@@ -61,10 +59,9 @@ export function Menu() {
             </h2>
           </div>
 
-          <a
+          <LinkExterno
             href={brand.menuUrl}
-            target="_blank"
-            rel="noreferrer"
+            evento="cardapio_digital"
             className="group inline-flex min-h-11 items-center gap-2 font-mono text-xs font-bold tracking-widest text-gold uppercase"
           >
             <span>Cardápio completo e preços</span>
@@ -72,7 +69,7 @@ export function Menu() {
               className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               aria-hidden
             />
-          </a>
+          </LinkExterno>
         </div>
 
         <div className="mt-12 flex flex-wrap gap-2" role="tablist" aria-label="Cozinhas">
@@ -98,69 +95,29 @@ export function Menu() {
           ))}
         </div>
 
-        <div
-          id={`painel-${kitchen.id}`}
-          role="tabpanel"
-          aria-labelledby={`aba-${kitchen.id}`}
-          tabIndex={0}
-          className="mt-10"
-        >
-          <p className={`font-mono text-[11px] tracking-widest uppercase ${accent[kitchen.heat]}`}>
-            {kitchen.temperature}
-          </p>
-
-          {/* A frase que era o lede do card. Aqui ela é o que separa uma aba da
-              outra: sem isso, trocar de aba trocava só a lista, e as três
-              cozinhas ficavam com o mesmo rosto. O `detail` fica de fora de
-              propósito — ele enumerava os pratos que a lista abaixo já traz. */}
-          <p className="mt-3 max-w-2xl text-xl leading-snug text-cream sm:text-2xl">
-            {kitchen.lede}
-          </p>
-
-          {/* A foto acompanha a cozinha escolhida. Continua opcional de
-              propósito: se uma cozinha ficar sem foto autorizada, a lista ocupa
-              a largura toda em vez de abrir um buraco para tapar com banco de
-              imagens. */}
-          <div
-            className={`mt-6 gap-10 ${kitchen.photo ? 'lg:grid lg:grid-cols-[minmax(0,20rem)_1fr] lg:items-start' : ''}`}
-          >
-            {kitchen.photo && (
-              <KitchenMedia kitchenId={kitchen.id} photo={kitchen.photo} />
-            )}
-
-            <ul className="divide-y divide-char border-y border-char">
-              {items.map((item) => (
-                // Nome e descrição só se dividem em duas colunas quando cabem lado
-                // a lado: abaixo de 1024px o nome longo era espremido em três linhas.
-                <li
-                  key={item.name}
-                  className="flex flex-col gap-1.5 py-5 lg:flex-row lg:items-baseline lg:justify-between lg:gap-8"
-                >
-                  <span className="display text-xl text-cream sm:text-2xl">{item.name}</span>
-                  <span className="text-sm leading-relaxed text-smoke lg:max-w-xs lg:text-right">
-                    {item.note}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        {/* Os três painéis existem no documento; o atributo `hidden` esconde os
+            dois que não estão escolhidos. Antes só a aba ativa era montada, e o
+            HTML publicado saía com um terço do cardápio: Burger e Sushi nunca
+            chegavam ao robô — justamente onde estão Itacoatiara, Camboinhas,
+            Piratininga e Itaipu, que são os melhores termos locais da página.
+            Para quem olha a tela não mudou nada; para quem lê o HTML, triplicou. */}
+        {kitchens.map((k) => (
+          <Painel key={k.id} kitchen={k} ativa={active === k.id} />
+        ))}
 
         {/* A lista terminava num fio de 1px, no exato momento em que a vontade
             estava no pico. Agora ela termina no pedido. */}
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <a
+          <LinkExterno
             href={primaryChannel.url}
-            target="_blank"
-            rel="noreferrer"
+            evento={primaryChannel.evento}
             className="inline-flex min-h-11 items-center bg-gold px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
           >
             Pedir no {primaryChannel.name}
-          </a>
-          <a
+          </LinkExterno>
+          <LinkExterno
             href={brand.menuUrl}
-            target="_blank"
-            rel="noreferrer"
+            evento="cardapio_digital"
             className="group inline-flex min-h-11 items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
           >
             <span>Ver preços</span>
@@ -168,9 +125,80 @@ export function Menu() {
               className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               aria-hidden
             />
-          </a>
+          </LinkExterno>
         </div>
       </div>
     </section>
+  )
+}
+
+/**
+ * Um painel de cozinha. Fica no documento mesmo quando não está escolhido —
+ * é o que garante o cardápio inteiro no HTML publicado.
+ *
+ * A mídia é a exceção, e continua saindo só na aba ativa: `KitchenMedia` monta
+ * um vídeo com `autoPlay`, e três deles montados de uma vez baixariam os três
+ * filmes na abertura do cardápio. Isso desfaria a decisão registrada naquele
+ * arquivo — "quem entra no cardápio e vai direto para o sushi nunca paga os
+ * 616 KB do churrasco". O texto é o que o buscador precisa; o filme, não.
+ */
+function Painel({
+  kitchen,
+  ativa,
+}: {
+  kitchen: (typeof kitchens)[number]
+  ativa: boolean
+}) {
+  const items = menu.find((m) => m.kitchen === kitchen.id)?.items ?? []
+
+  return (
+    <div
+      id={`painel-${kitchen.id}`}
+      role="tabpanel"
+      aria-labelledby={`aba-${kitchen.id}`}
+      tabIndex={0}
+      hidden={!ativa}
+      className="mt-10"
+    >
+      <p className={`font-mono text-[11px] tracking-widest uppercase ${accent[kitchen.heat]}`}>
+        {kitchen.temperature}
+      </p>
+
+      {/* A frase que era o lede do card. Aqui ela é o que separa uma aba da
+          outra: sem isso, trocar de aba trocava só a lista, e as três
+          cozinhas ficavam com o mesmo rosto. O `detail` fica de fora de
+          propósito — ele enumerava os pratos que a lista abaixo já traz. */}
+      <p className="mt-3 max-w-2xl text-xl leading-snug text-cream sm:text-2xl">
+        {kitchen.lede}
+      </p>
+
+      {/* A foto acompanha a cozinha escolhida. Continua opcional de
+          propósito: se uma cozinha ficar sem foto autorizada, a lista ocupa
+          a largura toda em vez de abrir um buraco para tapar com banco de
+          imagens. */}
+      <div
+        className={`mt-6 gap-10 ${kitchen.photo ? 'lg:grid lg:grid-cols-[minmax(0,20rem)_1fr] lg:items-start' : ''}`}
+      >
+        {kitchen.photo && ativa && (
+          <KitchenMedia kitchenId={kitchen.id} photo={kitchen.photo} />
+        )}
+
+        <ul className="divide-y divide-char border-y border-char">
+          {items.map((item) => (
+            // Nome e descrição só se dividem em duas colunas quando cabem lado
+            // a lado: abaixo de 1024px o nome longo era espremido em três linhas.
+            <li
+              key={item.name}
+              className="flex flex-col gap-1.5 py-5 lg:flex-row lg:items-baseline lg:justify-between lg:gap-8"
+            >
+              <span className="display text-xl text-cream sm:text-2xl">{item.name}</span>
+              <span className="text-sm leading-relaxed text-smoke lg:max-w-xs lg:text-right">
+                {item.note}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   )
 }

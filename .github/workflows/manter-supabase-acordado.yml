@@ -67,6 +67,59 @@ jobs:
 
           echo "Banco acordado."
 
+  # Falhar não bastava. Em 27/08/2026 este workflow acusou o projeto fora do ar
+  # e ninguém viu: a notificação de execução agendada chega por e-mail para uma
+  # pessoa só, some no meio do resto, e o site ficou dois dias com o formulário
+  # de reserva quebrado até alguém reparar por outro caminho. Uma verificação
+  # que detecta o problema e não avisa é quase uma verificação que não existe.
+  #
+  # Este job é separado de propósito. O `ping` fala com a internet e não tem
+  # permissão nenhuma; este escreve no repositório e não recebe secret nenhum.
+  # Assim nenhum dos dois acumula as duas coisas ao mesmo tempo.
+  avisar:
+    needs: ping
+    if: failure()
+    runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+
+    steps:
+      - name: Abrir ou atualizar o aviso
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EXECUCAO: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          TITULO='Supabase fora do ar: o ping agendado falhou'
+
+          CORPO=$(printf '%s\n' \
+            "O workflow \"Manter o Supabase acordado\" falhou em $(date -u '+%d/%m/%Y às %H:%M UTC')." \
+            "" \
+            "Costuma significar uma destas três coisas: o projeto pausou por inatividade, a publishable key mudou, ou o host do projeto deixou de resolver — este último indica projeto removido, porque projeto apenas pausado continua resolvendo e responde com erro HTTP." \
+            "" \
+            "**Enquanto durar, o formulário de reserva e o painel da equipe estão fora do ar.**" \
+            "" \
+            "Depois de religar, rode \`npm run db:check\`: em 29/08/2026 a volta do banco revelou que uma migration nunca havia sido aplicada." \
+            "" \
+            "Execução: $EXECUCAO")
+
+          # Um aviso por incidente, não um por execução: se o projeto ficar
+          # semanas fora, isto vira comentário na mesma issue em vez de encher
+          # a lista de issues idênticas — que é o jeito mais rápido de ensinar
+          # todo mundo a ignorar o aviso.
+          NUMERO=$(gh issue list --repo "$REPO" --state open --limit 50 \
+            --json number,title --jq ".[] | select(.title == \"$TITULO\") | .number" | head -1)
+
+          if [ -n "$NUMERO" ]; then
+            gh issue comment "$NUMERO" --repo "$REPO" --body "$CORPO"
+            echo "Comentei na issue #$NUMERO, que já estava aberta."
+          else
+            gh issue create --repo "$REPO" --title "$TITULO" --body "$CORPO"
+          fi
+
 # LIMITE CONHECIDO — o GitHub desativa workflows agendados em repositório sem
 # nenhuma atividade por sessenta dias, e avisa por e-mail antes. Se este projeto
 # ficar dois meses parado, o agendamento morre calado e o Supabase pausa em

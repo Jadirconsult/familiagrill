@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Landing } from './pages/Landing'
+import { Noindex } from './components/Noindex'
 
 /**
  * O painel da equipe carrega sob demanda, e leva o cliente do Supabase junto.
@@ -29,11 +30,24 @@ export default function App() {
                 </div>
               }
             >
+              <Noindex />
               <Reservas />
             </Suspense>
           }
         />
-        <Route path="*" element={<Landing />} />
+        {/* Endereço inventado devolve a landing, porque o fallback de SPA manda
+            o index.html para tudo. Continua devolvendo — trocar por uma página
+            de erro seria desenhar tela nova. O `Noindex` resolve o que doía:
+            sem ele, cada URL errada era uma cópia indexável desta página. */}
+        <Route
+          path="*"
+          element={
+            <>
+              <Noindex />
+              <Landing />
+            </>
+          }
+        />
       </Routes>
     </BrowserRouter>
   )

@@ -9,6 +9,7 @@ import {
 } from '../data/site'
 import { formatCountdown, formatMinutes, statusOf } from '../lib/hours'
 import { useReveal } from '../hooks/useReveal'
+import { LinkExterno } from './LinkExterno'
 
 export function Order() {
   const ref = useReveal<HTMLDivElement>()
@@ -33,11 +34,10 @@ export function Order() {
 
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {directChannels.map((channel) => (
-            <a
+            <LinkExterno
               key={channel.id}
               href={channel.url}
-              target="_blank"
-              rel="noreferrer"
+              evento={channel.evento}
               className="group flex items-center justify-between gap-4 border border-char px-5 py-5 transition-colors hover:border-gold sm:gap-6 sm:px-8"
             >
               <span>
@@ -48,7 +48,7 @@ export function Order() {
                 className="size-5 shrink-0 text-smoke transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gold"
                 aria-hidden
               />
-            </a>
+            </LinkExterno>
           ))}
         </div>
       </div>
@@ -94,10 +94,9 @@ function OrderWindow() {
 
 function AppCard({ channel, featured }: { channel: OrderChannel; featured: boolean }) {
   return (
-    <a
+    <LinkExterno
       href={channel.url}
-      target="_blank"
-      rel="noreferrer"
+      evento={channel.evento}
       className={`group flex min-h-56 flex-col justify-between gap-8 p-8 transition-colors sm:min-h-64 sm:gap-10 sm:p-10 md:p-8 lg:p-10 ${
         featured
           ? 'bg-gold text-coal hover:bg-cream'
@@ -126,6 +125,6 @@ function AppCard({ channel, featured }: { channel: OrderChannel; featured: boole
           aria-hidden
         />
       </span>
-    </a>
+    </LinkExterno>
   )
 }

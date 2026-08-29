@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { brand, primaryChannel } from '../data/site'
+import { LinkExterno } from './LinkExterno'
 
 const links = [
   // A seção das três cozinhas e a do cardápio viraram uma só: dois itens aqui
@@ -86,14 +87,13 @@ export function Header() {
         {/* O rótulo carrega o destino em toda largura: um CTA persistente que diz
             só o verbo não vende nada. Cabe em 320px — Space Mono tem avanço de
             0,6em, então o rótulo inteiro mede ~143px contra ~172px disponíveis. */}
-        <a
+        <LinkExterno
           href={primaryChannel.url}
-          target="_blank"
-          rel="noreferrer"
+          evento={primaryChannel.evento}
           className="inline-flex min-h-11 shrink-0 items-center bg-gold px-3.5 font-mono text-[11px] font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream sm:px-4 sm:text-xs"
         >
           Pedir no {primaryChannel.name}
-        </a>
+        </LinkExterno>
 
         {menuOpen && (
           <nav
