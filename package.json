@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/seo-build.mjs",
+    "build": "tsc -b && vite build && node scripts/seo-build.mjs && node scripts/seo-check.mjs",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seo:check": "node scripts/seo-check.mjs",
+    "db:check": "node scripts/db-check.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.0",

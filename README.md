@@ -15,9 +15,28 @@ npm run dev
 | Comando | O que faz |
 | --- | --- |
 | `npm run dev` | Servidor de desenvolvimento |
-| `npm run build` | Type-check e build de produção em `dist/` |
+| `npm run build` | Type-check, build, pré-renderização e a verificação de publicação |
 | `npm run preview` | Serve o build |
+| `npm run seo:check` | Só a verificação, contra o `dist/` que já existe |
+| `npm run db:check` | Confere se o banco e o site concordam sobre o expediente |
 | `npm run lint` | oxlint |
+
+### O que o build faz além de empacotar
+
+1. `vite build` gera o `dist/` de sempre.
+2. [scripts/seo-build.mjs](scripts/seo-build.mjs) **pré-renderiza a landing**
+   dentro do `#root` do `index.html` e reescreve, a partir de
+   [src/data/site.ts](src/data/site.ts), tudo que os buscadores leem: título,
+   descrição, canonical, Open Graph, JSON-LD e o `sitemap.xml`. Sem esse passo o
+   arquivo publicado sobe com a div vazia, e quem não executa JavaScript — Bing,
+   DuckDuckGo, os robôs de IA — não vê cardápio, endereço nem horário.
+3. [scripts/seo-check.mjs](scripts/seo-check.mjs) confere as invariantes e
+   **falha o build** se alguma quebrou: página vazia, cardápio pela metade,
+   título fora do tamanho que a busca mostra, canonical errado, alias de preview
+   vazando para produção, imagem acima do orçamento de peso, link externo sem
+   medição. Como o CI publica rodando `npm run build`, uma falha aqui impede o
+   deploy em vez de publicar o erro. As regras e o porquê de cada uma estão em
+   [CLAUDE.md](CLAUDE.md).
 
 ## Onde editar o conteúdo
 
