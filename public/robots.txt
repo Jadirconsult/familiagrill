@@ -1,8 +1,16 @@
-# O site é uma landing só. A única rota que não deve ser indexada é o painel
-# da equipe, que fica fora do menu e é protegido por login do Supabase —
-# vale barrar mesmo assim, para não aparecer em busca por "família grill reservas".
+# O site é uma landing só.
+#
+# /reservas — o painel da equipe — não tem mais Disallow aqui, e a mudança é
+# deliberada: Disallow impede o RASTREIO, não a INDEXAÇÃO. Uma URL bloqueada
+# que alguém linkar pode acabar listada na busca sem descrição, e o robô nunca
+# chega a ler o noindex de dentro dela, porque foi proibido de entrar.
+#
+# Agora quem barra o painel é o cabeçalho `X-Robots-Tag: noindex` do
+# public/.htaccess, reforçado pelo componente Noindex no lado do cliente. Para
+# o cabeçalho funcionar, o robô precisa poder buscar a página — daí a liberação.
+# O painel continua protegido por login do Supabase; isto é sobre busca, não
+# sobre acesso.
 User-agent: *
 Allow: /
-Disallow: /reservas
 
 Sitemap: https://www.familiagrill.com.br/sitemap.xml
