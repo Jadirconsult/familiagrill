@@ -14,6 +14,7 @@ import {
   toRestaurantTimestamp,
 } from '../lib/form'
 import { useReveal } from '../hooks/useReveal'
+import { LinkExterno } from './LinkExterno'
 
 const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(brand.address.mapsQuery)}`
 const mapsEmbed = `https://www.google.com/maps?q=${encodeURIComponent(brand.address.mapsQuery)}&z=16&output=embed`
@@ -46,33 +47,30 @@ export function Visit() {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <a
+              <LinkExterno
                 href={mapsLink}
-                target="_blank"
-                rel="noreferrer"
+                evento="rota_mapa"
                 className="inline-flex min-h-11 items-center gap-2 border border-char px-5 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <MapPin className="size-3.5" aria-hidden />
                 Abrir no mapa
-              </a>
-              <a
+              </LinkExterno>
+              <LinkExterno
                 href={`https://wa.me/${brand.whatsapp}`}
-                target="_blank"
-                rel="noreferrer"
+                evento="whatsapp"
                 className="inline-flex min-h-11 items-center gap-2 border border-char px-5 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <MessageCircle className="size-3.5" aria-hidden />
                 WhatsApp
-              </a>
-              <a
+              </LinkExterno>
+              <LinkExterno
                 href={brand.instagram}
-                target="_blank"
-                rel="noreferrer"
+                evento="instagram"
                 className="inline-flex min-h-11 items-center gap-2 border border-char px-5 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <AtSign className="size-3.5" aria-hidden />
                 Instagram
-              </a>
+              </LinkExterno>
             </div>
           </div>
 
@@ -229,15 +227,14 @@ function ReservationForm() {
           <code className="font-mono text-gold">VITE_SUPABASE_PUBLISHABLE_KEY</code> no
           arquivo <code className="font-mono text-gold">.env.local</code>.
         </p>
-        <a
+        <LinkExterno
           href={`https://wa.me/${brand.whatsapp}`}
-          target="_blank"
-          rel="noreferrer"
+          evento="whatsapp"
           className="mt-8 inline-flex items-center justify-center gap-2 bg-gold px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
         >
           <MessageCircle className="size-3.5" aria-hidden />
           Reservar pelo WhatsApp
-        </a>
+        </LinkExterno>
       </div>
     )
   }

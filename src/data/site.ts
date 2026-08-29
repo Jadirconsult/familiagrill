@@ -6,6 +6,8 @@
  * e no cardápio digital da casa. Itens marcados com TODO precisam de confirmação.
  */
 
+import type { Evento } from '../lib/track'
+
 export const brand = {
   name: 'Família Grill',
   fullName: 'Família Grill & Sushi',
@@ -43,6 +45,13 @@ export type OrderChannel = {
   note: string
   /** 'app' = entrega por aplicativo; 'direto' = fala direto com a casa. */
   kind: 'app' | 'direto'
+  /**
+   * Qual conversão um clique aqui representa. Fica junto do canal, e não numa
+   * tabela em src/lib/track.ts, porque canal novo tem que ser obrigado a
+   * declarar como será medido — o TypeScript cobra no momento em que ele é
+   * acrescentado, em vez de deixar o clique cair num evento genérico.
+   */
+  evento: Evento
 }
 
 export const orderChannels: OrderChannel[] = [
@@ -52,6 +61,7 @@ export const orderChannels: OrderChannel[] = [
     url: 'https://oia.99app.com/dlp9/yfYKIz?area=BR',
     note: 'O caminho mais rápido até a nossa cozinha',
     kind: 'app',
+    evento: 'pedido_99food',
   },
   {
     id: 'ifood',
@@ -59,6 +69,7 @@ export const orderChannels: OrderChannel[] = [
     url: 'https://www.ifood.com.br/',
     note: 'A brasa entregue por quem você já usa',
     kind: 'app',
+    evento: 'pedido_ifood',
   },
   {
     id: 'whatsapp',
@@ -66,6 +77,7 @@ export const orderChannels: OrderChannel[] = [
     url: `https://wa.me/${brand.whatsapp}`,
     note: 'Pedido, reserva ou dúvida — direto com o salão',
     kind: 'direto',
+    evento: 'whatsapp',
   },
   {
     id: 'cardapio',
@@ -73,6 +85,7 @@ export const orderChannels: OrderChannel[] = [
     url: brand.menuUrl,
     note: 'Todos os itens e os preços atualizados',
     kind: 'direto',
+    evento: 'cardapio_digital',
   },
 ]
 

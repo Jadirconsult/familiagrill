@@ -1,4 +1,5 @@
 import { brand, primaryChannel } from '../data/site'
+import { LinkExterno } from './LinkExterno'
 
 export function Footer() {
   return (
@@ -10,14 +11,13 @@ export function Footer() {
         <p className="display max-w-md text-[clamp(1.5rem,3.5vw,2.25rem)] text-cream">
           A grelha está acesa. Vai encarar?
         </p>
-        <a
+        <LinkExterno
           href={primaryChannel.url}
-          target="_blank"
-          rel="noreferrer"
+          evento={primaryChannel.evento}
           className="inline-flex min-h-11 shrink-0 items-center bg-gold px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-cream"
         >
           Pedir no {primaryChannel.name}
-        </a>
+        </LinkExterno>
       </div>
 
       <div className="shell mt-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -39,14 +39,13 @@ export function Footer() {
             {brand.address.street} — {brand.address.city}/{brand.address.state}
           </p>
           <p className="mt-1">
-            <a
+            <LinkExterno
               href={brand.instagram}
-              target="_blank"
-              rel="noreferrer"
+              evento="instagram"
               className="inline-flex min-h-11 items-center transition-colors hover:text-cream"
             >
               {brand.instagramHandle}
-            </a>
+            </LinkExterno>
           </p>
           {/* smoke/60 sobre carvão dava 3,0:1. O smoke cheio dá 6,21:1. */}
           <p className="mt-4 text-smoke">

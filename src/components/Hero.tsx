@@ -1,6 +1,7 @@
 import { MapPin, MessageCircle } from 'lucide-react'
 import { brand, primaryChannel } from '../data/site'
 import { HeroBackdrop } from './HeroBackdrop'
+import { LinkExterno } from './LinkExterno'
 import { NightMeter } from './NightMeter'
 
 export function Hero() {
@@ -42,23 +43,21 @@ export function Hero() {
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a
+              <LinkExterno
                 href={primaryChannel.url}
-                target="_blank"
-                rel="noreferrer"
+                evento={primaryChannel.evento}
                 className="bg-cream px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-coal uppercase transition-colors hover:bg-gold"
               >
                 Pedir no {primaryChannel.name}
-              </a>
-              <a
+              </LinkExterno>
+              <LinkExterno
                 href={`https://wa.me/${brand.whatsapp}`}
-                target="_blank"
-                rel="noreferrer"
+                evento="whatsapp"
                 className="inline-flex items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
               >
                 <MessageCircle className="size-3.5" aria-hidden />
                 WhatsApp
-              </a>
+              </LinkExterno>
               <a
                 href="#visita"
                 className="inline-flex items-center gap-2 border border-char px-6 py-3.5 font-mono text-xs font-bold tracking-widest text-cream uppercase transition-colors hover:border-gold hover:text-gold"
