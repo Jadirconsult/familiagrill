@@ -116,6 +116,50 @@ if (canonical !== `${HOST}/`) {
   )
 }
 
+// 6b. As fontes são servidas por este domínio, e voltar ao Google Fonts é uma
+//     regressão fácil de cometer — basta alguém colar um <link> de exemplo. A
+//     folha de estilo de lá bloqueia a renderização e traz dois handshakes,
+//     num elemento que é o próprio LCP da página.
+if (/fonts\.googleapis\.com|fonts\.gstatic\.com/.test(html)) {
+  falha(
+    'O index.html publicado carrega fontes do Google.',
+    'As fontes vivem em src/fontes.css e são servidas por este domínio. Folha externa bloqueia a renderização e piora o LCP.',
+  )
+}
+
+// 6c. As duas faces da primeira dobra têm que estar pré-carregadas, e o
+//     crossorigin não é opcional: sem ele o navegador baixa a fonte duas vezes.
+// Comentários fora antes de contar: este arquivo tem um comentário que
+// CITA um <link rel="preload"> para explicar de onde ele vem, e sem esta
+// limpeza a citação seria contada como se fosse a tag.
+const semComentarios = html.replace(/<!--[\s\S]*?-->/g, '')
+const preloads = [...semComentarios.matchAll(/<link[^>]+rel="preload"[^>]*>/g)].map((m) => m[0])
+
+// Todo preload tem que apontar para arquivo existente — inclusive os que o
+// React 19 emite sozinho para as imagens da primeira dobra. Preload solto é
+// uma ida ao servidor gasta para receber 404.
+for (const tag of preloads) {
+  const alvo = tag.match(/href="([^"]+)"/)?.[1]
+  if (alvo && alvo.startsWith('/') && !fs.existsSync(path.join(dist, alvo.replace(/^\//, '')))) {
+    falha(`Preload aponta para ${alvo}, que não existe no dist.`, 'Corrija ou remova o preload.')
+  }
+}
+const fontesPreload = preloads.filter((p) => p.includes('as="font"'))
+if (fontesPreload.length < 2) {
+  falha(
+    `Só ${fontesPreload.length} fonte(s) pré-carregada(s).`,
+    'Cinzel (o h1) e Archivo (o corpo) devem ser pré-carregados. Ver montaPreloadDeFontes em scripts/seo-build.mjs.',
+  )
+}
+for (const tag of fontesPreload) {
+  if (!tag.includes('crossorigin')) {
+    falha(
+      `Preload de fonte sem crossorigin: ${tag}`,
+      'Fonte é buscada em modo CORS. Sem o atributo, o preload não casa com o pedido real e o arquivo desce duas vezes.',
+    )
+  }
+}
+
 // 7. O alias de preview não pode vazar para produção.
 if (html.includes('vercel.app')) {
   falha(
