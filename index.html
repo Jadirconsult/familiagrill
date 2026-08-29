@@ -49,12 +49,15 @@
     />
     <link rel="canonical" href="https://www.familiagrill.com.br/" />
     <!-- seo:fim -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Cinzel:wght@500;700;900&family=Space+Mono:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <!--
+      As fontes saíram do Google Fonts e passaram a ser servidas por este
+      domínio — as declarações estão em src/fontes.css, que index.css importa.
+      Aqui não sobra nada porque não há mais domínio externo a preconectar.
+
+      O <link rel="preload"> das duas faces da primeira dobra é injetado no
+      build por scripts/seo-build.mjs, que é quem conhece o nome com hash que
+      o Vite gera para cada arquivo.
+    -->
   </head>
   <body>
     <div id="root"></div>

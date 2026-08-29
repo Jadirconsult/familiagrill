@@ -202,6 +202,44 @@ function montaBlocoSeo(site, og) {
   return linhas.map((linha) => `    ${linha}`).join('\n')
 }
 
+/**
+ * As duas faces da primeira dobra, pré-carregadas.
+ *
+ * Sem isto o navegador só descobre que precisa delas depois de baixar e
+ * interpretar o CSS: HTML, folha de estilo, e só então a fonte — três idas ao
+ * servidor antes de a primeira letra assentar. Com o preload, a fonte parte
+ * junto com o CSS.
+ *
+ * Só duas, e é o ponto principal: pré-carregar as dezesseis faria o navegador
+ * competir consigo mesmo e atrasaria justamente o que se quis adiantar.
+ * Cinzel é o h1, que a página usa como abertura e o Google cronometra como
+ * LCP; Archivo é o parágrafo logo abaixo dele. Space Mono só aparece em
+ * rótulos pequenos e entra pelo caminho normal, quando o CSS pedir.
+ *
+ * `crossorigin` é obrigatório mesmo sendo o mesmo domínio: fonte é sempre
+ * buscada em modo CORS, e sem o atributo o navegador baixa o arquivo duas
+ * vezes — o preload não casa com o pedido real e vira desperdício puro.
+ */
+function montaPreloadDeFontes() {
+  const assets = path.join(dist, 'assets')
+  if (!fs.existsSync(assets)) return ''
+
+  // Cinzel e Archivo são variáveis: um arquivo por subconjunto cobre todos os
+  // pesos, então estes dois cobrem o h1, os h2 e o corpo de texto inteiros.
+  // O `-ext` fica de fora — o unicode-range dele quase nunca dispara em português.
+  const criticas = [/^cinzel-latin-(?!ext)/, /^archivo-latin-(?!ext)/]
+  const arquivos = fs.readdirSync(assets)
+
+  return criticas
+    .map((padrao) => arquivos.find((a) => padrao.test(a) && a.endsWith('.woff2')))
+    .filter(Boolean)
+    .map(
+      (arquivo) =>
+        `    <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/${arquivo}" />`,
+    )
+    .join('\n')
+}
+
 function montaSitemap(site, lastmod) {
   const base = site.brand.site.replace(/\/$/, '')
   // Uma URL só, e é de propósito: a landing é página única, e /reservas é o
@@ -247,6 +285,13 @@ if (!blocoSeo.test(documento)) {
   process.exit(1)
 }
 documento = documento.replace(blocoSeo, () => montaBlocoSeo(site, og))
+
+const preloads = montaPreloadDeFontes()
+if (preloads) {
+  documento = documento.replace('</head>', () => `${preloads}\n  </head>`)
+} else {
+  console.warn('seo-build: não achei as fontes críticas em dist/assets — nenhum preload injetado.')
+}
 
 const rootVazio = /<div id="root">\s*<\/div>/
 if (!rootVazio.test(documento)) {

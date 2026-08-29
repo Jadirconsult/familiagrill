@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+/* As fontes vêm do próprio domínio, não mais do Google. O porquê está lá. */
+@import './fontes.css';
 
 @theme {
   /* O creme vem do fundo da logo. O ouro é escolha de tela, não de marca:
