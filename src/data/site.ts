@@ -35,8 +35,9 @@ export const brand = {
  * Canais de pedido, em ordem de prioridade. O primeiro vira o botão principal
  * do site — hoje o 99Food, por decisão da casa.
  *
- * TODO: trocar o link do iFood pela URL direta da loja. O endereço abaixo
- * leva à home do app, não à página do restaurante.
+ * Todos os links levam direto ao destino final: a loja da casa dentro do app,
+ * nunca a home dele. Quem clica em "Pedir no iFood" já decidiu onde vai comer;
+ * fazê-lo procurar o restaurante de novo é perder o pedido no meio do caminho.
  */
 export type OrderChannel = {
   id: string
@@ -66,7 +67,10 @@ export const orderChannels: OrderChannel[] = [
   {
     id: 'ifood',
     name: 'iFood',
-    url: 'https://www.ifood.com.br/',
+    // Loja da casa, não a home do app. O endereço anterior jogava quem clicava
+    // na porta de entrada do iFood, onde ele tinha que procurar o restaurante
+    // de novo — e a maioria não procura.
+    url: 'https://www.ifood.com.br/delivery/niteroi-rj/churrasco-familia-grill--familia-sushi-piratininga/a4c35301-e6a3-4c8e-af9b-765a026449d4',
     note: 'A brasa entregue por quem você já usa',
     kind: 'app',
     evento: 'pedido_ifood',
