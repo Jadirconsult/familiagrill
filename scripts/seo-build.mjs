@@ -147,9 +147,11 @@ function montaJsonLd(site, ogUrl) {
         target: { '@type': 'EntryPoint', urlTemplate: app.url },
       })),
       {
+        // A casa aceita reserva, mas por telefone: o alvo é o WhatsApp do
+        // salão, não um formulário — não existe mais formulário.
         '@type': 'ReserveAction',
-        name: 'Reservar mesa',
-        target: { '@type': 'EntryPoint', urlTemplate: `${base}/#visita` },
+        name: 'Reservar mesa pelo WhatsApp',
+        target: { '@type': 'EntryPoint', urlTemplate: `https://wa.me/${brand.whatsapp}` },
         result: {
           '@type': 'FoodEstablishmentReservation',
           name: `Mesa no ${brand.fullName}`,
@@ -242,8 +244,7 @@ function montaPreloadDeFontes() {
 
 function montaSitemap(site, lastmod) {
   const base = site.brand.site.replace(/\/$/, '')
-  // Uma URL só, e é de propósito: a landing é página única, e /reservas é o
-  // painel da equipe, marcado com X-Robots-Tag: noindex no public/.htaccess.
+  // Uma URL só, e é de propósito: o site é uma landing de página única.
   // Sempre com www, nunca o apex nem o alias .vercel.app — o sitemap tem que
   // concordar com o canonical.
   return `<?xml version="1.0" encoding="UTF-8"?>

@@ -295,13 +295,11 @@ export const dineInService = services[1]
 /**
  * Segunda = 1 … Domingo = 0. `open: null` marca dia fechado — hoje nenhum.
  *
- * A tabela é derivada do turno do salão, e não copiada dele: é ela que valida a
- * reserva de mesa. Mudou o salão? O SQL em
- * supabase/migrations/20260804_000001 repete a mesma janela para barrar reserva
- * fora do expediente vinda de fora do site. Atualize os dois.
+ * A tabela é derivada do turno do salão. Ela alimenta a faixa de dias da seção
+ * de horários e a frase de atendimento na seção de visita.
  *
- * A janela de pedido não entra aqui de propósito — ninguém reserva mesa para
- * receber em casa.
+ * A janela de pedido não entra aqui de propósito — é outra coisa: quando a
+ * cozinha aceita pedido, não quando o salão atende.
  */
 export type DayHours = {
   day: number

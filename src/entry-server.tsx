@@ -8,10 +8,8 @@ import { Landing } from './pages/Landing'
  * devolve a landing inteira já em HTML — ver scripts/seo-build.mjs.
  *
  * Por que a landing e não o App: o App monta um BrowserRouter, que precisa de
- * `window`. Aqui a rota é sempre `/`, então um MemoryRouter dá o contexto de
- * que o `<Link to="/reservas">` do formulário precisa sem tocar em nenhuma API
- * de navegador. O painel da equipe não é pré-renderizado de propósito: é
- * privado, carrega sob demanda e não deve ser indexado.
+ * `window`. Aqui a rota é sempre `/`, e o MemoryRouter dá o contexto de
+ * roteamento sem tocar em nenhuma API de navegador.
  *
  * O que roda aqui: só a primeira renderização. Nenhum `useEffect` é executado
  * no servidor, então o IntersectionObserver do useReveal, o relógio do

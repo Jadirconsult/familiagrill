@@ -1,15 +1,13 @@
-# O site é uma landing só.
+# O site é uma landing de página única e não tem nada a esconder do rastreio:
+# não há painel, não há login, não há rota privada. Por isso não há nenhum
+# Disallow aqui — e a ausência é deliberada, não esquecimento.
 #
-# /reservas — o painel da equipe — não tem mais Disallow aqui, e a mudança é
-# deliberada: Disallow impede o RASTREIO, não a INDEXAÇÃO. Uma URL bloqueada
-# que alguém linkar pode acabar listada na busca sem descrição, e o robô nunca
-# chega a ler o noindex de dentro dela, porque foi proibido de entrar.
-#
-# Agora quem barra o painel é o cabeçalho `X-Robots-Tag: noindex` do
-# public/.htaccess, reforçado pelo componente Noindex no lado do cliente. Para
-# o cabeçalho funcionar, o robô precisa poder buscar a página — daí a liberação.
-# O painel continua protegido por login do Supabase; isto é sobre busca, não
-# sobre acesso.
+# Endereço inventado devolve a landing com status 200, porque o fallback de SPA
+# manda o index.html para tudo. Quem barra a indexação dessas cópias é o
+# componente Noindex, no cliente, e não uma regra neste arquivo: Disallow
+# impede o RASTREIO, não a INDEXAÇÃO — uma URL bloqueada que alguém linkar pode
+# acabar listada na busca sem descrição, e o robô nunca chega a ler o noindex
+# de dentro dela porque foi proibido de entrar.
 User-agent: *
 Allow: /
 

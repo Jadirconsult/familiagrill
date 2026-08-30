@@ -29,15 +29,8 @@
 
 # 2. Fallback de SPA: qualquer rota que não seja um arquivo real
 #    devolve o index.html, para o React Router assumir o controle.
-#    Sem isso, recarregar a página do painel de reservas dá 404.
+#    Sem isso, qualquer rota que não seja a raiz responde 404.
 <IfModule mod_rewrite.c>
-  # Marca o painel da equipe ANTES do fallback. Depois da reescrita a URI já é
-  # /index.html e não há mais como distinguir /reservas de qualquer outra rota,
-  # então a marca tem que ser posta aqui, enquanto o endereço original existe.
-  # O cabeçalho em si é aplicado na seção 3.
-  RewriteCond %{REQUEST_URI} ^/reservas
-  RewriteRule ^ - [E=NOINDEX:1]
-
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
@@ -67,19 +60,6 @@
   <FilesMatch "\.(html|xml|txt|json)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
   </FilesMatch>
-
-  # O painel da equipe fora da busca. Duas linhas para a mesma regra porque o
-  # fallback de SPA da seção 2 é um redirecionamento interno, e o Apache
-  # renomeia as variáveis de ambiente com o prefixo REDIRECT_ ao atravessá-lo:
-  # a primeira linha pega o acesso direto, a segunda pega o que passou pela
-  # reescrita. Faltando uma delas, /reservas volta a ser indexável em silêncio.
-  #
-  # Por que cabeçalho e não `Disallow` no robots.txt: Disallow impede o
-  # rastreio, não a indexação — a URL pode aparecer na busca sem descrição, e
-  # o robô nunca chega a ler um noindex que esteja dentro da página. Por isso o
-  # Disallow saiu de public/robots.txt: para o robô poder entrar e ler isto.
-  Header always set X-Robots-Tag "noindex, nofollow" env=NOINDEX
-  Header always set X-Robots-Tag "noindex, nofollow" env=REDIRECT_NOINDEX
 
   # Cabeçalhos básicos de segurança
   Header always set X-Content-Type-Options "nosniff"

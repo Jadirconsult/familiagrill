@@ -2,13 +2,13 @@
 
 Landing page da casa de churrasco, hambúrguer e sushi da Av. Tamandaré, 389 — Niterói/RJ.
 
-Stack: Vite + React 19 + TypeScript + Tailwind v4 + Supabase.
+Stack: Vite + React 19 + TypeScript + Tailwind v4. Sem back-end: o site é
+estático e não guarda dado de ninguém.
 
 ## Rodar
 
 ```bash
 npm install
-cp .env.example .env.local   # preencha a publishable key
 npm run dev
 ```
 
@@ -18,7 +18,6 @@ npm run dev
 | `npm run build` | Type-check, build, pré-renderização e a verificação de publicação |
 | `npm run preview` | Serve o build |
 | `npm run seo:check` | Só a verificação, contra o `dist/` que já existe |
-| `npm run db:check` | Confere se o banco e o site concordam sobre o expediente |
 | `npm run lint` | oxlint |
 
 ### O que o build faz além de empacotar
@@ -53,8 +52,8 @@ componente tem conteúdo fixo — mudar o site é mudar esse arquivo.
   depois da meia-noite passam de 1440 (2h da manhã = `26 * 60`):
   - **Pedido** (delivery e retirada), 17h30 às 1h45
   - **Salão** (atendimento presencial), 18h às 2h
-- `hours` — a semana, **derivada do salão**. É ela que valida a reserva de mesa,
-  então espelha o SQL em `supabase/migrations`. Mudou o salão, mude os dois.
+- `hours` — a semana, **derivada do salão**. Alimenta a faixa de dias da
+  seção de horários e a frase de atendimento da seção de visita.
 
 ## Deploy
 
@@ -65,15 +64,13 @@ andamento, e nenhuma URL do site aponta para ele.
 
 Publicar é dar push na `main`:
 [.github/workflows/deploy-hospedagem.yml](.github/workflows/deploy-hospedagem.yml)
-builda no CI e envia `dist/` por FTPS. Precisa de cinco secrets no repositório:
-`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`, `VITE_SUPABASE_URL` e
-`VITE_SUPABASE_PUBLISHABLE_KEY` — as duas últimas porque o Vite embute as
-variáveis no bundle em tempo de build.
+builda no CI e envia `dist/` por FTPS. Precisa de três secrets no repositório: `FTP_SERVER`, `FTP_USERNAME` e
+`FTP_PASSWORD`.
 
 [public/.htaccess](public/.htaccess) é obrigatório e vive em `public/` para o
 Vite copiá-lo ao `dist/` a cada build. É o equivalente Apache do `vercel.json`:
-sem o rewrite dele, abrir `/reservas` direto responde 404, porque o Apache
-procura uma pasta com esse nome antes de o React Router existir. Ele também
+sem o rewrite dele, abrir qualquer rota que não seja a raiz responde 404,
+porque o Apache procura uma pasta com esse nome. Ele também
 força HTTPS e o `www`, faz a compressão e separa o cache — `/assets/` é eterno
 porque leva hash no nome; imagem dura um dia, porque a logo é feita para ser
 trocada mantendo o mesmo arquivo.
@@ -88,40 +85,7 @@ Duas coisas que confundem quem olha o servidor depois de um deploy:
   mesmos hashes, e o FTP só manda o que mudou. A pasta parecer intocada é o
   comportamento correto, não falha do envio.
 
-O Supabase gratuito pausa o projeto após sete dias sem atividade, o que derruba
-a reserva e o painel.
-[.github/workflows/manter-supabase-acordado.yml](.github/workflows/manter-supabase-acordado.yml)
-faz um ping segundas e quintas. Atenção: o GitHub desativa workflows agendados
-em repositório parado por 60 dias.
 
-## Supabase
-
-O formulário de reserva grava na tabela `reservas`. Aplique a migration em
-[supabase/migrations](supabase/migrations) no projeto e preencha `.env.local`:
-
-```
-VITE_SUPABASE_URL=https://lpnrupxeicyhafqjzyvs.supabase.co
-VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
-```
-
-Sem essas variáveis a página continua funcionando: a seção de reserva mostra um
-aviso no lugar do formulário.
-
-A RLS permite `insert` anônimo e restringe `select`, `update` e `delete` a quem
-está na tabela `staff` — não basta estar autenticado. A equipe lê as reservas
-em `/reservas`, rota fora do menu e protegida por login.
-
-Reserva com mais de um mês de passada é apagada sozinha: um gatilho de `after
-insert` faz a faxina a cada nova reserva. Não apaga mesa futura, e não roda se
-ninguém reservar — o que também significa que nada novo se acumula nesse tempo.
-
-O `insert` público passa por cinco condições, todas no banco, porque a chave
-publicável fica no navegador de qualquer visitante e quem chama a API direto
-ignora o formulário: data futura, teto de 90 dias, `status` inicial obrigatório,
-horário dentro do expediente e os freios de volume. Os freios valem sobre o
-telefone **normalizado em dígitos** — a coluna gerada `telefone_digitos` —
-porque comparar a string crua deixava `(21) 99999-9999` e `21999999999` passarem
-como pessoas diferentes.
 
 ## A confirmar com o restaurante
 

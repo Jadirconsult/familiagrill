@@ -310,7 +310,7 @@ for (const [, caminho] of html.matchAll(/<script[^>]+src="([^"]+)"/g)) {
   if (tamanho > LIMITES.jsInicialKb) {
     falha(
       `O JavaScript inicial ${caminho} tem ${tamanho} kB.`,
-      `O teto é ${LIMITES.jsInicialKb} kB. Mova o que não é da primeira visita para import dinâmico, como já se fez com o Supabase.`,
+      `O teto é ${LIMITES.jsInicialKb} kB. Mova o que não é da primeira visita para import dinâmico.`,
     )
   }
 }
@@ -343,16 +343,11 @@ for (const arquivo of percorre(dist)) {
 // medição. Sem esta regra, o próximo botão de pedido nasce sem evento de
 // conversão e ninguém percebe até o relatório vir vazio.
 //
-// Duas exceções, ambas deliberadas: o próprio LinkExterno, que é onde o
-// target="_blank" mora; e o painel da equipe, cujo único link externo é o
-// WhatsApp do cliente que reservou. Ali quem clica é quem trabalha no salão,
-// confirmando a mesa por telefone — contar isso como conversão sujaria
-// justamente o número que a medição existe para produzir. O painel também é
-// noindex e fica fora do menu, então não há nada de SEO a vigiar nele.
+// Uma exceção só: o próprio LinkExterno, que é onde o target="_blank" mora.
 const fontes = percorre(src).filter((f) => f.endsWith('.tsx'))
 for (const arquivo of fontes) {
   const nome = path.basename(arquivo)
-  if (nome === 'LinkExterno.tsx' || nome === 'Reservas.tsx') continue
+  if (nome === 'LinkExterno.tsx') continue
   const codigo = fs.readFileSync(arquivo, 'utf8')
   if (codigo.includes('target="_blank"')) {
     falha(
