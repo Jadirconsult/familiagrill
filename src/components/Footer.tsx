@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { brand, primaryChannel } from '../data/site'
 import { LinkExterno } from './LinkExterno'
 
@@ -46,6 +47,14 @@ export function Footer() {
             >
               {brand.instagramHandle}
             </LinkExterno>
+          </p>
+          <p className="mt-3">
+            <Link
+              to="/privacidade"
+              className="inline-flex min-h-11 items-center transition-colors hover:text-cream"
+            >
+              Privacidade
+            </Link>
           </p>
           {/* smoke/60 sobre carvão dava 3,0:1. O smoke cheio dá 6,21:1. */}
           <p className="mt-4 text-smoke">

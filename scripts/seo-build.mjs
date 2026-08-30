@@ -79,7 +79,13 @@ async function carregaDados() {
   try {
     const site = await vite.ssrLoadModule('/src/data/site.ts')
     const servidor = await vite.ssrLoadModule('/src/entry-server.tsx')
-    return { site, html: servidor.render() }
+    return {
+      site,
+      paginas: {
+        '/': servidor.render('/'),
+        '/privacidade': servidor.render('/privacidade'),
+      },
+    }
   } finally {
     await vite.close()
   }
@@ -161,11 +167,16 @@ function montaJsonLd(site, ogUrl) {
   }
 }
 
-function montaBlocoSeo(site, og) {
+function montaBlocoSeo(site, og, rota) {
   const { brand } = site
   const base = brand.site.replace(/\/$/, '')
-  const titulo = `${brand.fullName} — Churras, Burger e Sushi em Niterói`
-  const descricao = `Churrasco na brasa, hambúrguer na chapa e sushi artesanal na ${brand.address.street}, ${brand.address.city}. Todo dia: pedido a partir das 17h30, salão das 18h às 2h.`
+  const privacidade = rota === '/privacidade'
+  const titulo = privacidade
+    ? `Privacidade — ${brand.fullName}`
+    : `${brand.fullName} — Churras, Burger e Sushi em Niterói`
+  const descricao = privacidade
+    ? `Este site não tem formulário, cadastro nem login, e não guarda nenhum dado de quem visita. O que os serviços embutidos na página fazem, e como recusar.`
+    : `Churrasco na brasa, hambúrguer na chapa e sushi artesanal na ${brand.address.street}, ${brand.address.city}. Todo dia: pedido a partir das 17h30, salão das 18h às 2h.`
   const ogDescricao = `${brand.tagline} — ${brand.address.city}. Todo dia até as 2h da manhã.`
   const ogUrl = `${base}/${og.arquivo}`
 
@@ -174,7 +185,7 @@ function montaBlocoSeo(site, og) {
     '<!-- Bloco gerado por scripts/seo-build.mjs a partir de src/data/site.ts. Não edite aqui. -->',
     `<title>${escapaHtml(titulo)}</title>`,
     `<meta name="description" content="${escapaHtml(descricao)}" />`,
-    `<link rel="canonical" href="${base}/" />`,
+    `<link rel="canonical" href="${base}${privacidade ? '/privacidade' : '/'}" />`,
     `<meta property="og:site_name" content="${escapaHtml(brand.fullName)}" />`,
     `<meta property="og:title" content="${escapaHtml(brand.fullName)}" />`,
     `<meta property="og:description" content="${escapaHtml(ogDescricao)}" />`,
@@ -186,7 +197,7 @@ function montaBlocoSeo(site, og) {
           `<meta property="og:image:height" content="${og.altura}" />`,
         ]
       : []),
-    `<meta property="og:url" content="${base}/" />`,
+    `<meta property="og:url" content="${base}${privacidade ? '/privacidade' : '/'}" />`,
     // "restaurant" não é tipo válido de Open Graph; os scrapers caíam para o
     // padrão de qualquer jeito. O tipo do lugar é dito no JSON-LD abaixo.
     '<meta property="og:type" content="website" />',
@@ -195,9 +206,11 @@ function montaBlocoSeo(site, og) {
     `<meta name="twitter:title" content="${escapaHtml(brand.fullName)}" />`,
     `<meta name="twitter:description" content="${escapaHtml(ogDescricao)}" />`,
     `<meta name="twitter:image" content="${ogUrl}" />`,
-    '<script type="application/ld+json">',
-    JSON.stringify(montaJsonLd(site, ogUrl)),
-    '</script>',
+    // O dado estruturado do restaurante pertence à landing. Repeti-lo no
+    // aviso de privacidade faria o buscador ver duas fichas do mesmo lugar.
+    ...(privacidade
+      ? []
+      : ['<script type="application/ld+json">', JSON.stringify(montaJsonLd(site, ogUrl)), '</script>']),
     '<!-- seo:fim -->',
   ]
 
@@ -244,9 +257,12 @@ function montaPreloadDeFontes() {
 
 function montaSitemap(site, lastmod) {
   const base = site.brand.site.replace(/\/$/, '')
-  // Uma URL só, e é de propósito: o site é uma landing de página única.
-  // Sempre com www, nunca o apex nem o alias .vercel.app — o sitemap tem que
-  // concordar com o canonical.
+  // Duas URLs: a landing e o aviso de privacidade. Sempre com www, nunca o
+  // apex nem o alias .vercel.app — o sitemap tem que concordar com o canonical.
+  //
+  // A privacidade entra no sitemap de propósito, mesmo sendo página de rodapé:
+  // o Google Ads verifica a existência dela na revisão da conta, e listar
+  // acelera o rastreio.
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!-- Gerado por scripts/seo-build.mjs. Não edite à mão. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -255,6 +271,12 @@ function montaSitemap(site, lastmod) {
     <lastmod>${lastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>${base}/privacidade</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>
 `
@@ -276,33 +298,51 @@ if (og === OG_RESERVA) {
   )
 }
 
-const { site, html } = await carregaDados()
+const { site, paginas } = await carregaDados()
 
-let documento = fs.readFileSync(indexPath, 'utf8')
+const modelo = fs.readFileSync(indexPath, 'utf8')
 
 const blocoSeo = /[ ]*<!-- seo:inicio -->[\s\S]*?<!-- seo:fim -->/
-if (!blocoSeo.test(documento)) {
+const rootVazio = /<div id="root">\s*<\/div>/
+
+if (!blocoSeo.test(modelo)) {
   console.error('seo-build: marcadores <!-- seo:inicio --> / <!-- seo:fim --> sumiram do index.html.')
   process.exit(1)
 }
-documento = documento.replace(blocoSeo, () => montaBlocoSeo(site, og))
-
-const preloads = montaPreloadDeFontes()
-if (preloads) {
-  documento = documento.replace('</head>', () => `${preloads}\n  </head>`)
-} else {
-  console.warn('seo-build: não achei as fontes críticas em dist/assets — nenhum preload injetado.')
-}
-
-const rootVazio = /<div id="root">\s*<\/div>/
-if (!rootVazio.test(documento)) {
+if (!rootVazio.test(modelo)) {
   console.error('seo-build: não achei <div id="root"></div> para preencher.')
   process.exit(1)
 }
-documento = documento.replace(rootVazio, () => `<div id="root">${html}</div>`)
 
-fs.writeFileSync(indexPath, documento, 'utf8')
+const preloads = montaPreloadDeFontes()
+if (!preloads) {
+  console.warn('seo-build: não achei as fontes críticas em dist/assets — nenhum preload injetado.')
+}
+
+// Cada rota vira um arquivo de verdade no disco. O fallback de SPA do
+// public/.htaccess só entra quando o caminho pedido NÃO é arquivo nem pasta,
+// então dist/privacidade/index.html é servido direto — e o aviso de
+// privacidade existe no HTML, como a landing, em vez de depender de o
+// visitante executar JavaScript.
+const escritas = []
+for (const [rota, html] of Object.entries(paginas)) {
+  let documento = modelo
+    .replace(blocoSeo, () => montaBlocoSeo(site, og, rota))
+    .replace(rootVazio, () => `<div id="root">${html}</div>`)
+  if (preloads) documento = documento.replace('</head>', () => `${preloads}
+  </head>`)
+
+  const destino =
+    rota === '/' ? indexPath : path.join(dist, rota.replace(/^\//, ''), 'index.html')
+  fs.mkdirSync(path.dirname(destino), { recursive: true })
+  fs.writeFileSync(destino, documento, 'utf8')
+  escritas.push({ rota, kb: (Buffer.byteLength(html, 'utf8') / 1024).toFixed(1) })
+}
+
 fs.writeFileSync(path.join(dist, 'sitemap.xml'), montaSitemap(site, dataDoUltimoCommit()), 'utf8')
 
-const kb = (Buffer.byteLength(html, 'utf8') / 1024).toFixed(1)
-console.log(`seo-build: landing pré-renderizada (${kb} kB de HTML) e sitemap gerado.`)
+console.log(
+  'seo-build: ' +
+    escritas.map((e) => `${e.rota} (${e.kb} kB)`).join(', ') +
+    ' pré-renderizadas, e sitemap gerado.',
+)
