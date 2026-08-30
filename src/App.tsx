@@ -1,40 +1,27 @@
-import { Suspense, lazy } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Landing } from './pages/Landing'
+import { Privacidade } from './pages/Privacidade'
 import { Noindex } from './components/Noindex'
 
 /**
- * O painel da equipe carrega sob demanda, e leva o cliente do Supabase junto.
- * Ele não tem nada a ver com a visita de quem vem pedir comida — não faz sentido
- * cobrar esse download de todo mundo que abre a landing no celular.
+ * Duas rotas: a landing e o aviso de privacidade.
+ *
+ * Havia uma terceira, o painel da equipe em /reservas, carregada sob demanda
+ * porque trazia o cliente do Supabase junto. Ela existia para a equipe ler as
+ * reservas que chegavam pelo formulário; sem o formulário, não há o que ler —
+ * a mesa é combinada pelo WhatsApp e confirmada na hora.
+ *
+ * As duas rotas são pré-renderizadas no build, cada uma no seu arquivo. Ver
+ * scripts/seo-build.mjs.
  */
-const Reservas = lazy(() =>
-  import('./pages/Reservas').then((m) => ({ default: m.Reservas })),
-)
-
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing />} />
-        {/* Fora do menu do site: quem trabalha no salão acessa pelo endereço. */}
-        <Route
-          path="/reservas"
-          element={
-            <Suspense
-              fallback={
-                <div className="grid min-h-dvh place-items-center px-5">
-                  <p className="font-mono text-xs tracking-widest text-smoke uppercase">
-                    Carregando o painel…
-                  </p>
-                </div>
-              }
-            >
-              <Noindex />
-              <Reservas />
-            </Suspense>
-          }
-        />
+        {/* Indexável de propósito: o Google Ads verifica a existência da
+            política na revisão da conta, e para isso o robô precisa alcançá-la. */}
+        <Route path="/privacidade" element={<Privacidade />} />
         {/* Endereço inventado devolve a landing, porque o fallback de SPA manda
             o index.html para tudo. Continua devolvendo — trocar por uma página
             de erro seria desenhar tela nova. O `Noindex` resolve o que doía:

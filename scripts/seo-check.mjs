@@ -237,6 +237,51 @@ if (!ogImage || !ogImage.startsWith('http')) {
   }
 }
 
+// --- o aviso de privacidade -------------------------------------------------
+
+// Ele existe por duas razões que se somam: a LGPD, e a revisão de conta do
+// Google Ads, que verifica se o site declara o que coleta. Precisa existir no
+// HTML como a landing — não adianta ser rota que só nasce depois do JavaScript.
+const privacidadePath = path.join(dist, 'privacidade', 'index.html')
+if (!fs.existsSync(privacidadePath)) {
+  falha(
+    'Não há dist/privacidade/index.html.',
+    'O aviso de privacidade precisa ser pré-renderizado. Ver a lista de rotas em scripts/seo-build.mjs.',
+  )
+} else {
+  const privacidade = fs.readFileSync(privacidadePath, 'utf8')
+
+  if (/<div id="root">\s*<\/div>/.test(privacidade)) {
+    falha('O aviso de privacidade tem o #root vazio.', 'Ele precisa sair pré-renderizado, como a landing.')
+  }
+
+  if (!html.includes('href="/privacidade"')) {
+    falha(
+      'A landing não linka para o aviso de privacidade.',
+      'Sem um link alcançável, o robô do Google Ads não encontra a política na revisão da conta. O link vive no rodapé.',
+    )
+  }
+
+  // A guarda que importa: o texto do aviso não pode contradizer o que o site
+  // realmente carrega. Se alguém preencher VITE_GA_ID e a página continuar
+  // dizendo que não há rastreamento, o site passa a afirmar algo falso sobre
+  // dado pessoal — que é exatamente o tipo de coisa que a LGPD pune e que
+  // ninguém percebe olhando a tela.
+  const medindo = /googletagmanager|gtag\/js/.test(html)
+  const dizQueNaoMede = privacidade.includes('não carrega nenhum script')
+  if (medindo && dizQueNaoMede) {
+    falha(
+      'O site carrega scripts de medição, mas o aviso de privacidade diz que não.',
+      'A seção de medição é derivada de `medicaoLigada` em src/lib/track.ts — se ela divergiu, o build está usando uma versão antiga da página.',
+    )
+  }
+  if (!medindo && !dizQueNaoMede) {
+    aviso(
+      'O aviso de privacidade não afirma a ausência de rastreamento, e o site não carrega nenhum. Confira se o texto continua verdadeiro.',
+    )
+  }
+}
+
 // --- robots e sitemap --------------------------------------------------------
 
 const robotsPath = path.join(dist, 'robots.txt')
@@ -310,7 +355,7 @@ for (const [, caminho] of html.matchAll(/<script[^>]+src="([^"]+)"/g)) {
   if (tamanho > LIMITES.jsInicialKb) {
     falha(
       `O JavaScript inicial ${caminho} tem ${tamanho} kB.`,
-      `O teto é ${LIMITES.jsInicialKb} kB. Mova o que não é da primeira visita para import dinâmico, como já se fez com o Supabase.`,
+      `O teto é ${LIMITES.jsInicialKb} kB. Mova o que não é da primeira visita para import dinâmico.`,
     )
   }
 }
@@ -343,16 +388,11 @@ for (const arquivo of percorre(dist)) {
 // medição. Sem esta regra, o próximo botão de pedido nasce sem evento de
 // conversão e ninguém percebe até o relatório vir vazio.
 //
-// Duas exceções, ambas deliberadas: o próprio LinkExterno, que é onde o
-// target="_blank" mora; e o painel da equipe, cujo único link externo é o
-// WhatsApp do cliente que reservou. Ali quem clica é quem trabalha no salão,
-// confirmando a mesa por telefone — contar isso como conversão sujaria
-// justamente o número que a medição existe para produzir. O painel também é
-// noindex e fica fora do menu, então não há nada de SEO a vigiar nele.
+// Uma exceção só: o próprio LinkExterno, que é onde o target="_blank" mora.
 const fontes = percorre(src).filter((f) => f.endsWith('.tsx'))
 for (const arquivo of fontes) {
   const nome = path.basename(arquivo)
-  if (nome === 'LinkExterno.tsx' || nome === 'Reservas.tsx') continue
+  if (nome === 'LinkExterno.tsx') continue
   const codigo = fs.readFileSync(arquivo, 'utf8')
   if (codigo.includes('target="_blank"')) {
     falha(

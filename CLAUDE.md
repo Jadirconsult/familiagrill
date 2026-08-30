@@ -29,17 +29,6 @@ O que o robô lê — título, descrição, canonical, Open Graph, JSON-LD e o
 valores à mão: já houve três cópias do expediente da casa no repositório, e elas
 divergiram.
 
-A migration do Supabase ainda espelha o horário do salão. Mudou `services` em
-`site.ts`, mude o SQL também — essa é a única duplicação que sobrou, e é
-proposital: quem valida a reserva é o banco.
-
-**Rode `npm run db:check` depois de mexer em `services`/`hours` ou de aplicar
-migration.** Ele pergunta ao Postgres o que ele acha dos quatro instantes de
-fronteira de cada dia e acusa a divergência. Ficou fora do `npm run build` de
-propósito: depende de rede e credencial, e build não pode quebrar porque o
-Wi-Fi caiu. Em 29/08/2026 esse script encontrou 7 horários em desacordo — a
-migration `20260804_000001_expediente_unico.sql` nunca tinha sido aplicada, e o
-site aceitava mesa para 1h30 de uma quarta que o banco recusava calado.
 
 ## A página precisa existir no HTML
 
@@ -66,30 +55,20 @@ conversão é registrada. Como todo pedido termina fora do domínio — 99Food,
 iFood, WhatsApp, cardápio digital —, um `<a target="_blank">` solto é um pedido
 que ninguém consegue contar. O `seo-check` reprova o build se encontrar um.
 
-A exceção é [src/pages/Reservas.tsx](src/pages/Reservas.tsx): ali quem clica no
-WhatsApp é a equipe, confirmando mesa por telefone. Contar isso como conversão
-sujaria o número.
-
 Canal de pedido novo declara o próprio `evento` em `site.ts` — o TypeScript
 cobra no momento em que ele é acrescentado.
 
-## A medição fica desligada até a privacidade estar publicada
+## Este site não coleta dado nenhum de quem visita
 
-`VITE_GA_ID` e `VITE_ADS_ID` vazios significam nenhum script de terceiro
-baixado e nenhum dado saindo do navegador. **Não preencha antes de a página de
-política de privacidade estar no ar**: o formulário de reserva grava nome e
-telefone, e ligar a medição sem aviso é coleta sem base legal — além de motivo
-de reprovação da conta no Google Ads.
+Não há formulário, não há banco de dados, não há login. A mesa é combinada
+pelo WhatsApp e a casa confirma na hora — foi essa remoção que desobrigou a
+página de política de privacidade e liberou a medição.
 
-## O painel da equipe fica fora da busca por cabeçalho, não por robots.txt
-
-`Disallow` impede o rastreio, não a indexação: a URL pode aparecer na busca sem
-descrição, e o robô nunca chega a ler o `noindex` de dentro dela. Por isso
-`/reservas` **não** está no `robots.txt` — quem barra é o `X-Robots-Tag` do
-[public/.htaccess](public/.htaccess), em duas linhas (`NOINDEX` e
-`REDIRECT_NOINDEX`, porque o fallback de SPA é um redirecionamento interno e o
-Apache renomeia a variável ao atravessá-lo), reforçado pelo componente
-[Noindex](src/components/Noindex.tsx) no cliente.
+`VITE_GA_ID` e `VITE_ADS_ID` continuam vazios por padrão: vazios significam
+nenhum script de terceiro baixado. **No dia em que forem preenchidos**, o site
+passa a carregar o gtag e aí precisa de um aviso de privacidade — cookie de
+medição é dado pessoal, mesmo sem formulário. Ligar a medição e escrever esse
+aviso é a mesma tarefa, não duas.
 
 ## Endereço incompleto é melhor que endereço errado
 
@@ -109,8 +88,8 @@ componente usava parou de viajar para o servidor a cada deploy.
 - **Produção é a hospedagem própria** (cPanel/Apache). A Vercel é preview de
   branch — o alias `.vercel.app` não pode aparecer em canonical, `og:` nem
   JSON-LD, e o `seo-check` reprova se aparecer.
-- **`public/.htaccess` é obrigatório.** Sem o rewrite dele, `/reservas` responde
-  404 no Apache.
+- **`public/.htaccess` é obrigatório.** Sem o rewrite dele, qualquer rota que
+  não seja a raiz responde 404 no Apache.
 - **Para conferir DNS recém-alterado, pergunte ao autoritativo**
   (`nslookup familiagrill.com.br ns9.srvif.com`). Resolver público devolve cache
   e faz virada concluída parecer pendente por horas.

@@ -39,9 +39,6 @@ jobs:
         run: npm ci
 
       - name: Build de producao
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
         run: npm run build
 
       # Falha cedo se o build nao gerou o index.html, em vez de subir uma pasta vazia
