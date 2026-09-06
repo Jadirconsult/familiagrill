@@ -1,4 +1,4 @@
-import { brand, primaryChannel } from '../data/site'
+import { brand, desenvolvedor, primaryChannel } from '../data/site'
 import { LinkExterno } from './LinkExterno'
 
 export function Footer() {
@@ -52,6 +52,39 @@ export function Footer() {
             © {new Date().getFullYear()} {brand.fullName}
           </p>
         </div>
+      </div>
+
+      {/* A assinatura de quem fez, abaixo de tudo e centralizada — separada do
+          bloco da casa por um fio, para não competir com o endereço nem com o
+          copyright. Em mono e no tom mais apagado da paleta: presente para quem
+          procura, invisível para quem não. */}
+      <div className="shell mt-12 border-t border-char pt-8">
+        {/* Flex com quebra, e não texto corrido: em 390px a linha inteira não
+            cabe, e no texto corrido o telefone partia no meio — "(21)" numa
+            linha e "98878-5170" na outra. Cada parte é indivisível, a quebra
+            acontece entre elas, e a barra some quando isso ocorre, para não
+            sobrar um separador pendurado no fim da primeira linha. */}
+        <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-mono text-[11px] leading-relaxed tracking-wider text-smoke">
+          <span className="whitespace-nowrap">
+            Desenvolvido por{' '}
+            <LinkExterno
+              href={desenvolvedor.site}
+              evento="credito_desenvolvedor"
+              className="underline decoration-char underline-offset-4 transition-colors hover:text-gold hover:decoration-gold"
+            >
+              {desenvolvedor.siteLabel}
+            </LinkExterno>
+          </span>
+          <span className="hidden text-char sm:inline" aria-hidden>
+            |
+          </span>
+          <a
+            href={desenvolvedor.telefone}
+            className="whitespace-nowrap underline decoration-char underline-offset-4 transition-colors hover:text-gold hover:decoration-gold"
+          >
+            {desenvolvedor.telefoneLabel}
+          </a>
+        </p>
       </div>
     </footer>
   )

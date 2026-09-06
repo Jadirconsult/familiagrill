@@ -32,6 +32,22 @@ export const brand = {
 } as const
 
 /**
+ * Quem fez o site. Fica no rodapé, abaixo de tudo.
+ *
+ * Os rótulos são separados das URLs de propósito: o visitante lê
+ * "www.icardcase.com.br" e "(21) 98878-5170", que é como se escreve para gente,
+ * enquanto o link carrega o protocolo e o telefone em E.164, que é como se
+ * escreve para máquina. Trocar o `tel:` por `https://wa.me/…` é uma linha, se
+ * um dia o WhatsApp render mais que a ligação.
+ */
+export const desenvolvedor = {
+  site: 'https://www.icardcase.com.br',
+  siteLabel: 'www.icardcase.com.br',
+  telefone: 'tel:+5521988785170',
+  telefoneLabel: '(21) 98878-5170',
+} as const
+
+/**
  * Canais de pedido, em ordem de prioridade. O primeiro vira o botão principal
  * do site — hoje o 99Food, por decisão da casa.
  *
