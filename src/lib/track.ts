@@ -34,6 +34,13 @@ export type Evento =
   | 'rota_mapa'
   | 'instagram'
   | 'reserva_enviada'
+  /**
+   * O crédito do rodapé. Não é conversão da casa — é do estúdio que fez o site.
+   * Está aqui porque a regra do repositório não abre exceção: link que sai do
+   * domínio passa pelo LinkExterno, e o LinkExterno exige um evento. Manter a
+   * regra absoluta vale mais do que poupar uma linha desta união.
+   */
+  | 'credito_desenvolvedor'
 
 declare global {
   interface Window {

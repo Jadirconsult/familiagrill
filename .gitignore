@@ -32,3 +32,6 @@ skills-lock.json
 *.njsproj
 *.sln
 *.sw?
+
+# Capturas e snapshots do Playwright MCP, gerados durante conferência visual
+.playwright-mcp/
